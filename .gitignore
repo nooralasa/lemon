@@ -9,4 +9,5 @@ coverage
 # misc
 .DS_Store
 .env
+._*
 npm-debug.log
