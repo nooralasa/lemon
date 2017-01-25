@@ -7,6 +7,7 @@ import AnnouncementsPage from './react/pages/AnnouncementsPage';
 import CoursesPage from './react/pages/CoursesPage';
 import CommunityPage from './react/pages/CommunityPage';
 
+//note: react_router won't work with gh-pages
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route path="/" component={LandingPage}/>
