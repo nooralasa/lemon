@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
+import { browserHistory } from 'react-router';
 
 class Navbar extends Component {
   renderRightNavItems(items) {
     const navItems = items.map((item, index) =>
-      <rbs.NavItem key={index} eventKey={index} onClick={() => { window.location.href=item[1];}}>{item[0]}</rbs.NavItem>
+      <rbs.NavItem key={index} eventKey={index} onClick={() => { browserHistory.push(item[1]);}}>{item[0]}</rbs.NavItem>
     );
     return (
       <rbs.Nav pullRight>
@@ -36,6 +37,10 @@ class Navbar extends Component {
       </rbs.Navbar>
     );
   }
+}
+
+Navbar.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string.isRequired).isRequired).isRequired
 }
 
 export default Navbar;

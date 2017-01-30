@@ -1,10 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 import ThumbnailsList from './ThumbnailsList';
-
-const hiddenOverFlow = {overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
-const panelStyles = { margin: 10, maxHeight: 400, overflowY: 'scroll'};
 
 function moduleTitle(body_params) {
   return (
@@ -33,7 +30,7 @@ function moduleControls(body_params, btn1, btn2) {
 
 function moduleDescription(body_params, header) {
   return (
-    <rbs.Panel style={{marginTop:'25'}}>
+    <rbs.Panel style={{marginTop:25}}>
       <p style={{textAlign: 'left'}}>{header}</p>
       <br/>
       <p style={{fontWeight: 'normal'}}>{body_params['description']}</p>
@@ -41,19 +38,19 @@ function moduleDescription(body_params, header) {
   );
 }
 
-function renderModulePanel(item, btn1, btn2, descriptionHeader, otherItems, idToIndex, thumbnailsHeader) {
+function renderModulePanel(item, btn1, btn2, descriptionHeader, otherItems, thumbnailsHeader, onUserClick, url) {
   return (
       <div className="container">
         <div className="row">
           <div className="col-md-9">
             {moduleTitle(item['body_params'])}
           </div>
-          <div className="col-md-3" style={{maxWidth:'300', marginTop:'10'}}>
+          <div className="col-md-3" style={{maxWidth:300, marginTop:10}}>
             {moduleControls(item['body_params'], btn1, btn2)}
           </div>
         </div>
         {moduleDescription(item['body_params'], descriptionHeader)}
-        <ThumbnailsList list={item['body_params']['list']} items={otherItems} idToIndex={idToIndex} header={thumbnailsHeader}/>
+        <ThumbnailsList list={item['body_params']['list']} items={otherItems} header={thumbnailsHeader} onUserClick={onUserClick} url={url}/>
       </div>
     );
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 const panelStyles = { margin: 10, maxHeight: 400, overflowY: 'scroll'};
@@ -10,9 +10,7 @@ class ItemControls extends Component {
   }
 
   handleUserClick(id) {
-    this.props.onUserClick(
-      !this.props.isListViewable
-    );
+    this.props.onUserClick();
   }
 
   render() {
@@ -28,15 +26,23 @@ class ItemControls extends Component {
   }
 }
 
+ItemControls.propTypes = {
+  onUserClick: PropTypes.func.isRequired
+}
+
 class ItemPanel extends Component {
   render() {
     return (
-      <rbs.Panel header={<ItemControls isListViewable={this.props.isListViewable} onUserClick={this.props.onUserClick}/>} style={panelStyles}>
+      <rbs.Panel header={<ItemControls onUserClick={this.props.onUserClick}/>} style={panelStyles}>
         {this.props.renderItemPanel}
       </rbs.Panel>
     );
   }
 }
 
+ItemPanel.propTypes = {
+  onUserClick: PropTypes.func.isRequired,
+  renderItemPanel: PropTypes.node.isRequired
+}
 
 export default ItemPanel;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 class PanelList extends Component {
@@ -8,20 +8,17 @@ class PanelList extends Component {
   }
 
   handleUserClick(id) {
-    this.props.onUserClick(
-      !this.props.isListViewable,
-      id
-    );
+    this.props.onUserClick(id);
   }
   
-  renderListGroupItems(items, renderBody) {
-    const listGroupItems = items.map((item) =>
+  renderListGroupItems(itemIds, items, renderBody) {
+    const listGroupItems = itemIds.map((itemId) =>
       <rbs.ListGroupItem 
-        key={item['id']} 
-        header={item['header']} 
-        onClick={() => this.handleUserClick(item['id'])}
+        key={itemId} 
+        header={items[itemId]['header']} 
+        onClick={() => this.handleUserClick(itemId)}
       >
-        {renderBody(item['body_params'])}
+        {renderBody(items[itemId]['body_params'])}
       </rbs.ListGroupItem>
     );
 
@@ -35,10 +32,17 @@ class PanelList extends Component {
   render() {
     return (
       <div>
-        {this.renderListGroupItems(this.props.items, this.props.renderBody)}
+        {this.renderListGroupItems(this.props.itemIds, this.props.items, this.props.renderBody)}
       </div>
     );
   }
+}
+
+PanelList.propTypes = {
+  onUserClick: PropTypes.func.isRequired,
+  renderBody: PropTypes.func.isRequired,
+  items: PropTypes.object.isRequired,
+  itemIds: PropTypes.array.isRequired
 }
 
 export default PanelList;

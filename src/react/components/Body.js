@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import * as rbs from 'react-bootstrap/lib';
+import React, { Component, PropTypes } from 'react';
 
 class Body extends Component {
   render() {
@@ -10,5 +9,11 @@ class Body extends Component {
     );
   }
 }
+
+Body.propTypes = {
+	children: PropTypes.node.isRequired
+}
+
+
 
 export default Body;

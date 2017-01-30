@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, browserHistory } from 'react-router';
+import { Provider } from 'react-redux'
+import { Router, Route, browserHistory } from 'react-router';
 
 import LandingPage from './react/pages/LandingPage';
-import AnnouncementsPage from './react/pages/AnnouncementsPage';
-import CoursesPage from './react/pages/CoursesPage';
-import CommunityPage from './react/pages/CommunityPage';
+import AnnouncementsContainer from './react/containers/AnnouncementsContainer';
+import CoursesContainer from './react/containers/CoursesContainer';
+import CommunityContainer from './react/containers/CommunityContainer';
 
-//note: react_router won't work with gh-pages
+import storeSetUp from './redux/storeSetUp';
+
+let store = storeSetUp();
+
 ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path="/" component={LandingPage}/>
-    <Route path="/announcements" component={AnnouncementsPage}/>
-    <Route path="/courses" component={CoursesPage}/>
-    <Route path="/community" component={CommunityPage}/>
-  </Router>,
+	<Provider store={store}>
+		<Router history={browserHistory}>
+		  <Route path="/" component={LandingPage}/>
+		  <Route path="/announcements" component={AnnouncementsContainer}/>
+		  <Route path="/courses" component={CoursesContainer}/>
+		  <Route path="/community" component={CommunityContainer}/>
+		</Router>
+  </Provider>,
   document.getElementById('root')
 );

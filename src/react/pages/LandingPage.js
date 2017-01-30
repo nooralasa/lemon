@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import * as rbs from 'react-bootstrap/lib';
+import { browserHistory } from 'react-router';
+
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -15,7 +17,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button bsSize="large" href="/announcements"><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
+                <rbs.Button bsSize="large" onClick={() => { browserHistory.push('/announcements');}}><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
               </div>
             </div>
           </div>

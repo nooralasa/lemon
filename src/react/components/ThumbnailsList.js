@@ -1,17 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
+import { browserHistory } from 'react-router';
 
 class ThumbnailsList extends Component {
-  renderThumbnails(list, items, idToIndex) {
+  renderThumbnails(list, items, url) {
     const listThumbnails = list.map((id) =>
-      <td>
+      <td key={id}>
         <rbs.Thumbnail 
           key={id} 
-          src={items[idToIndex[id]]['body_params']['img']}
-          style={{width: '150'}}
-          onClick={() => {console.log("Hello")}}
+          src={items[id]['body_params']['img']}
+          style={{width: 150}}
+          onClick={() => 
+            {
+              browserHistory.push(url);
+              this.props.onUserClick(id);
+            }
+          }
         >
-          <h5 style={{overflow: 'auto'}}>{items[idToIndex[id]]['body_params']['title']}</h5>
+          <h5 key={id} style={{overflow: 'auto'}}>{items[id]['body_params']['title']}</h5>
         </rbs.Thumbnail>
       </td>
     );
@@ -29,13 +35,21 @@ class ThumbnailsList extends Component {
 
   render() {
     return (
-      <rbs.Panel style={{marginTop:'25'}}>
+      <rbs.Panel style={{marginTop:25}}>
         <p style={{textAlign: 'left'}}>{this.props.header}</p>
         <br/>
-        {this.renderThumbnails(this.props.list, this.props.items, this.props.idToIndex)}
+        {this.renderThumbnails(this.props.list, this.props.items, this.props.url)}
       </rbs.Panel>
     );
   }
+}
+
+ThumbnailsList.propTypes = {
+  header: PropTypes.string.isRequired,
+  list: PropTypes.array.isRequired,
+  onUserClick: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  items: PropTypes.object.isRequired
 }
 
 export default ThumbnailsList;
