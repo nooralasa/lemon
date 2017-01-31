@@ -2,7 +2,7 @@
   "name": "lemon",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://fresh-soup.surge.sh",
+  "homepage": "http://lemon.surge.sh",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "immutable": "^3.8.1",
@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && sw-precache --config=sw-precache-config.js",
-    "deploy": "npm run build&&surge buil fresh-soup.surge.sh",
+    "deploy": "npm run build&&surge build lemon.surge.sh",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
