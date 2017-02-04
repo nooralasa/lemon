@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "http://lemon.surge.sh",
+  "proxy": "http://localhost:3001/",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "immutable": "^3.8.1",
@@ -11,6 +12,7 @@
     "redux": "^3.6.0"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "moment": "^2.17.1",
     "react": "^15.4.2",
@@ -18,6 +20,8 @@
     "react-dom": "^15.4.2",
     "react-router": "^3.0.2",
     "react-router-redux": "^4.0.7",
+    "redux-logger": "^2.8.1",
+    "redux-thunk": "^2.2.0",
     "sw-precache": "^4.3.0"
   },
   "scripts": {

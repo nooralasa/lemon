@@ -21,7 +21,7 @@ class Announcements extends Component {
         <hr />
         <p style={{fontWeight: 'normal'}}>{announcement['body_params']['message']}</p>
         <br />
-        <p style={{float: 'right', fontWeight: 'normal', color: 'grey', fontSize: '10px', margin: 0}}><span>{announcement['body_params']['timestamp'].format('LLLL')}</span> by {announcement['body_params']['user']}</p>        
+        <p style={{float: 'right', fontWeight: 'normal', color: 'grey', fontSize: '10px', margin: 0}}><span>{announcement['body_params']['timestamp']}</span> by {announcement['body_params']['user']}</p>        
       </div>
     );
   }

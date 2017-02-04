@@ -1,59 +1,171 @@
-export const ADD_COURSE = 'ADD_COURSE';
-export const UPDATE_COURSE = 'UPDATE_COURSE';
-export const DELETE_COURSE = 'DELETE_COURSE';
+import axios from 'axios';
 
-var coursesId = -1;
-export function addCourse(title, source, link, img, description) {
-	//const request = axios.get(`/api/v1/lemon/${access_token}`, access_token);
-	coursesId += 1;
+export const ADD_COURSE_REQUEST = 'ADD_COURSE_REQUEST';
+export const ADD_COURSE_FAILURE = 'ADD_COURSE_FAILURE';
+export const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
+
+export const UPDATE_COURSE_REQUEST = 'UPDATE_COURSE_REQUEST';
+export const UPDATE_COURSE_FAILURE = 'UPDATE_COURSE_FAILURE';
+export const UPDATE_COURSE_SUCCESS = 'UPDATE_COURSE_SUCCESS';
+
+export const DELETE_COURSE_REQUEST = 'DELTE_COURSE_REQUEST';
+export const DELETE_COURSE_FAILURE = 'DELTE_COURSE_FAILURE';
+export const DELETE_COURSE_SUCCESS = 'DELTE_COURSE_SUCCESS';
+
+function addCourseRequest() {
+
+	return {
+		type: ADD_COURSE_REQUEST
+	};
+}
+
+function addCourseSuccess(data) {
 	const request = {
-		id: coursesId,
+		id: data.id,
 		body_params: {
-			title: title,
-			source: source,
-			link: link,
-			img: img,
+			title: data.title,
+			source: data.source,
+			link: data.course_link,
+			img: data.image,
 			list: [],
-			description: description
+			description: data.description
 		}
 	};
 
 	return {
-		type: ADD_COURSE,
+		type: ADD_COURSE_SUCCESS,
 		payload: request
+	};
+}
+
+function addCourseFailure(error) {
+
+	return {
+		type: ADD_COURSE_FAILURE,
+		payload: {error: error}
+	};
+}
+
+export function addCourse(title, source, link, img, description) {
+	return dispatch => {
+		dispatch(addCourseRequest());
+
+		return axios.post('/api/v1/courses', {
+			title: title,
+			source: source,
+			description: description,
+			image: img,
+			course_link: link,
+			chat_link: link
+		})
+		.then(res => {
+			console.log('adding course success!');
+			dispatch(addCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('adding course failure!');
+			dispatch(addCourseFailure(err));	
+		});
+	}	
+}
+
+function updateCourseRequest(id) {
+
+	return {
+		type: UPDATE_COURSE_REQUEST,
+		payload: {id: id}
+	};
+}
+
+function updateCourseSuccess(data) {
+	const request = {
+		id: data.id,
+		body_params: {
+			title: data.title,
+			source: data.source,
+			link: data.course_link,
+			img: data.image,
+			list: [],
+			description: data.description
+		}
+	};
+
+	return {
+		type: UPDATE_COURSE_SUCCESS,
+		payload: request
+	};
+}
+
+function updateCourseFailure(error) {
+
+	return {
+		type: UPDATE_COURSE_FAILURE,
+		payload: {error: error}
 	};
 }
 
 export function updateCourse(id, title, source, link, img, list, description) {
-	//const request = axios.get(`/api/v1/lemon/${access_token}`, access_token);
-	const request = {
-		id: id,
-		body_params: {
+	return dispatch => {
+		dispatch(updateCourseRequest());
+
+		return axios.put(`/api/v1/courses/${id}`, {
 			title: title,
 			source: source,
-			link: link,
-			img: img,
-			list: list,
-			description: description
-		}
-	};
+			description: description,
+			image: img,
+			course_link: link,
+			chat_link: link
+		})
+		.then(res => {
+			console.log('updating course success!');
+			dispatch(updateCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('updating course failure!');
+			dispatch(updateCourseFailure(err));	
+		});
+	}	
+}
 
+function deleteCourseRequest(id) {
 
 	return {
-		type: UPDATE_COURSE,
+		type: DELETE_COURSE_REQUEST,
+		payload: {id: id}
+	};
+}
+
+function deleteCourseSuccess(data) {
+	const request = {
+		id: data.id,
+	};
+
+	return {
+		type: DELETE_COURSE_SUCCESS,
 		payload: request
 	};
 }
 
-export function deleteCourse(id) {
-	//const request = axios.get(`/api/v1/lemon/${access_token}`, access_token);
-	const request = {
-		id: id
-	};
-
+function deleteCourseFailure(error) {
 
 	return {
-		type: DELETE_COURSE,
-		payload: request
+		type: DELETE_COURSE_FAILURE,
+		payload: {error: error}
 	};
+}
+
+export function deleteCourse(id) {
+	return dispatch => {
+		dispatch(deleteCourseRequest());
+
+		return axios.delete(`/api/v1/courses/${id}`)
+		.then(res => {
+			console.log('deleting course success!');
+			dispatch(deleteCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('deleting course failure!');
+			dispatch(deleteCourseFailure(err));	
+		});
+	}	
 }
