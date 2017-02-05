@@ -1,4 +1,4 @@
-import {FETCH_ANNOUNCEMENTS, FETCH_ANNOUNCEMENT} from '../actions/announcementsUIActions.js'
+import {DISPLAY_FETCHED_ANNOUNCEMENTS, FETCH_ANNOUNCEMENT} from '../actions/announcementsUIActions.js'
 import * as Immutable from 'immutable';
 
 const initialAnnouncementsUIState = Immutable.fromJS({
@@ -10,7 +10,7 @@ const initialAnnouncementsUIState = Immutable.fromJS({
 function announcementsUI(state = initialAnnouncementsUIState, action) {
 	switch (action.type) {
 
-		case FETCH_ANNOUNCEMENTS:
+		case DISPLAY_FETCHED_ANNOUNCEMENTS:
 			state = state.set('isAnnouncementsListViewable', true);
 			return state
 

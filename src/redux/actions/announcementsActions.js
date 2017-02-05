@@ -1,4 +1,9 @@
 import axios from 'axios';
+import * as Immutable from 'immutable';
+
+export const FETCH_ANNOUNCEMENTS_REQUEST = 'FETCH_ANNOUNCEMENTS_REQUEST';
+export const FETCH_ANNOUNCEMENTS_FAILURE = 'FETCH_ANNOUNCEMENTS_FAILURE';
+export const FETCH_ANNOUNCEMENTS_SUCCESS = 'FETCH_ANNOUNCEMENTS_SUCCESS';
 
 export const ADD_ANNOUNCEMENT_REQUEST = 'ADD_ANNOUNCEMENT_REQUEST';
 export const ADD_ANNOUNCEMENT_FAILURE = 'ADD_ANNOUNCEMENT_FAILURE';
@@ -11,6 +16,66 @@ export const UPDATE_ANNOUNCEMENT_SUCCESS = 'UPDATE_ANNOUNCEMENT_SUCCESS';
 export const DELETE_ANNOUNCEMENT_REQUEST = 'DELETE_ANNOUNCEMENT_REQUEST';
 export const DELETE_ANNOUNCEMENT_FAILURE = 'DELETE_ANNOUNCEMENT_FAILURE';
 export const DELETE_ANNOUNCEMENT_SUCCESS = 'DELETE_ANNOUNCEMENT_SUCCESS';
+
+function fetchAnnouncementsRequest() {
+
+	return {
+		type: FETCH_ANNOUNCEMENTS_REQUEST
+	};
+}
+
+function fetchAnnouncementsSuccess(data) {
+	let announcementsList = Immutable.List();
+	let announcementsById = Immutable.Map();
+	data.forEach(function(item) {
+		announcementsList = announcementsList.push(item.id);
+		announcementsById = announcementsById.set(item.id, {
+			id: item.id,
+			header: item.header,
+			body_params: {
+				message: item.message,
+				timestamp: item.timestamp,
+				user: item.user_id
+			}
+		});
+	});
+	
+	console.log('announcementsList: ', announcementsList);
+	console.log('announcementsById: ', announcementsById);
+	const request = {
+		announcementsList: announcementsList,
+		announcementsById: announcementsById
+	};
+
+	return {
+		type: FETCH_ANNOUNCEMENTS_SUCCESS,
+		payload: request
+	};
+}
+
+function fetchAnnouncementsFailure(error) {
+
+	return {
+		type: FETCH_ANNOUNCEMENTS_FAILURE,
+		payload: {error: error}
+	};
+}
+
+export function fetchAnnouncements() {
+	return dispatch => {
+		dispatch(fetchAnnouncementsRequest());
+
+		return axios.get('/api/v1/announcements')
+		.then(res => {
+			console.log('fetching announcements success!');
+			dispatch(fetchAnnouncementsSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('fetching announcements failure!');
+			dispatch(fetchAnnouncementsFailure(err));	
+		});
+	}	
+}
 
 function addAnnouncementRequest() {
 

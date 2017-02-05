@@ -7,13 +7,18 @@ import {
 	UPDATE_SCHOLAR_FAILURE, 
 	DELETE_SCHOLAR_REQUEST, 
 	DELETE_SCHOLAR_SUCCESS, 
-	DELETE_SCHOLAR_FAILURE
+	DELETE_SCHOLAR_FAILURE,
+	FETCH_SCHOLARS_REQUEST, 
+	FETCH_SCHOLARS_SUCCESS, 
+	FETCH_SCHOLARS_FAILURE
 } from '../actions/communityActions.js'
 
 import * as Immutable from 'immutable';
 
 const initialCommunityState = Immutable.fromJS({
 	apiCalling: {
+		isFetching: false,
+		errorFetching: null,
 		isAdding: false,
 		errorAdding: null,
 		isUpdating: false,
@@ -29,6 +34,21 @@ const initialCommunityState = Immutable.fromJS({
 
 function community(state = initialCommunityState, action) {
 	switch (action.type) {
+
+		case FETCH_SCHOLARS_REQUEST:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
+			return state
+
+		case FETCH_SCHOLARS_SUCCESS:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.update('communityList', communityList => action.payload.communityList);
+			state = state.update('communityById', communityById => action.payload.communityById);
+			return state
+
+		case FETCH_SCHOLARS_FAILURE:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
+			return state
 
 		case ADD_SCHOLAR_REQUEST:
 			state = state.updateIn(['apiCalling','isAdding'], isAdding => true);

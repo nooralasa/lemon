@@ -1,4 +1,9 @@
 import axios from 'axios';
+import * as Immutable from 'immutable';
+
+export const FETCH_COURSES_REQUEST = 'FETCH_COURSES_REQUEST';
+export const FETCH_COURSES_FAILURE = 'FETCH_COURSES_FAILURE';
+export const FETCH_COURSES_SUCCESS = 'FETCH_COURSES_SUCCESS';
 
 export const ADD_COURSE_REQUEST = 'ADD_COURSE_REQUEST';
 export const ADD_COURSE_FAILURE = 'ADD_COURSE_FAILURE';
@@ -11,6 +16,66 @@ export const UPDATE_COURSE_SUCCESS = 'UPDATE_COURSE_SUCCESS';
 export const DELETE_COURSE_REQUEST = 'DELTE_COURSE_REQUEST';
 export const DELETE_COURSE_FAILURE = 'DELTE_COURSE_FAILURE';
 export const DELETE_COURSE_SUCCESS = 'DELTE_COURSE_SUCCESS';
+
+function fetchCoursesRequest() {
+
+	return {
+		type: FETCH_COURSES_REQUEST
+	};
+}
+
+function fetchCoursesSuccess(data) {
+	let coursesList = Immutable.List();
+	let coursesById = Immutable.Map();
+	data.forEach(function(item) {
+		coursesList = coursesList.push(item.id);
+		coursesById = coursesById.set(item.id, {
+			id: item.id,
+			body_params: {
+				title: item.title,
+				source: item.source,
+				link: item.course_link,
+				img: item.image,
+				list: [],
+				description: item.description
+			}
+		});
+	});
+
+	const request = {
+		coursesList: coursesList,
+		coursesById: coursesById
+	};
+
+	return {
+		type: FETCH_COURSES_SUCCESS,
+		payload: request
+	};
+}
+
+function fetchCoursesFailure(error) {
+
+	return {
+		type: FETCH_COURSES_FAILURE,
+		payload: {error: error}
+	};
+}
+
+export function fetchCourses() {
+	return dispatch => {
+		dispatch(fetchCoursesRequest());
+
+		return axios.get('/api/v1/courses')
+		.then(res => {
+			console.log('fetching courses success!');
+			dispatch(fetchCoursesSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('fetching courses failure!');
+			dispatch(fetchCoursesFailure(err));	
+		});
+	}	
+}
 
 function addCourseRequest() {
 

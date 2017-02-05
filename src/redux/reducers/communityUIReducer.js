@@ -1,4 +1,4 @@
-import {FETCH_SCHOLARS, FETCH_SCHOLAR} from '../actions/communityUIActions.js'
+import {DISPLAY_FETCHED_SCHOLARS, FETCH_SCHOLAR} from '../actions/communityUIActions.js'
 import * as Immutable from 'immutable';
 
 const initialCommunityUIState = Immutable.fromJS({
@@ -9,7 +9,7 @@ const initialCommunityUIState = Immutable.fromJS({
 function communityUI(state = initialCommunityUIState, action) {
 	switch (action.type) {
 
-		case FETCH_SCHOLARS:
+		case DISPLAY_FETCHED_SCHOLARS:
 			state = state.set('isCommunityListViewable', true);
 			return state
 

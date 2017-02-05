@@ -1,7 +1,7 @@
-export const FETCH_SCHOLARS = 'FETCH_SCHOLARS';
+export const DISPLAY_FETCHED_SCHOLARS = 'FETCH_SCHOLARS';
 export const FETCH_SCHOLAR = 'FETCH_SCHOLAR';
 
-export function fetchScholars(filter = null) {
+export function displayFetchedScholars(filter = null) {
 	//const request = axios.get(`/api/v1/lemon/${access_token}`, access_token);
 	const request = {
 		filter: filter
@@ -9,7 +9,7 @@ export function fetchScholars(filter = null) {
 
 
 	return {
-		type: FETCH_SCHOLARS,
+		type: DISPLAY_FETCHED_SCHOLARS,
 		payload: request
 	};
 }

@@ -7,13 +7,18 @@ import {
 	UPDATE_ANNOUNCEMENT_FAILURE, 
 	DELETE_ANNOUNCEMENT_REQUEST, 
 	DELETE_ANNOUNCEMENT_SUCCESS, 
-	DELETE_ANNOUNCEMENT_FAILURE
+	DELETE_ANNOUNCEMENT_FAILURE,
+	FETCH_ANNOUNCEMENTS_REQUEST, 
+	FETCH_ANNOUNCEMENTS_SUCCESS, 
+	FETCH_ANNOUNCEMENTS_FAILURE
 } from '../actions/announcementsActions.js'
 
 import * as Immutable from 'immutable';
 
 const initialAnnouncementsState = Immutable.fromJS({
 	apiCalling: {
+		isFetching: false,
+		errorFetching: null,
 		isAdding: false,
 		errorAdding: null,
 		isUpdating: false,
@@ -29,6 +34,21 @@ const initialAnnouncementsState = Immutable.fromJS({
 
 function announcements(state = initialAnnouncementsState, action) {
 	switch (action.type) {
+
+		case FETCH_ANNOUNCEMENTS_REQUEST:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
+			return state
+
+		case FETCH_ANNOUNCEMENTS_SUCCESS:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.update('announcementsList', announcementsList => action.payload.announcementsList);
+			state = state.update('announcementsById', announcementsById => action.payload.announcementsById);
+			return state
+
+		case FETCH_ANNOUNCEMENTS_FAILURE:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
+			return state
 
 		case ADD_ANNOUNCEMENT_REQUEST:
 			state = state.updateIn(['apiCalling','isAdding'], isAdding => true);

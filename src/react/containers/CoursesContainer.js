@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import CoursesPage from '../pages/CoursesPage';
-import {fetchCourse, fetchCourses} from '../../redux/actions/coursesUIActions';
+import {fetchCourse, displayFetchedCourses} from '../../redux/actions/coursesUIActions';
+import {fetchCourses} from '../../redux/actions/coursesActions';
+import {fetchScholars} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
 
@@ -15,12 +17,15 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
+  dispatch(fetchCourses());
+  dispatch(fetchScholars());
   return {
     handleListClick: (id) => {
       dispatch(fetchCourse(id));
     },
     handlePanelClick: () => {
     	dispatch(fetchCourses());
+      dispatch(displayFetchedCourses());
     },
     handleThumbnailClick: (id) => {
       dispatch(fetchScholar(id));

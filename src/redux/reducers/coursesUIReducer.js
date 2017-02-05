@@ -1,4 +1,4 @@
-import {FETCH_COURSES, FETCH_COURSE} from '../actions/coursesUIActions.js'
+import {DISPLAY_FETCHED_COURSES, FETCH_COURSE} from '../actions/coursesUIActions.js'
 import * as Immutable from 'immutable';
 
 const initialCoursesUIState = Immutable.fromJS({
@@ -9,7 +9,7 @@ const initialCoursesUIState = Immutable.fromJS({
 function coursesUI(state = initialCoursesUIState, action) {
 	switch (action.type) {
 
-		case FETCH_COURSES:
+		case DISPLAY_FETCHED_COURSES:
 			state = state.set('isCoursesListViewable', true);
 			return state
 

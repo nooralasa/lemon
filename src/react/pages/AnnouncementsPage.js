@@ -14,14 +14,14 @@ class Announcements extends Component {
     );
   }
 
-  renderItemPanel(announcement) {
+  renderItemPanel(announcement, communityById) {
     return (
       <div>
         <p style={{textAlign: 'center'}}>{announcement['header']}</p>
         <hr />
         <p style={{fontWeight: 'normal'}}>{announcement['body_params']['message']}</p>
         <br />
-        <p style={{float: 'right', fontWeight: 'normal', color: 'grey', fontSize: '10px', margin: 0}}><span>{announcement['body_params']['timestamp']}</span> by {announcement['body_params']['user']}</p>        
+        <p style={{float: 'right', fontWeight: 'normal', color: 'grey', fontSize: '10px', margin: 0}}><span>{announcement['body_params']['timestamp']}</span> by {communityById[announcement['body_params']['user']]['body_params']['title']}</p>        
       </div>
     );
   }
@@ -37,6 +37,7 @@ class Announcements extends Component {
           <ItemsPanel 
             items={this.props.announcementsById}
             itemIds={this.props.announcementsList} 
+            otherItems={this.props.communityById}
             isListViewable={this.props.isAnnouncementsListViewable}
             currentVisible={this.props.currentVisibleAnnouncement}
             handleListClick={this.props.handleListClick}
@@ -58,6 +59,7 @@ Announcements.propTypes = {
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
   announcementsById: PropTypes.object.isRequired,
+  communityById: PropTypes.object.isRequired,
   announcementsList: PropTypes.array.isRequired
 }
 

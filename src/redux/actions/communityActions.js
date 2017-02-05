@@ -1,4 +1,9 @@
 import axios from 'axios';
+import * as Immutable from 'immutable';
+
+export const FETCH_SCHOLARS_REQUEST = 'FETCH_SCHOLARS_REQUEST';
+export const FETCH_SCHOLARS_FAILURE = 'FETCH_SCHOLARS_FAILURE';
+export const FETCH_SCHOLARS_SUCCESS = 'FETCH_SCHOLARS_SUCCESS';
 
 export const ADD_SCHOLAR_REQUEST = 'ADD_SCHOLAR_REQUEST';
 export const ADD_SCHOLAR_FAILURE = 'ADD_SCHOLAR_FAILURE';
@@ -11,6 +16,67 @@ export const UPDATE_SCHOLAR_SUCCESS = 'UPDATE_SCHOLAR_SUCCESS';
 export const DELETE_SCHOLAR_REQUEST = 'DELTE_SCHOLAR_REQUEST';
 export const DELETE_SCHOLAR_FAILURE = 'DELTE_SCHOLAR_FAILURE';
 export const DELETE_SCHOLAR_SUCCESS = 'DELTE_SCHOLAR_SUCCESS';
+
+function fetchScholarsRequest() {
+
+	return {
+		type: FETCH_SCHOLARS_REQUEST
+	};
+}
+
+function fetchScholarsSuccess(data) {
+	let communityList = Immutable.List();
+	let communityById = Immutable.Map();
+	data.forEach(function(item) {
+		communityList = communityList.push(item.id);
+		communityById = communityById.set(item.id, {
+			id: item.id,
+			body_params: {
+				title: item.name,
+				source: item.affiliation,
+				link: item.portfolio,
+				img: item.image,
+				list: [],
+				role: 'scholar',
+				description: item.description
+			}
+		});
+	});
+
+	const request = {
+		communityList: communityList,
+		communityById: communityById
+	};
+
+	return {
+		type: FETCH_SCHOLARS_SUCCESS,
+		payload: request
+	};
+}
+
+function fetchScholarsFailure(error) {
+
+	return {
+		type: FETCH_SCHOLARS_FAILURE,
+		payload: {error: error}
+	};
+}
+
+export function fetchScholars() {
+	return dispatch => {
+		dispatch(fetchScholarsRequest());
+
+		return axios.get('/api/v1/users')
+		.then(res => {
+			console.log('fetching community success!');
+			dispatch(fetchScholarsSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('fetching community failure!');
+			dispatch(fetchScholarsFailure(err));	
+		});
+	}	
+}
 
 function addScholarRequest() {
 
