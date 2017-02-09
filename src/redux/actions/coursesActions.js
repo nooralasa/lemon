@@ -13,9 +13,9 @@ export const UPDATE_COURSE_REQUEST = 'UPDATE_COURSE_REQUEST';
 export const UPDATE_COURSE_FAILURE = 'UPDATE_COURSE_FAILURE';
 export const UPDATE_COURSE_SUCCESS = 'UPDATE_COURSE_SUCCESS';
 
-export const DELETE_COURSE_REQUEST = 'DELTE_COURSE_REQUEST';
-export const DELETE_COURSE_FAILURE = 'DELTE_COURSE_FAILURE';
-export const DELETE_COURSE_SUCCESS = 'DELTE_COURSE_SUCCESS';
+export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
+export const DELETE_COURSE_FAILURE = 'DELETE_COURSE_FAILURE';
+export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
 
 function fetchCoursesRequest() {
 
@@ -28,18 +28,20 @@ function fetchCoursesSuccess(data) {
 	let coursesList = Immutable.List();
 	let coursesById = Immutable.Map();
 	data.forEach(function(item) {
-		coursesList = coursesList.push(item.id);
-		coursesById = coursesById.set(item.id, {
-			id: item.id,
-			body_params: {
-				title: item.title,
-				source: item.source,
-				link: item.course_link,
-				img: item.image,
-				list: [],
-				description: item.description
-			}
-		});
+		if (coursesById.get(item.id) === undefined ) {
+			coursesList = coursesList.push(item.id);
+			coursesById = coursesById.set(item.id, Immutable.fromJS({
+				id: item.id,
+				body_params: {
+					title: item.title,
+					source: item.source,
+					link: item.course_link,
+					img: item.image,
+					list: [],
+					description: item.description
+				}
+			}));
+		}	
 	});
 
 	const request = {

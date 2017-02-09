@@ -5,7 +5,7 @@ import appReducer from './reducers/index';
 import {addAnnouncement, updateAnnouncement, deleteAnnouncement} from './actions/announcementsActions.js';
 import {logIn , logOut, signUp} from './actions/authenticationActions.js';
 // import {fetchAnnouncements, fetchAnnouncement} from './actions/announcementsUIActions.js'
-import {addScholar, updateScholar, deleteScholar} from './actions/communityActions.js'
+import {addScholar, updateScholar, deleteScholar, addScholarCourse} from './actions/communityActions.js'
 // import {fetchScholars, fetchScholar} from './actions/communityUIActions.js'
 import {addCourse, updateCourse, deleteCourse} from './actions/coursesActions.js'
 // import {fetchCourses, fetchCourse} from './actions/coursesUIActions.js'
@@ -89,6 +89,9 @@ function storeSetUp() {
 	
 	// store.dispatch(deleteCourse(4));
 	// store.dispatch(deleteScholar(5));
+
+	// store.dispatch(addScholarCourse(1, 1));
+	// console.info(JSON.stringify(store.getState(), null, ' '));
 
 
 	//unsubscribe();

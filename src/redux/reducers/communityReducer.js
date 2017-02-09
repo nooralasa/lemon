@@ -1,7 +1,10 @@
 import {
 	ADD_SCHOLAR_REQUEST, 
 	ADD_SCHOLAR_SUCCESS, 
-	ADD_SCHOLAR_FAILURE, 
+	ADD_SCHOLAR_FAILURE,
+	ADD_SCHOLAR_COURSE_REQUEST, 
+	ADD_SCHOLAR_COURSE_SUCCESS, 
+	ADD_SCHOLAR_COURSE_FAILURE, 
 	UPDATE_SCHOLAR_REQUEST, 
 	UPDATE_SCHOLAR_SUCCESS, 
 	UPDATE_SCHOLAR_FAILURE, 
@@ -48,6 +51,34 @@ function community(state = initialCommunityState, action) {
 		case FETCH_SCHOLARS_FAILURE:
 			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
 			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
+			return state
+
+		case ADD_SCHOLAR_COURSE_REQUEST:
+			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => true);
+			state = state.updateIn(['apiCalling','currentlyUpdating'], currentlyUpdating => action.payload.user_id);
+			return state
+
+		case ADD_SCHOLAR_COURSE_SUCCESS:
+			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => false);
+			// const list = state.getIn(['communityById', action.payload.user_id, 'body_params', 'list']);
+			console.log('hase in: ');
+			console.log(state.hasIn(['communityById', action.payload.user_id, 'body_params', 'list']));
+			let newList = state.getIn(['communityById', action.payload.user_id, 'body_params', 'list']);
+			console.log('new list: ', action.payload);
+			newList = newList.push(action.payload.course_id);
+			state = state.update(
+				'communityById', 
+				communityById => communityById.updateIn(
+					[action.payload.user_id, 'body_params', 'list'], 
+					list => newList
+					)
+				);
+			return state
+
+		case ADD_SCHOLAR_COURSE_FAILURE:
+			state = state.update('isUpdating', isUpdating => false);
+			state = state.update('currentlyUpdating', currentlyUpdating => null);
+			state = state.update('errorUpdating', errorUpdating => action.payload.error);
 			return state
 
 		case ADD_SCHOLAR_REQUEST:

@@ -28,16 +28,18 @@ function fetchAnnouncementsSuccess(data) {
 	let announcementsList = Immutable.List();
 	let announcementsById = Immutable.Map();
 	data.forEach(function(item) {
-		announcementsList = announcementsList.push(item.id);
-		announcementsById = announcementsById.set(item.id, {
-			id: item.id,
-			header: item.header,
-			body_params: {
-				message: item.message,
-				timestamp: item.timestamp,
-				user: item.user_id
-			}
-		});
+		if (announcementsById.get(item.id) === undefined ) {
+			announcementsList = announcementsList.push(item.id);
+			announcementsById = announcementsById.set(item.id, Immutable.fromJS({
+				id: item.id,
+				header: item.header,
+				body_params: {
+					message: item.message,
+					timestamp: item.timestamp,
+					user: item.user_id
+				}
+			}));
+		}
 	});
 	
 	console.log('announcementsList: ', announcementsList);

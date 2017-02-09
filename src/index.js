@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { Router, Route, browserHistory } from 'react-router';
 
-import LandingPage from './react/pages/LandingPage';
+import LandingContainer from './react/containers/LandingContainer';
 import AnnouncementsContainer from './react/containers/AnnouncementsContainer';
 import CoursesContainer from './react/containers/CoursesContainer';
 import CommunityContainer from './react/containers/CommunityContainer';
@@ -15,7 +15,7 @@ let store = storeSetUp();
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
-		  <Route path="/" component={LandingPage}/>
+		  <Route path="/" component={LandingContainer}/>
 		  <Route path="/announcements" component={AnnouncementsContainer}/>
 		  <Route path="/courses" component={CoursesContainer}/>
 		  <Route path="/community" component={CommunityContainer}/>
