@@ -1,18 +1,18 @@
 import { connect } from 'react-redux';
 import LandingPage from '../pages/LandingPage';
-import {logIn} from '../../redux/actions/authenticationActions';
+import {logIn, fetchLogIn} from '../../redux/actions/authenticationActions';
 
 
 const mapStateToProps = (state) => {
   return {
-  	isLoggedIn: state.courses.get('isLoggedIn')
+  	isLoggedIn: state.authentication.get('isLoggedIn')
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     handleLogInAttempt: () => {
-      dispatch(logIn());
+      dispatch(fetchLogIn());
     }
   }
 }
