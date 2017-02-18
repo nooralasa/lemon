@@ -16,15 +16,6 @@ ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
 		  <Route path="/login" component={LandingContainer} />
-		  <Route path="/announcements" component={AnnouncementsContainer}/>
-		  <Route path="/courses" component={CoursesContainer}/>
-		  <Route path="/community" component={CommunityContainer}/>
-		  <Route path="*" >
-		  	<IndexRedirect to="/announcements" />
-		  	<IndexRedirect to="/courses" />
-		  	<IndexRedirect to="/community" />
-		  	<IndexRedirect to="/login" />
-		  </Route>
 		</Router>
   </Provider>,
   document.getElementById('root')
