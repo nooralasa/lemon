@@ -25,7 +25,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button href='http://127.0.0.1:3001/auth/github' onClick={() => this.handleLogIn()}bsSize="large"><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
+                <rbs.Button href='/auth/github' onClick={() => this.handleLogIn()}bsSize="large"><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
               </div>
             </div>
           </div>
