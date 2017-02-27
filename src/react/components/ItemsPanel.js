@@ -21,7 +21,7 @@ class ItemsPanel extends Component {
       return (
         <ItemPanel 
           onUserClick={this.props.handlePanelClick}
-          renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url)} />
+          renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)} />
       );
     }
     

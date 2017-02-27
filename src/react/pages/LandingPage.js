@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 import { browserHistory } from 'react-router';
 
@@ -7,6 +7,14 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 class HeaderInstance extends Component {
+  constructor(props) {
+    super(props);
+    this.handleLogIn = this.handleLogIn.bind(this);
+  }
+
+  handleLogIn() {
+    this.props.onUserClick();
+  }
   render() {
     return (  
       <div className="intro-header">
@@ -17,7 +25,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button bsSize="large" onClick={() => { browserHistory.push('/announcements');}}><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
+                <rbs.Button href='http://127.0.0.1:3001/auth/github' onClick={() => this.handleLogIn()}bsSize="large"><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
               </div>
             </div>
           </div>
@@ -56,7 +64,7 @@ class Landing extends Component {
       <div className="landing">
         <Navbar items={[['About','#about'], ['Contact', '#contact']]}/>
 
-        <HeaderInstance />
+        <HeaderInstance onUserClick={this.props.handleLogInAttempt}/>
 
         <a name="about" />
         <AboutInstance />
@@ -66,6 +74,11 @@ class Landing extends Component {
       </div>
     );
   }
+}
+
+Landing.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  handleLogInAttempt: PropTypes.func.isRequired
 }
 
 export default Landing;

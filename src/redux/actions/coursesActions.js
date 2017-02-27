@@ -5,17 +5,68 @@ export const FETCH_COURSES_REQUEST = 'FETCH_COURSES_REQUEST';
 export const FETCH_COURSES_FAILURE = 'FETCH_COURSES_FAILURE';
 export const FETCH_COURSES_SUCCESS = 'FETCH_COURSES_SUCCESS';
 
+export const FETCH_COURSE_USERS_REQUEST = 'FETCH_COURSE_USERS_REQUEST';
+export const FETCH_COURSE_USERS_FAILURE = 'FETCH_COURSE_USERS_FAILURE';
+export const FETCH_COURSE_USERS_SUCCESS = 'FETCH_COURSE_USERS_SUCCESS';
+
 export const ADD_COURSE_REQUEST = 'ADD_COURSE_REQUEST';
 export const ADD_COURSE_FAILURE = 'ADD_COURSE_FAILURE';
 export const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
+
+export const ENROLL_IN_COURSE_REQUEST = 'ENROLL_IN_COURSE_REQUEST';
+export const ENROLL_IN_COURSE_FAILURE = 'ENROLL_IN_COURSE_FAILURE';
+export const ENROLL_IN_COURSE_SUCCESS = 'ENROLL_IN_COURSE_SUCCESS';
 
 export const UPDATE_COURSE_REQUEST = 'UPDATE_COURSE_REQUEST';
 export const UPDATE_COURSE_FAILURE = 'UPDATE_COURSE_FAILURE';
 export const UPDATE_COURSE_SUCCESS = 'UPDATE_COURSE_SUCCESS';
 
-export const DELETE_COURSE_REQUEST = 'DELTE_COURSE_REQUEST';
-export const DELETE_COURSE_FAILURE = 'DELTE_COURSE_FAILURE';
-export const DELETE_COURSE_SUCCESS = 'DELTE_COURSE_SUCCESS';
+export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
+export const DELETE_COURSE_FAILURE = 'DELETE_COURSE_FAILURE';
+export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
+
+function enrollInCourseRequest() {
+
+	return {
+		type: ENROLL_IN_COURSE_REQUEST
+	};
+}
+
+function enrollInCourseSuccess(data) {
+
+	return {
+		type: ENROLL_IN_COURSE_SUCCESS,
+		request: data
+	};
+}
+
+function enrollInCourseFailure(error) {
+
+	return {
+		type: ENROLL_IN_COURSE_FAILURE,
+		payload: {error: error}
+	};
+}
+
+export function enrollInCourse(user_id, course_id) {
+	return dispatch => {
+		dispatch(enrollInCourseRequest());
+
+		return axios.post('/api/v1/users/courses', {
+			user_id: user_id,
+			course_id: course_id
+		})
+		.then(res => {
+			console.log('adding user course success!');
+			dispatch(enrollInCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('adding user course failure!');
+			dispatch(enrollInCourseFailure(err));	
+		});
+	}	
+}
+
 
 function fetchCoursesRequest() {
 
@@ -28,18 +79,21 @@ function fetchCoursesSuccess(data) {
 	let coursesList = Immutable.List();
 	let coursesById = Immutable.Map();
 	data.forEach(function(item) {
-		coursesList = coursesList.push(item.id);
-		coursesById = coursesById.set(item.id, {
-			id: item.id,
-			body_params: {
-				title: item.title,
-				source: item.source,
-				link: item.course_link,
-				img: item.image,
-				list: [],
-				description: item.description
-			}
-		});
+		if (coursesById.get(item.id) === undefined ) {
+			coursesList = coursesList.push(item.id);
+			coursesById = coursesById.set(item.id, Immutable.Map({
+				id: item.id,
+				body_params: Immutable.Map({
+					title: item.title,
+					source: item.source,
+					link: item.course_link,
+					chat_link: item.chat_link,
+					img: item.image,
+					list: Immutable.List(),
+					description: item.description
+				})
+			}));
+		}	
 	});
 
 	const request = {
@@ -73,6 +127,52 @@ export function fetchCourses() {
 		.catch(err => {
 			console.log('fetching courses failure!');
 			dispatch(fetchCoursesFailure(err));	
+		});
+	}	
+}
+
+function fetchCourseUsersRequest() {
+
+	return {
+		type: FETCH_COURSE_USERS_REQUEST
+	};
+}
+
+function fetchCourseUsersSuccess(data, id) {
+	let list = Immutable.List();
+	data.forEach(function(item) {
+		list = list.push(item.user_id);
+	});
+
+	const request = {
+		courseId: id,
+		list: list
+	};
+
+	return {
+		type: FETCH_COURSE_USERS_SUCCESS,
+		payload: request
+	};
+}
+
+function fetchCourseUsersFailure(error) {
+
+	return {
+		type: FETCH_COURSE_USERS_FAILURE,
+		payload: {error: error}
+	};
+}
+
+export function fetchCourseUsers(id) {
+	return dispatch => {
+		dispatch(fetchCourseUsersRequest());
+
+		return axios.get('/api/v1/courses/users/'+id)
+		.then(res => {
+			dispatch(fetchCourseUsersSuccess(res.data, id));		
+		})
+		.catch(err => {
+			dispatch(fetchCourseUsersFailure(err));	
 		});
 	}	
 }
@@ -111,7 +211,7 @@ function addCourseFailure(error) {
 	};
 }
 
-export function addCourse(title, source, link, img, description) {
+export function addCourse(title, room, source, link, img, description) {
 	return dispatch => {
 		dispatch(addCourseRequest());
 
@@ -121,7 +221,7 @@ export function addCourse(title, source, link, img, description) {
 			description: description,
 			image: img,
 			course_link: link,
-			chat_link: link
+			chat_link: 'https://gitter.im/ML-LIME/'+room
 		})
 		.then(res => {
 			console.log('adding course success!');

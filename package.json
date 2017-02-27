@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "http://lemon.surge.sh",
-  "proxy": "http://localhost:3001/",
+  "proxy": "http://127.0.0.1:3001/",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "immutable": "^3.8.1",
@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
+    "github-api": "^3.0.0",
     "moment": "^2.17.1",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
