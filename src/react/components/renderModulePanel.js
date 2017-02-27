@@ -18,12 +18,17 @@ function moduleTitle(body_params) {
   );
 }
 
-function moduleControls(body_params, btn1, btn2) {
+//add user to chat link and add thumbnail when Enroll button is pressed
+function moduleControls(body_params, btn1, btn2, handleBtn1, course_id) {
+  function handleBtnClick() {
+    handleBtn1(course_id);
+    window.location.replace(body_params['link']);
+  }
   return (
     <div>
-      <rbs.Button bsSize="large" href={body_params['link']} block>{btn1}</rbs.Button>
+      <rbs.Button bsSize="large" onClick={handleBtnClick} block>{btn1}</rbs.Button>
       <br />
-      <rbs.Button bsSize="large" block>{btn2}</rbs.Button>
+      <rbs.Button bsSize="large" href={body_params['chat_link']} block>{btn2}</rbs.Button>
     </div>
   );
 }
@@ -38,7 +43,7 @@ function moduleDescription(body_params, header) {
   );
 }
 
-function renderModulePanel(item, btn1, btn2, descriptionHeader, otherItems, thumbnailsHeader, onUserClick, url) {
+function renderModulePanel(item, btn1, handleBtn1, btn2, descriptionHeader, otherItems, thumbnailsHeader, onUserClick, url) {
   return (
       <div className="container">
         <div className="row">
@@ -46,7 +51,7 @@ function renderModulePanel(item, btn1, btn2, descriptionHeader, otherItems, thum
             {moduleTitle(item['body_params'])}
           </div>
           <div className="col-md-3" style={{maxWidth:300, marginTop:10}}>
-            {moduleControls(item['body_params'], btn1, btn2)}
+            {moduleControls(item['body_params'], btn1, btn2, handleBtn1, item['id'])}
           </div>
         </div>
         {moduleDescription(item['body_params'], descriptionHeader)}

@@ -25,8 +25,12 @@ class Courses extends Component {
     );
   }
 
-  renderItemPanel(course, communityById, handleThumbnailClick, url) {
-    return renderModulePanel(course, 'Enroll Now', 'Course Channel', 'Course Description', communityById, 'Enrolled Scholars', handleThumbnailClick, url);
+  renderItemPanel(course, communityById, handleThumbnailClick, url, handleButtonClick) {
+    return renderModulePanel(course, 'Enroll Now', handleButtonClick, 'Course Channel', 'Course Description', communityById, 'Enrolled Scholars', handleThumbnailClick, url);
+  }
+
+  componentDidMount() {
+    this.props.mount(this.props.isCoursesListViewable, this.props.currentVisibleCourse);
   }
 
   render() {
@@ -46,6 +50,7 @@ class Courses extends Component {
             handleListClick={this.props.handleListClick}
             handlePanelClick={this.props.handlePanelClick}
             handleThumbnailClick={this.props.handleThumbnailClick}
+            handleButtonClick={this.props.handleButtonClick}
             url={'/community'}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}/>
@@ -63,6 +68,8 @@ Courses.propTypes = {
   currentVisibleCourse: PropTypes.number.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
+  mount: PropTypes.func.isRequired,
+  handleButtonClick: PropTypes.func.isRequired,
   handleThumbnailClick: PropTypes.func.isRequired,
   coursesById: PropTypes.object.isRequired,
   coursesList: PropTypes.array.isRequired,

@@ -26,7 +26,11 @@ class Community extends Component {
   }
 
   renderItemPanel(scholar, coursesById, handleThumbnailClick, url) {
-    return renderModulePanel(scholar, 'Personal Portfolio', 'Direct Message', 'About Scholar', coursesById, 'Enrolled Courses', handleThumbnailClick, url);
+    return renderModulePanel(scholar, 'Personal Portfolio', null, 'Direct Message', 'About Scholar', coursesById, 'Enrolled Courses', handleThumbnailClick, url);
+  }
+
+  componentDidMount() {
+    this.props.mount(this.props.isCommunityListViewable, this.props.currentVisibleScholar);
   }
 
   render() {

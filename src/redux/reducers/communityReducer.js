@@ -13,7 +13,13 @@ import {
 	DELETE_SCHOLAR_FAILURE,
 	FETCH_SCHOLARS_REQUEST, 
 	FETCH_SCHOLARS_SUCCESS, 
-	FETCH_SCHOLARS_FAILURE
+	FETCH_SCHOLARS_FAILURE,
+	FETCH_SCHOLAR_COURSES_REQUEST, 
+	FETCH_SCHOLAR_COURSES_SUCCESS, 
+	FETCH_SCHOLAR_COURSES_FAILURE,
+	CURRENT_SCHOLAR_REQUEST, 
+	CURRENT_SCHOLAR_SUCCESS, 
+	CURRENT_SCHOLAR_FAILURE
 } from '../actions/communityActions.js'
 
 import * as Immutable from 'immutable';
@@ -31,12 +37,27 @@ const initialCommunityState = Immutable.fromJS({
 		currentlyDeleting: null,
 		errorDeleting: null
 	},
+	currentlyLoggedIn: null,
 	communityList: [],
 	communityById: {}
 });
 
 function community(state = initialCommunityState, action) {
 	switch (action.type) {
+
+		case CURRENT_SCHOLAR_REQUEST:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
+			return state
+
+		case CURRENT_SCHOLAR_SUCCESS:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.update('currentlyLoggedIn', currentlyLoggedIn => action.payload.user_id);
+			return state
+
+		case CURRENT_SCHOLAR_FAILURE:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
+			return state
 
 		case FETCH_SCHOLARS_REQUEST:
 			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
@@ -53,6 +74,23 @@ function community(state = initialCommunityState, action) {
 			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
 			return state
 
+		case FETCH_SCHOLAR_COURSES_REQUEST:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
+			return state
+
+		case FETCH_SCHOLAR_COURSES_SUCCESS:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			var mutableState = state.toJS();
+			mutableState['communityById'][action.payload.userId]['body_params']['list'] = action.payload.list;
+			console.log('mutableState: ', mutableState);
+			state = Immutable.fromJS(mutableState);
+			return state
+
+		case FETCH_SCHOLAR_COURSES_FAILURE:
+			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
+			return state
+
 		case ADD_SCHOLAR_COURSE_REQUEST:
 			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => true);
 			state = state.updateIn(['apiCalling','currentlyUpdating'], currentlyUpdating => action.payload.user_id);
@@ -60,7 +98,6 @@ function community(state = initialCommunityState, action) {
 
 		case ADD_SCHOLAR_COURSE_SUCCESS:
 			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => false);
-			// const list = state.getIn(['communityById', action.payload.user_id, 'body_params', 'list']);
 			console.log('hase in: ');
 			console.log(state.hasIn(['communityById', action.payload.user_id, 'body_params', 'list']));
 			let newList = state.getIn(['communityById', action.payload.user_id, 'body_params', 'list']);
