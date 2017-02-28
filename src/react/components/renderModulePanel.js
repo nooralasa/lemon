@@ -22,13 +22,13 @@ function moduleTitle(body_params) {
 function moduleControls(body_params, btn1, btn2, handleBtn1, course_id) {
   function handleBtnClick() {
     handleBtn1(course_id);
-    window.location.replace(body_params['link']);
+    window.open(body_params['link']);
   }
   return (
     <div>
       <rbs.Button bsSize="large" onClick={handleBtnClick} block>{btn1}</rbs.Button>
       <br />
-      <rbs.Button bsSize="large" href={body_params['chat_link']} block>{btn2}</rbs.Button>
+      <rbs.Button bsSize="large" target="_blank" href={body_params['chat_link']} block>{btn2}</rbs.Button>
     </div>
   );
 }
