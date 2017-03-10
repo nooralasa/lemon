@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import Navbar from '../components/Navbar';
-import Body from '../components/Body';
 import Title from '../components/Title';
 import ItemsPanel from '../components/ItemsPanel';
 import Footer from '../components/Footer';
@@ -31,7 +30,7 @@ class Announcements extends Component {
       <div className="announcements">
         <Navbar items={[['Announcements','/announcements'], ['Courses','/courses'], ['Community','/community']]} />
 
-        <Body>
+        <div style={{padding: '50px 0'}}>
           <Title>Announcements</Title>
 
           <ItemsPanel 
@@ -44,8 +43,7 @@ class Announcements extends Component {
             handlePanelClick={this.props.handlePanelClick}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}/>
-
-        </Body>
+        </div>
         
         <Footer />
       </div>

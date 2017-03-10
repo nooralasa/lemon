@@ -1,22 +1,52 @@
+// ---------------------------------------------------------------- //
+// The React Component responsible for rendering the Community Page //
+// ---------------------------------------------------------------- //
+
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ * @import PropTypes an object with validators to typecheck the based props
+ * @import rbs the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ **/
 import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
+/** 
+ * React Components
+ **/
 import Navbar from '../components/Navbar';
-import Body from '../components/Body';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
 import renderModulePanel from '../components/renderModulePanel';
 
-const hiddenOverFlow = {overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
-
+/**
+ * The Community Class: a React Component representing the community page
+ **/
 class Community extends Component {
+
+  /**
+   * a function rendering a single item (scholar) in the PanelList
+   * this function is to be passed as a prop to the PanelList component
+   * @param body_params an object including the to-be-rendered scholar's info
+   *        body_params = {
+   *          img: scholar's picture,
+   *          title: scholar's name,
+   *          source: scholar's affiliation
+   *        }
+   **/
   renderListBody(body_params) {
+    //styling to crop overflowing text in a list item
+    const hiddenOverFlow = {overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
     return (
       <rbs.Media>
+       {/* The scholar's image on the left of the list item */}
        <rbs.Media.Left>
           <rbs.Image width={64} height={64} src={body_params['img']} circle />
         </rbs.Media.Left>
+        {/* The scholar's name and affiliation to the right */}
         <rbs.Media.Body>
           <rbs.Media.Heading style={hiddenOverFlow}>{body_params['title']}</rbs.Media.Heading>
           <p style={{color:'grey'}}>{body_params['source']}</p>
@@ -38,7 +68,7 @@ class Community extends Component {
       <div className="community">
         <Navbar items={[['Announcements','/announcements'], ['Courses','/courses'], ['Community','/community']]} />
         
-        <Body>
+        <div style={{padding: '50px 0'}}>
           <Title>Community</Title>
 
           <ItemsPanel 
@@ -53,8 +83,7 @@ class Community extends Component {
             url={'/courses'}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}/>
-          
-        </Body>
+        </div>
 
         <Footer />
       </div>

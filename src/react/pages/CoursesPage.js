@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 import Navbar from '../components/Navbar';
-import Body from '../components/Body';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
@@ -38,7 +37,7 @@ class Courses extends Component {
       <div className="courses">
         <Navbar items={[['Announcements','/announcements'], ['Courses','/courses'], ['Community','/community']]} />
         
-        <Body>
+        <div style={{padding: '50px 0'}}>
           <Title>Courses</Title>
 
           <ItemsPanel 
@@ -54,8 +53,7 @@ class Courses extends Component {
             url={'/community'}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}/>
-
-        </Body>
+        </div>
 
         <Footer />
       </div>

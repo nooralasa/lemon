@@ -1,11 +1,28 @@
-import {DISPLAY_FETCHED_SCHOLARS, FETCH_SCHOLAR} from '../actions/communityUIActions.js'
+// ------------------------------------------- //
+// This is the reducer for community ui state. //
+// ------------------------------------------- //
+
+//importing relevant action types
+import {
+	DISPLAY_FETCHED_SCHOLARS, 
+	FETCH_SCHOLAR} from '../actions/communityUIActions.js';
+
+//importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
 
+//the initial state declaration before dispatching any actions
 const initialCommunityUIState = Immutable.fromJS({
 	isCommunityListViewable: true, 
 	currentVisibleScholar: NaN
 });
 
+/**
+ * Reducer for community ui state
+ * This reducer handles rendering the scholars list or a specific scholar 
+ * @param state the current state of the app
+ *							set to initialCommunityUIState when the app is first started
+ * @param action the dispatched action
+ **/
 function communityUI(state = initialCommunityUIState, action) {
 	switch (action.type) {
 

@@ -15,8 +15,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  dispatch(fetchAnnouncements());
-  dispatch(fetchScholars());
+  // dispatch(fetchAnnouncements());
+  // dispatch(fetchScholars());
   return {
     handleListClick: (id) => {
       dispatch(fetchAnnouncement(id));

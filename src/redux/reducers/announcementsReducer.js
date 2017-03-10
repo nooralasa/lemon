@@ -1,3 +1,8 @@
+// ------------------------------------------ //
+// This is the reducer for announcement data. //
+// ------------------------------------------ //
+
+//importing relevant action types
 import {
 	ADD_ANNOUNCEMENT_REQUEST, 
 	ADD_ANNOUNCEMENT_SUCCESS, 
@@ -13,89 +18,71 @@ import {
 	FETCH_ANNOUNCEMENTS_FAILURE
 } from '../actions/announcementsActions.js'
 
+//importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
 
+//the initial state declaration before dispatching any actions
 const initialAnnouncementsState = Immutable.fromJS({
-	apiCalling: {
-		isFetching: false,
-		errorFetching: null,
-		isAdding: false,
-		errorAdding: null,
-		isUpdating: false,
-		currentlyUpdating: null,
-		errorUpdating: null,
-		isDeleting: false,
-		currentlyDeleting: null,
-		errorDeleting: null
+	networkStatus: {
+		isRequesting: false,
+		requests: [],
+		responses: []
 	},
 	announcementsList: [],
 	announcementsById: {}
 });
 
+/**
+ * Reducer for announcements data
+ * This reducer handles adding, updating, deleting and fetching announcements
+ * @param state the current state of the app
+ *							set to initialAnnouncementsState when the app is first run
+ * @param action the dispatched action
+ **/
 function announcements(state = initialAnnouncementsState, action) {
 	switch (action.type) {
 
-		case FETCH_ANNOUNCEMENTS_REQUEST:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
-			return state
-
 		case FETCH_ANNOUNCEMENTS_SUCCESS:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
 			state = state.update('announcementsList', announcementsList => action.payload.announcementsList);
 			state = state.update('announcementsById', announcementsById => action.payload.announcementsById);
 			return state
 
-		case FETCH_ANNOUNCEMENTS_FAILURE:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
-			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
-			return state
-
-		case ADD_ANNOUNCEMENT_REQUEST:
-			state = state.updateIn(['apiCalling','isAdding'], isAdding => true);
-			return state
-
 		case ADD_ANNOUNCEMENT_SUCCESS:
-			state = state.updateIn(['apiCalling','isAdding'], isAdding => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
 			state = state.update('announcementsList', announcementsList => announcementsList.push(action.payload.id));
 			state = state.update('announcementsById', announcementsById => announcementsById.set(action.payload.id, action.payload));
 			return state
 
-		case ADD_ANNOUNCEMENT_FAILURE:
-			state = state.updateIn(['apiCalling','isAdding'], isAdding => false);
-			state = state.updateIn(['apiCalling','errorAdding'], errorAdding => action.payload.error);
-			return state
-
-		case UPDATE_ANNOUNCEMENT_REQUEST:
-			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => true);
-			state = state.updateIn(['apiCalling','currentlyUpdating'], currentlyUpdating => action.payload.id);
-			return state
-
 		case UPDATE_ANNOUNCEMENT_SUCCESS:
-			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
 			state = state.update('announcementsById', announcementsById => announcementsById.set(action.payload.id, action.payload));
 			return state
 
-		case UPDATE_ANNOUNCEMENT_FAILURE:
-			state = state.update('isUpdating', isUpdating => false);
-			state = state.update('currentlyUpdating', currentlyUpdating => null);
-			state = state.update('errorUpdating', errorUpdating => action.payload.error);
-			return state
-
-		case DELETE_ANNOUNCEMENT_REQUEST:
-			state = state.updateIn(['apiCalling','isDeleting'], isDeleting => true);
-			state = state.updateIn(['apiCalling','currentlyDeleting'], currentlyDeleting => action.payload.id);
-			return state
-
 		case DELETE_ANNOUNCEMENT_SUCCESS:
-			state = state.updateIn(['apiCalling','isDeleting'], isDeleting => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
 			state = state.update('announcementsList', announcementsList => announcementsList.delete(announcementsList.indexOf(action.payload.id)));
 			state = state.update('announcementsById', announcementsById => announcementsById.delete(action.payload.id));
 			return state
 
+		case FETCH_ANNOUNCEMENTS_REQUEST:
+		case ADD_ANNOUNCEMENT_REQUEST:
+		case UPDATE_ANNOUNCEMENT_REQUEST:
+		case DELETE_ANNOUNCEMENT_REQUEST:
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => true);
+			state = state.updateIn(['networkStatus','requests'], requests => requests.push(action.type));
+			return state
+
+		case FETCH_ANNOUNCEMENTS_FAILURE:
+		case ADD_ANNOUNCEMENT_FAILURE:
+		case UPDATE_ANNOUNCEMENT_FAILURE:
 		case DELETE_ANNOUNCEMENT_FAILURE:
-			state = state.update('isDeleting', isDeleting => false);
-			state = state.update('currentlyDeleting', currentlyDeleting => null);
-			state = state.update('errorDeleting', errorDeleting => action.payload.error);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
 			return state
 
 		default: 

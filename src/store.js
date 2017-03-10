@@ -1,3 +1,8 @@
+// ------------------------------------------------------------- //
+// This file was used to design the redux store. 								 //
+// It is not actually used anywhere and the file can be deleted. //
+// ------------------------------------------------------------- //
+
 const store = {
 	authentication: {
 		isLoggedIn: true

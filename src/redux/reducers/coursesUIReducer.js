@@ -1,11 +1,28 @@
-import {DISPLAY_FETCHED_COURSES, FETCH_COURSE} from '../actions/coursesUIActions.js'
+// ---------------------------------------- //
+// This is the reducer for course ui state. //
+// ---------------------------------------- //
+
+//importing relevant action types
+import {
+	DISPLAY_FETCHED_COURSES, 
+	FETCH_COURSE} from '../actions/coursesUIActions.js'
+
+//importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
 
+//the initial state declaration before dispatching any actions
 const initialCoursesUIState = Immutable.fromJS({
 	isCoursesListViewable: true, 
 	currentVisibleCourse: NaN
 });
 
+/**
+ * Reducer for course ui state
+ * This reducer handles rendering the courses list or a specific course 
+ * @param state the current state of the app
+ *							set to initialCoursesUIState when the app is first started
+ * @param action the dispatched action
+ **/
 function coursesUI(state = initialCoursesUIState, action) {
 	switch (action.type) {
 

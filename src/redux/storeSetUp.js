@@ -1,44 +1,88 @@
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
-import { createStore, applyMiddleware, compose } from 'redux';
-import appReducer from './reducers/index';
-import {addAnnouncement, updateAnnouncement, deleteAnnouncement} from './actions/announcementsActions.js';
-import {logIn , logOut, signUp} from './actions/authenticationActions.js';
-// import {fetchAnnouncements, fetchAnnouncement} from './actions/announcementsUIActions.js'
-import {addScholar, updateScholar, deleteScholar, addScholarCourse} from './actions/communityActions.js'
-// import {fetchScholars, fetchScholar} from './actions/communityUIActions.js'
-import {addCourse, updateCourse, deleteCourse} from './actions/coursesActions.js'
-// import {fetchCourses, fetchCourse} from './actions/coursesUIActions.js'
+// ---------------------------------------------------------------- //
+// This module exports a function thay initializes the redux store. //
+// ---------------------------------------------------------------- //
 
-import * as Immutable from 'immutable';
+//Importing actions that update the database and persist 
+import {
+	fetchAnnouncements,
+	addAnnouncement, 
+	updateAnnouncement, 
+	deleteAnnouncement} from './actions/announcementsActions.js';
+import {
+	currentScholar,
+	addScholarCourse,
+	fetchScholars,
+	fetchScholarCourses,
+	addScholar,
+	updateScholar,
+	deleteScholar} from './actions/communityActions.js';
+import {
+	enrollInCourse,
+	fetchCourses,
+	fetchCourseUsers,
+	addCourse,
+	updateCourse,
+	deleteCourse} from './actions/coursesActions.js';
 
-const loggerMiddleware = createLogger();
+//Importing actions that do not update the database and will only update the store locally
+import {
+	fetchAnnouncementsSuccess,
+	addAnnouncementSuccess, 
+	updateAnnouncementSuccess, 
+	deleteAnnouncementSuccess} from './actions/announcementsActions.js';
+import {
+	currentScholarSuccess,
+	addScholarCourseSuccess,
+	fetchScholarsSuccess,
+	fetchScholarCoursesSuccess,
+	addScholarSuccess,
+	updateScholarSuccess,
+	deleteScholarSuccess} from './actions/communityActions.js';
+import {
+	enrollInCourseSuccess,
+	fetchCoursesSuccess,
+	fetchCourseUsersSuccess,
+	addCourseSuccess,
+	updateCourseSuccess,
+	deleteCourseSuccess} from './actions/coursesActions.js';
 
-function getInitialState() {
-	const initialState = Immutable.fromJS({
-		authentication: {},
-		announcements: {},
-		announcementsUI: {},
-		courses: {},
-		coursesUI: {},
-		community: {},
-		communityUI: {}
-	});
 
-	return initialState;
-}
 
-function storeSetUp() {
+function storeSetUp(store) {
 
-	const store = createStore(
-		appReducer,
-		compose(
-      applyMiddleware(
-				thunkMiddleware,
-				loggerMiddleware
-			),
-      window.devToolsExtension ? window.devToolsExtension() : f => f
-    ));
+	store.dispatch(addAnnouncementSuccess({
+		id: 1,
+		header: 'Welcome to LIME', 
+		message: 'On Behalf of the Media Lab Learning Initiative we would like to welcome you to LIME: Learning Innovators - Middle East. Welcome to our set of scholars and innovators. </br> LIME is platform where you can take online courses relating to learning, innovation and technology. Check out the courses tab to see the set of courses that we offer. </br> LIME is a community where you can collaborate with other scholars on courses. We encourage you to checkout the community tab to see who is part of LIME the community. We encourage you to collaborate with others in the community on projects.', 
+		user_id: 1,
+		timestamp: 'just now'
+	}));
+
+	store.dispatch(addScholarSuccess({
+		id: 1,
+		name: 'Philipp Schmidt', 
+		affiliation: 'MIT Media Lab', 
+		portfolio: 'https://www.media.mit.edu/people/ps1/overview/', 
+		image: '/styles/img/community/ps1.jpg', 
+		description: "J. Philipp Schmidt is Director of Learning Innovation at the MIT Media Lab, where he leads the ML Learning initiative, teaches courses, and conducts research on learning communities. He is also a cofounder and board member of Peer 2 Peer University (P2PU), a non-profit organization that provides access to online higher education through public libraries. Philipp served on the founding board of the OpenCourseWare Consortium, co-authored the Cape Town Open Education Declaration, and is an advisor to a number of non-profit and for-profit education projects. He has received Shuttleworth and Ashoka fellowships, and came to MIT as a Media Lab Director's fellow."
+	}));
+
+	// store.dispatch(addScholar(
+	// 	'Philipp Schmidt 2', 
+	// 	'MIT Media Lab', 
+	// 	'https://www.media.mit.edu/people/ps1/overview/', 
+	// 	'/styles/img/community/ps1.jpg', 
+	// 	"J. Philipp Schmidt is Director of Learning Innovation at the MIT Media Lab, where he leads the ML Learning initiative, teaches courses, and conducts research on learning communities. He is also a cofounder and board member of Peer 2 Peer University (P2PU), a non-profit organization that provides access to online higher education through public libraries. Philipp served on the founding board of the OpenCourseWare Consortium, co-authored the Cape Town Open Education Declaration, and is an advisor to a number of non-profit and for-profit education projects. He has received Shuttleworth and Ashoka fellowships, and came to MIT as a Media Lab Director's fellow."
+	// ));
+
+	// store.dispatch(addCourse(
+	// 	'Swift: Building iOS Apps', 
+	// 	'Swift', 
+	// 	'Flatiron School', 
+	// 	'https://flatironschool.com/programs/online-swift-free-course/', 
+	// 	'https://flatironschool.imgix.net/online-swift/build-ios-applications-v2.jpg?fit=crop&crop=entropy', 
+	// 	"We’ll start with the fundamentals of Swift and move on to more advanced topics like Higher Order Functions, Protocols, and Extensions. Write, run, and view your code in Xcode and learn how to read warning and error messages. Use Interface Builder and Auto Layout to build interactive, visually stunning applications."
+	// ));
 
 	//console.info(JSON.stringify(store.getState(), null, ' '));
 
