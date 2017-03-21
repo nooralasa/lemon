@@ -32,14 +32,14 @@ export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
 export const DELETE_COURSE_FAILURE = 'DELETE_COURSE_FAILURE';
 export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
 
-// ---Impure actions making asynchonous API calls--- //
+// ---impure action creator creators making asynchonous API calls--- //
 
 /**
- * an impure action that makes an API call to associate a scholar and a course
+ * an impure action creator that makes an API call to associate a scholar and a course
  * in the database
  * @param user_id the id of the scholar to be associated
  * @param course_id the id of the course to be associated 
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function enrollInCourse(user_id, course_id) {
 	return dispatch => {
@@ -61,8 +61,8 @@ export function enrollInCourse(user_id, course_id) {
 }
 
 /**
- * an impure action that makes an API call to get all courses from the database
- * @return a function that would dispatch pure actions and make the API call
+ * an impure action creator that makes an API call to get all courses from the database
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchCourses() {
 	return dispatch => {
@@ -81,10 +81,10 @@ export function fetchCourses() {
 }
 
 /**
- * an impure action that makes an API call to get all the scholars who are 
+ * an impure action creator that makes an API call to get all the scholars who are 
  * associated with the specified course from the database
  * @param id the id of the course
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchCourseUsers(id) {
 	return dispatch => {
@@ -101,14 +101,14 @@ export function fetchCourseUsers(id) {
 }
 
 /**
- * an impure action that makes an API call to add a course to the database  
+ * an impure action creator that makes an API call to add a course to the database  
  * @param title the title of the course
  * @param room the name of the gitter room for the course 
  * @param source the third party offering the course
  * @param link url to the enrolling page
  * @param img source of the course image
  * @param description text description of the course
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addCourse(title, room, source, link, img, description) {
 	return dispatch => {
@@ -134,7 +134,7 @@ export function addCourse(title, room, source, link, img, description) {
 }
 
 /**
- * an impure action that makes an API call to update a course to the database  
+ * an impure action creator that makes an API call to update a course to the database  
  * @param id the id of the course to be updated
  * @param title the new title of the course
  * @param room the new name of the gitter room for the course 
@@ -142,7 +142,7 @@ export function addCourse(title, room, source, link, img, description) {
  * @param link the new url to the enrolling page
  * @param img the new source of the course image
  * @param description the new text description of the course
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateCourse(id, title, source, link, img, list, description) {
 	return dispatch => {
@@ -168,9 +168,9 @@ export function updateCourse(id, title, source, link, img, list, description) {
 }
 
 /**
- * an impure action that makes an API call to delete a course from the database  
+ * an impure action creator that makes an API call to delete a course from the database  
  * @param id the id of the course to be deleted
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function deleteCourse(id) {
 	return dispatch => {
@@ -188,7 +188,7 @@ export function deleteCourse(id) {
 	}	
 }
 
-// ---Pure actions updating the store on API call success--- //
+// ---Pure action creators updating the store on API call success--- //
 
 /**
  * indicates that the API call for enrolling a user into a course succeeded
@@ -336,7 +336,7 @@ export function deleteCourseSuccess(data) {
 }
 
 
-// ---Pure actions specifying network information--- //
+// ---Pure action creators specifying network information--- //
 
 /**
  * indicates that an API call to enroll a scholar in a course has been initiated

@@ -52,38 +52,38 @@ function courses(state = initialCoursesState, action) {
 		
 		case ENROLL_IN_COURSE_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			return state
 
 		case FETCH_COURSES_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesList', coursesList => action.payload.coursesList);
 			state = state.update('coursesById', coursesById => action.payload.coursesById);
 			return state
 
 		case FETCH_COURSE_USERS_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.updateIn(['coursesById', action.payload.courseId, 'body_params', 'list'], list => action.payload.list);
 			return state
 
 		case ADD_COURSE_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesList', coursesList => coursesList.push(action.payload.id));
 			state = state.update('coursesById', coursesById => coursesById.set(action.payload.id, action.payload));
 			return state
 
 		case UPDATE_COURSE_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesById', coursesById => coursesById.set(action.payload.id, action.payload));
 			return state
 
 		case DELETE_COURSE_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesList', coursesList => coursesList.delete(coursesList.indexOf(action.payload.id)));
 			state = state.update('coursesById', coursesById => coursesById.delete(action.payload.id));
 			return state
@@ -105,7 +105,7 @@ function courses(state = initialCoursesState, action) {
 		case UPDATE_COURSE_FAILURE:
 		case DELETE_COURSE_FAILURE:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			return state
 
 		default: 

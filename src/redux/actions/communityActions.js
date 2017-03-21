@@ -36,31 +36,31 @@ export const DELETE_SCHOLAR_REQUEST = 'DELTE_SCHOLAR_REQUEST';
 export const DELETE_SCHOLAR_FAILURE = 'DELTE_SCHOLAR_FAILURE';
 export const DELETE_SCHOLAR_SUCCESS = 'DELTE_SCHOLAR_SUCCESS';
 
-// ---Impure actions making asynchonous API calls--- //
+// ---impure action creator creators making asynchonous API calls--- //
 
 /**
- * an impure action that makes an API call to get the currently logged in  
+ * an impure action creator that makes an API call to get the currently logged in  
  * user from the database 
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function currentScholar() {
 	return dispatch => {
+		console.log('The async action ran')
 		dispatch(currentScholarRequest());
 
 		return axios.get('/api/v1/users/current/')
-		.then(res => {
-			console.log('fetch current user success!');
-			dispatch(currentScholarSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('fetch current user failure!');
-			dispatch(currentScholarFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(currentScholarSuccess(res.data));
+			} else if (err) {
+				dispatch(currentScholarFailure(err));
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to add a course to the scholar's  
+ * an impure action creator that makes an API call to add a course to the scholar's  
  * enrolled courses in the database 
  * @param user_id the id of the user enrolling in the course
  * Qparam course_id the id of the course that the user is enrolling in
@@ -74,20 +74,18 @@ export function addScholarCourse(user_id, course_id) {
 			course_id: course_id,
 			user_id: user_id
 		})
-		.then(res => {
-			console.log('adding course to scholar success!');
-			console.log(res.data);
-			dispatch(addScholarCourseSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('adding course to scholar failure!');
-			dispatch(addScholarCourseFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(addScholarCourseSuccess(res.data));
+			} else if (err) {
+				dispatch(addScholarCourseFailure(err));
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to get all scholars from the database  
+ * an impure action creator that makes an API call to get all scholars from the database  
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function fetchScholars() {
@@ -95,20 +93,18 @@ export function fetchScholars() {
 		dispatch(fetchScholarsRequest());
 
 		return axios.get('/api/v1/users')
-		.then(res => {
-			console.log('fetching community success!');
-			console.log(res.data);
-			dispatch(fetchScholarsSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('fetching community failure!');
-			dispatch(fetchScholarsFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(fetchScholarsSuccess(res.data));
+			} else if (err) {
+				dispatch(fetchScholarsFailure(err));	
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to get all the courses that the scholar  
+ * an impure action creator that makes an API call to get all the courses that the scholar  
  * is enrolled in from the database 
  * @param id the id of the scholar whose list of courses we want to retrieve 
  * @return a function that would dispatch pure actions and make the API call
@@ -118,17 +114,18 @@ export function fetchScholarCourses(id) {
 		dispatch(fetchScholarCoursesRequest());
 
 		return axios.get('/api/v1/users/courses/'+id)
-		.then(res => {
-			dispatch(fetchScholarCoursesSuccess(res.data, id));		
-		})
-		.catch(err => {
-			dispatch(fetchScholarCoursesFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(fetchScholarCoursesSuccess(res.data, id));	
+			} else if (err) {
+				dispatch(fetchScholarCoursesFailure(err));
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to add a scholar to the database  
+ * an impure action creator that makes an API call to add a scholar to the database  
  * @param title the scholar's name
  * @param source the scholar's affiliation
  * @param link the scholar's personal portfolio
@@ -141,7 +138,7 @@ export function addScholar(title, source, link, img, description) {
 		dispatch(addScholarRequest());
 
 		return axios.post('/api/v1/users/', {
-			id: 1,
+			id: '5400684',
 			github_access_token: 'hello',
 			gitter_access_token: 'hello',
 			name: title,
@@ -152,19 +149,18 @@ export function addScholar(title, source, link, img, description) {
 			chat_link: link,
 			role: 'scholar'
 		})
-		.then(res => {
-			console.log('adding scholar success!');
-			dispatch(addScholarSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('adding scholar failure!');
-			dispatch(addScholarFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(addScholarSuccess(res.data));
+			} else if (err) {
+				dispatch(addScholarFailure(err));	
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to updare a  specified scholar 
+ * an impure action creator that makes an API call to updare a  specified scholar 
  * in the database 
  * @param id the id of the user to be updared 
  * @param title the scholar's name
@@ -187,19 +183,18 @@ export function updateScholar(id, title, source, link, img, list, description) {
 			chat_link: link,
 			role: 'scholar'
 		})
-		.then(res => {
-			console.log('updating scholar success!');
-			dispatch(updateScholarSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('updating scholar failure!');
-			dispatch(updateScholarFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(updateScholarSuccess(res.data));	
+			} else if (err) {
+				dispatch(updateScholarFailure(err));
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to remove a scholar from the database  
+ * an impure action creator that makes an API call to remove a scholar from the database  
  * @param id the scholar's id
  * @return a function that would dispatch pure actions and make the API call
  **/
@@ -208,13 +203,12 @@ export function deleteScholar(id) {
 		dispatch(deleteScholarRequest());
 
 		return axios.delete(`/api/v1/users/${id}`)
-		.then(res => {
-			console.log('deleting scholar success!');
-			dispatch(deleteScholarSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('deleting scholar failure!');
-			dispatch(deleteScholarFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(deleteScholarSuccess(res.data));
+			} else if (err) {
+				dispatch(deleteScholarFailure(err));
+			} 
 		});
 	}	
 }
@@ -416,7 +410,8 @@ function currentScholarRequest() {
  * @return object.payload the error returned by the network
  **/
 function currentScholarFailure(error) {
-
+	console.log('current scholar failure action creator');
+	console.log(error);
 	return {
 		type: CURRENT_SCHOLAR_FAILURE,
 		payload: {error: error}

@@ -13,7 +13,7 @@ import * as Immutable from 'immutable';
 //the initial state declaration before dispatching any actions
 const initialAnnouncementsUIState = Immutable.fromJS({
 	isAnnouncementsListViewable: true, 
-	currentVisibleAnnouncement: NaN
+	currentVisibleAnnouncement: null
 });
 
 /**

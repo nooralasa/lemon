@@ -25,36 +25,38 @@ export const DELETE_ANNOUNCEMENT_FAILURE = 'DELETE_ANNOUNCEMENT_FAILURE';
 export const DELETE_ANNOUNCEMENT_SUCCESS = 'DELETE_ANNOUNCEMENT_SUCCESS';
 
 
-// ---Impure actions making asynchonous API calls--- //
+// ---impure action creator creators making asynchonous API calls--- //
 
 /**
- * an impure action that makes an API call to get the announcements from 
+ * an impure action creator that makes an API call to get the announcements from 
  * the database 
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function fetchAnnouncements() {
+export function fetchAnnouncements(cb = null) {
 	return dispatch => {
 		dispatch(fetchAnnouncementsRequest());
 
 		return axios.get('/api/v1/announcements')
-		.then(res => {
-			console.log('fetching announcements success!');
-			dispatch(fetchAnnouncementsSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('fetching announcements failure!');
-			dispatch(fetchAnnouncementsFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(fetchAnnouncementsSuccess(res.data));
+			} else if (err) {
+				dispatch(fetchAnnouncementsFailure(err));
+			} 
+			if (cb) {
+				cb();
+			}
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to add an announcement to 
+ * an impure action creator that makes an API call to add an announcement to 
  * the database 
  * @param header the title of the announcement
  * @param message the body of the announcement
  * @param user_id the id of the user who making the announcement 
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addAnnouncement(header, message, user_id) {
 	return dispatch => {
@@ -65,25 +67,24 @@ export function addAnnouncement(header, message, user_id) {
 			message: message,
 			user_id: user_id
 		})
-		.then(res => {
-			console.log('adding announcement success!');
-			dispatch(addAnnouncementSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('adding announcement failure!');
-			dispatch(addAnnouncementFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(addAnnouncementSuccess(res.data));	
+			} else if (err) {
+				dispatch(addAnnouncementFailure(err));
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to update an announcement in 
+ * an impure action creator that makes an API call to update an announcement in 
  * the database 
  * @param id the id of the announcement
  * @param header the title of the announcement
  * @param message the body of the announcement
  * @param user_id the id of the user who making the announcement 
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateAnnouncement(id, header, message, user_id) {
 	return dispatch => {
@@ -94,40 +95,38 @@ export function updateAnnouncement(id, header, message, user_id) {
 			message: message,
 			user_id: user_id
 		})
-		.then(res => {
-			console.log('updating announcement success!');
-			dispatch(updateAnnouncementSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('updating announcement failure!');
-			dispatch(updateAnnouncementFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(updateAnnouncementSuccess(res.data));
+			} else if (err) {
+				dispatch(updateAnnouncementFailure(err));	
+			} 
 		});
 	}	
 }
 
 /**
- * an impure action that makes an API call to delete an announcement in 
+ * an impure action creator that makes an API call to delete an announcement in 
  * the database 
  * @param id the id of the announcement
- * @return a function that would dispatch pure actions and make the API call
+ * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function deleteAnnouncement(id) {
 	return dispatch => {
 		dispatch(deleteAnnouncementRequest());
 
 		return axios.delete(`/api/v1/announcements/${id}`)
-		.then(res => {
-			console.log('deleting announcement success!');
-			dispatch(deleteAnnouncementSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('deleting announcement failure!');
-			dispatch(deleteAnnouncementFailure(err));	
+		.then((res, err) => {
+			if (res) {
+				dispatch(deleteAnnouncementSuccess(res.data));
+			} else if (err) {
+				dispatch(deleteAnnouncementFailure(err));
+			} 
 		});
 	}	
 }
 
-// ---Pure actions updating the store on API call success--- //
+// ---Pure action creators updating the store on API call success--- //
 
 /**
  * indicates that the API call for getting the announcements succeeded
@@ -232,7 +231,7 @@ export function deleteAnnouncementSuccess(data) {
 	};
 }
 
-// ---Pure actions specifying network information--- //
+// ---Pure action creators specifying network information--- //
 
 /**
  * indicates that an API call to get the announcements from 

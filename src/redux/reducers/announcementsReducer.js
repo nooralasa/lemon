@@ -44,27 +44,27 @@ function announcements(state = initialAnnouncementsState, action) {
 
 		case FETCH_ANNOUNCEMENTS_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('announcementsList', announcementsList => action.payload.announcementsList);
 			state = state.update('announcementsById', announcementsById => action.payload.announcementsById);
 			return state
 
 		case ADD_ANNOUNCEMENT_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('announcementsList', announcementsList => announcementsList.push(action.payload.id));
 			state = state.update('announcementsById', announcementsById => announcementsById.set(action.payload.id, action.payload));
 			return state
 
 		case UPDATE_ANNOUNCEMENT_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('announcementsById', announcementsById => announcementsById.set(action.payload.id, action.payload));
 			return state
 
 		case DELETE_ANNOUNCEMENT_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('announcementsList', announcementsList => announcementsList.delete(announcementsList.indexOf(action.payload.id)));
 			state = state.update('announcementsById', announcementsById => announcementsById.delete(action.payload.id));
 			return state
@@ -82,7 +82,7 @@ function announcements(state = initialAnnouncementsState, action) {
 		case UPDATE_ANNOUNCEMENT_FAILURE:
 		case DELETE_ANNOUNCEMENT_FAILURE:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			return state
 
 		default: 

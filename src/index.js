@@ -17,7 +17,7 @@
  *												components
  * @import IndexRedirect redirects to the specified Route element
  **/
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom'; 
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
@@ -63,6 +63,9 @@ import CoursesContainer from './react/containers/CoursesContainer';
 import CommunityContainer from './react/containers/CommunityContainer';
 import NotFoundPage from './react/pages/NotFoundPage';
 
+import {currentScholar} from './redux/actions/communityActions';
+
+
 //set up the redux store by passing in the state reducer and relevant middleware
 //also add the Redux devToolsExtension to be able to debug the store in browser
 const store = createStore(
@@ -76,7 +79,7 @@ const store = createStore(
 	)
 );
 
-storeSetUp(store);
+// storeSetUp(store);
 
 //Render the React Application on index.html
 //ReactDom would fitch the html element with id root from index.html
@@ -85,18 +88,11 @@ storeSetUp(store);
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
-		  <Route path="/login" component={LandingPage} />
-		  <Route path="/announcements" component={AnnouncementsContainer} />
-		  <Route path="/courses" component={CoursesContainer} />
-		  <Route path="/community" component={CommunityContainer} />
-		  <Route path="/404" component={NotFoundPage} />
-		  <Route path="*" >
-		  	<IndexRedirect to="/announcements" />
-		  	<IndexRedirect to="/courses" />
-		  	<IndexRedirect to="/community" />
-		  	<IndexRedirect to="/login" />
-		  	<IndexRedirect to="/404" />
-		  </Route>
+			<Route path="/build" component={LandingPage} />
+		  <Route path="/build/announcements" component={AnnouncementsContainer} />
+		  <Route path="/build/courses" component={CoursesContainer} />
+		  <Route path="/build/community" component={CommunityContainer} />
+		  <Route path="/build/404" component={NotFoundPage} />
 		</Router>
   </Provider>,
   document.getElementById('root')

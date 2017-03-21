@@ -27,7 +27,7 @@ class NotFound extends Component {
   render() {
     return (
       <div className="notfound">
-        <Navbar items={[['About','#about'], ['Contact', '#contact']]}/>
+        <Navbar items={[]}/>
         
         <div style={{padding: '50px 0'}}>
           <Title>Page Not Found</Title>

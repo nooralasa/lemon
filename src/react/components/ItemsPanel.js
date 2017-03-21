@@ -3,13 +3,11 @@ import React, { Component, PropTypes } from 'react';
 import PanelList from '../components/PanelList';
 import ItemPanel from '../components/ItemPanel';
 
-const panelStyles = { margin: 10, maxHeight: 400, overflowY: 'scroll'};
-
 class ItemsPanel extends Component {
   render() {
     if (this.props.isListViewable) {
       return (
-        <div style={panelStyles}>
+        <div style={{ margin: '3%'}}>
           <PanelList 
             items={this.props.items}
             itemIds={this.props.itemIds} 
@@ -19,9 +17,11 @@ class ItemsPanel extends Component {
       );
     } else {
       return (
-        <ItemPanel 
-          onUserClick={this.props.handlePanelClick}
-          renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)} />
+        <div style={{ margin: '3%'}}>
+          <ItemPanel 
+            onUserClick={this.props.handlePanelClick}
+            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)} />
+        </div>
       );
     }
     

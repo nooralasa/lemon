@@ -31,7 +31,7 @@ class PanelList extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ margin: '0 auto'}}>
         {this.renderListGroupItems(this.props.itemIds, this.props.items, this.props.renderBody)}
       </div>
     );

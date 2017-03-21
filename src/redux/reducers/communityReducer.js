@@ -56,20 +56,20 @@ function community(state = initialCommunityState, action) {
 
 		case CURRENT_SCHOLAR_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('currentlyLoggedIn', currentlyLoggedIn => action.payload.user_id);
 			return state
 
 		case FETCH_SCHOLARS_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('communityList', communityList => action.payload.communityList);
 			state = state.update('communityById', communityById => action.payload.communityById);
 			return state
 
 		case FETCH_SCHOLAR_COURSES_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			let mutableState = state.toJS();
 			mutableState['communityById'][action.payload.userId]['body_params']['list'] = action.payload.list;
 			state = Immutable.fromJS(mutableState);
@@ -77,7 +77,7 @@ function community(state = initialCommunityState, action) {
 
 		case ADD_SCHOLAR_COURSE_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			let newList = state.getIn(['communityById', action.payload.user_id, 'body_params', 'list']);
 			newList = newList.push(action.payload.course_id);
 			state = state.update('communityById', communityById => communityById.updateIn([action.payload.user_id, 'body_params', 'list'], list => newList));
@@ -85,20 +85,20 @@ function community(state = initialCommunityState, action) {
 
 		case ADD_SCHOLAR_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('communityList', communityList => communityList.push(action.payload.id));
 			state = state.update('communityById', communityById => communityById.set(action.payload.id, action.payload));
 			return state
 
 		case UPDATE_SCHOLAR_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('communityById', communityById => communityById.set(action.payload.id, action.payload));
 			return state
 
 		case DELETE_SCHOLAR_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('communityList', communityList => communityList.delete(communityList.indexOf(action.payload.id)));
 			state = state.update('communityById', communityById => communityById.delete(action.payload.id));
 			return state
@@ -122,7 +122,7 @@ function community(state = initialCommunityState, action) {
 		case UPDATE_SCHOLAR_FAILURE:
 		case DELETE_SCHOLAR_FAILURE:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
-			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action.payload));
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			return state
 
 		default: 

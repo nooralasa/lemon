@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
-const panelStyles = { margin: 10, maxHeight: 400, overflowY: 'scroll'};
-
 class ItemControls extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +31,7 @@ ItemControls.propTypes = {
 class ItemPanel extends Component {
   render() {
     return (
-      <rbs.Panel header={<ItemControls onUserClick={this.props.onUserClick}/>} style={panelStyles}>
+      <rbs.Panel header={<ItemControls onUserClick={this.props.onUserClick}/>} style={{ margin: '0 auto'}}>
         {this.props.renderItemPanel}
       </rbs.Panel>
     );

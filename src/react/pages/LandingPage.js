@@ -1,3 +1,18 @@
+// ----------------------------------------------------- //
+// The Landing Page                                      //
+// The React Component to be endered with the /login uri //
+// ----------------------------------------------------- //
+
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ * @import PropTypes an object with validators to typecheck the based props
+ * @import rbs the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ * @import browserHistory the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ **/
 import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 import { browserHistory } from 'react-router';
