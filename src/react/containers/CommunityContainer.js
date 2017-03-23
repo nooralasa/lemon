@@ -33,6 +33,7 @@ import {fetchCourse} from '../../redux/actions/coursesUIActions';
 const mapStateToProps = (state) => {
   return {
     currentUser: state.community.get('currentlyLoggedIn'),
+    userRole: state.community.get('role'),
   	communityList: state.community.get('communityList').toArray(),
   	communityById: state.community.get('communityById').toJSON(),
     coursesById: state.courses.get('coursesById').toJSON(),

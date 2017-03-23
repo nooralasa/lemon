@@ -5,7 +5,10 @@
 //importing relevant action types
 import {
 	DISPLAY_FETCHED_ANNOUNCEMENTS, 
-	FETCH_ANNOUNCEMENT} from '../actions/announcementsUIActions.js';
+	FETCH_ANNOUNCEMENT,
+	FETCH_ANNOUNCEMENT_FORM, 
+	FETCH_ANNOUNCEMENT_FORM_DATA,
+	UPDATE_ANNOUNCEMENT_FORM_DATA,} from '../actions/announcementsUIActions.js';
 
 //importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
@@ -13,7 +16,24 @@ import * as Immutable from 'immutable';
 //the initial state declaration before dispatching any actions
 const initialAnnouncementsUIState = Immutable.fromJS({
 	isAnnouncementsListViewable: true, 
-	currentVisibleAnnouncement: null
+	currentVisibleAnnouncement: null,
+	isFormViewable: false,
+	formData: {
+		textBoxes: [
+			{
+				label: 'Announcement Title',
+				placeholder: 'Enter the announcement title',
+				value: ''
+			}
+		],
+		textAreaBoxes: [
+			{
+				label: 'Announcement Body',
+				placeholder: 'Enter the announcement body. You may use HTML tags for rendering purposes.',
+				value: ''
+			}
+		]
+	}
 });
 
 /**
@@ -28,11 +48,24 @@ function announcementsUI(state = initialAnnouncementsUIState, action) {
 
 		case DISPLAY_FETCHED_ANNOUNCEMENTS:
 			state = state.set('isAnnouncementsListViewable', true);
+			state = state.set('isFormViewable', false);
+			state = state.set('currentVisibleAnnouncement', null);
 			return state
 
 		case FETCH_ANNOUNCEMENT:
 			state = state.set('isAnnouncementsListViewable', false);
+			state = state.set('isFormViewable', false);
 			state = state.set('currentVisibleAnnouncement', action.payload.id);
+			return state
+
+		case FETCH_ANNOUNCEMENT_FORM:
+			state = state.set('isAnnouncementsListViewable', false);
+			state = state.set('isFormViewable', true);
+			state = state.set('currentVisibleAnnouncement', action.payload.id);
+			return state
+
+		case UPDATE_ANNOUNCEMENT_FORM_DATA:
+			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'value'], value => action.payload.value);
 			return state
 
 		default: 

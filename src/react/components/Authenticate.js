@@ -36,11 +36,9 @@ class Authenticate extends Component {
   render() {
   	if (this.props.currentlyLoggedIn) {
       console.log('Authenticated App');
-      if (this.props.children) {
-        return (
-          <div>{this.props.children}</div>
-        );
-      }
+      return (
+        <div>{this.props.children}</div>
+      );
     } else {
       console.log('Unauthenticated App');
       return (

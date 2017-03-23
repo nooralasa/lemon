@@ -38,6 +38,7 @@ const initialCommunityState = Immutable.fromJS({
 		responses: []
 	},
 	currentlyLoggedIn: null,
+	role: null,
 	communityList: [],
 	communityById: {}
 });
@@ -58,6 +59,7 @@ function community(state = initialCommunityState, action) {
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
 			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('currentlyLoggedIn', currentlyLoggedIn => action.payload.user_id);
+			state = state.update('role', role => action.payload.role);
 			return state
 
 		case FETCH_SCHOLARS_SUCCESS:

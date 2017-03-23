@@ -13,7 +13,12 @@ import * as Immutable from 'immutable';
 //the initial state declaration before dispatching any actions
 const initialCommunityUIState = Immutable.fromJS({
 	isCommunityListViewable: true, 
-	currentVisibleScholar: NaN
+	currentVisibleScholar: null,
+	isFormViewable: false,
+	formData: {
+		textBoxes: [],
+		textAreaBoxes: []
+	}
 });
 
 /**

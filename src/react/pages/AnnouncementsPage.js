@@ -108,12 +108,18 @@ class Announcements extends Component {
 
           <ItemsPanel 
             items={this.props.announcementsById}
+            isAdmin={this.props.userRole=='admin' ? true : false}
+            isFormViewable={this.props.isFormViewable}
+            formData={this.props.formData}
             itemIds={this.props.announcementsList} 
             otherItems={this.props.communityById}
             isListViewable={this.props.isAnnouncementsListViewable}
             currentVisible={this.props.currentVisibleAnnouncement}
             handleListClick={this.props.handleListClick}
             handlePanelClick={this.props.handlePanelClick}
+            handleAddButtonClick={this.props.handleAddButtonClick}
+            handleFormUpdates={this.props.handleFormUpdates}
+            handleAddFormSubmission={this.props.handleAddFormSubmission} 
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}/>
         </div>
@@ -142,9 +148,13 @@ class Announcements extends Component {
 Announcements.propTypes = {
   isAnnouncementsListViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
+  userRole: PropTypes.string.isRequired,
   currentVisibleAnnouncement: PropTypes.number.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
+  handleAddButtonClick: PropTypes.func,
+  handleAddFormSubmission: PropTypes.func,
+  handleFormUpdates: PropTypes.func,
   announcementsById: PropTypes.object.isRequired,
   communityById: PropTypes.object.isRequired,
   announcementsList: PropTypes.array.isRequired,

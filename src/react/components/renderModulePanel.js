@@ -46,7 +46,7 @@ function moduleDescription(body_params, header) {
 function nextModule(module) {
   return (
     <div className="row" style={{marginTop:25}}>
-      <div className="col-md-12">
+      <div className="col-md-11">
         <hr className="section-heading-spacer-left" style={{marginTop:25}} />
         {module}
       </div>

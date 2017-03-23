@@ -14,9 +14,9 @@ import { connect } from 'react-redux';
 import AnnouncementsPage from '../pages/AnnouncementsPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchAnnouncements} from '../../redux/actions/announcementsActions';
+import {fetchAnnouncements, addAnnouncement} from '../../redux/actions/announcementsActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
-import {fetchAnnouncement, displayFetchedAnnouncements} from '../../redux/actions/announcementsUIActions';
+import {fetchAnnouncement, displayFetchedAnnouncements, fetchAnnouncementForm, updateAnnouncementFormData} from '../../redux/actions/announcementsUIActions';
 
 const FIRST_ANNOUNCEMENT_ID = 1;
 /**
@@ -33,11 +33,14 @@ const FIRST_ANNOUNCEMENT_ID = 1;
 const mapStateToProps = (state) => {
   return {
     currentUser: state.community.get('currentlyLoggedIn'),
+    userRole: state.community.get('role'),
   	announcementsList: state.announcements.get('announcementsList').toArray(),
   	announcementsById: state.announcements.get('announcementsById').toJSON(),
     communityById: state.community.get('communityById').toJSON(),
   	isAnnouncementsListViewable: state.announcementsUI.get('isAnnouncementsListViewable'),
-  	currentVisibleAnnouncement: state.announcementsUI.get('currentVisibleAnnouncement')
+  	currentVisibleAnnouncement: state.announcementsUI.get('currentVisibleAnnouncement'),
+    isFormViewable: state.announcementsUI.get('isFormViewable'),
+    formData: state.announcementsUI.get('formData').toJSON()
   }
 }
 
@@ -63,7 +66,47 @@ const mapDispatchToProps = (dispatch) => {
     handlePanelClick: () => {
       dispatch(fetchAnnouncements());
     	dispatch(displayFetchedAnnouncements());
+    },
+    handleAddButtonClick: () => {
+      dispatch(fetchAnnouncementForm());
+    },
+    handleFormUpdates: (index, type, value) => {
+      dispatch(updateAnnouncementFormData(index, type, value));
+    },
+    handleAddFormSubmission: (id) => {
+      return (values) => {
+        dispatch(addAnnouncement(values[0], values[1], id));
+      }
     }
+  }
+}
+
+/**
+ * a function declaration to be called  by React-Redux 
+ * this function can be used to use the state data fetched by mapStateToProps
+ * with the defined functions in mapDispatchToProps
+ * we use this to pass the currently logged in user to the handleButtonClick function
+ * @param stateProps all the props taken directly from the state
+ * @param dispatchProps all the functions defined above to dispatch events
+ * @return the mixture of these two props to be passed into the presentation component
+ **/
+const mergeProps = (stateProps, dispatchProps) => {
+  return {
+    currentUser: stateProps.currentUser,
+    userRole: stateProps.userRole,
+    announcementsList: stateProps.announcementsList,
+    announcementsById: stateProps.announcementsById,
+    communityById: stateProps.communityById,
+    isAnnouncementsListViewable: stateProps.isAnnouncementsListViewable,
+    currentVisibleAnnouncement: stateProps.currentVisibleAnnouncement,
+    isFormViewable: stateProps.isFormViewable,
+    formData: stateProps.formData,
+    mount: dispatchProps.mount,
+    handleListClick: dispatchProps.handleListClick,
+    handlePanelClick: dispatchProps.handlePanelClick,
+    handleAddButtonClick: dispatchProps.handleAddButtonClick,
+    handleFormUpdates: dispatchProps.handleFormUpdates,
+    handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser)
   }
 }
 
@@ -74,7 +117,8 @@ const mapDispatchToProps = (dispatch) => {
  **/
 const AnnouncementsContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(AnnouncementsPage)
 
 export default AnnouncementsContainer;

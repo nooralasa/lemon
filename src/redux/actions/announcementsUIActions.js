@@ -5,6 +5,9 @@
 // ---Action Types--- //
 export const DISPLAY_FETCHED_ANNOUNCEMENTS = 'FETCH_ANNOUNCEMENTS';
 export const FETCH_ANNOUNCEMENT = 'FETCH_ANNOUNCEMENT';
+export const FETCH_ANNOUNCEMENT_FORM = 'FETCH_ANNOUNCEMENT_FORM';
+export const FETCH_ANNOUNCEMENT_FORM_DATA = 'FETCH_ANNOUNCEMENT_FORM_DATA';
+export const UPDATE_ANNOUNCEMENT_FORM_DATA = 'UPDATE_ANNOUNCEMENT_FORM_DATA';
 
 /**
  * display the announcements list
@@ -31,5 +34,34 @@ export function fetchAnnouncement(id) {
 	return {
 		type: FETCH_ANNOUNCEMENT,
 		payload: request
+	};
+}
+
+export function fetchAnnouncementForm(id = null) {
+	const request = {
+		id: id
+	};
+
+	return {
+		type: FETCH_ANNOUNCEMENT_FORM,
+		payload: request
+	};
+}
+
+export function fetchAnnouncementFormData() {
+
+	return {
+		type: FETCH_ANNOUNCEMENT_FORM_DATA
+	};
+}
+
+export function updateAnnouncementFormData(index, type, value) {
+	return {
+		type: UPDATE_ANNOUNCEMENT_FORM_DATA,
+		payload: {
+			index: index,
+			type: type,
+			value: value
+		}
 	};
 }

@@ -51,6 +51,8 @@ export function currentScholar() {
 		return axios.get('/api/v1/users/current/')
 		.then((res, err) => {
 			if (res) {
+				console.log('current_user');
+				console.log(res.data);
 				dispatch(currentScholarSuccess(res.data));
 			} else if (err) {
 				dispatch(currentScholarFailure(err));
@@ -224,6 +226,7 @@ export function deleteScholar(id) {
 export function currentScholarSuccess(data) {
 	const request = {
 		user_id: data.user_id,
+		role: data.role
 	};
 
 	return {

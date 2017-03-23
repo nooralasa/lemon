@@ -14,8 +14,8 @@ import { connect } from 'react-redux';
 import CoursesPage from '../pages/CoursesPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchCourse, displayFetchedCourses} from '../../redux/actions/coursesUIActions';
-import {fetchCourses, fetchCourseUsers, enrollInCourse} from '../../redux/actions/coursesActions';
+import {fetchCourse, displayFetchedCourses, fetchCourseForm, updateCourseFormData} from '../../redux/actions/coursesUIActions';
+import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse} from '../../redux/actions/coursesActions';
 import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
@@ -35,8 +35,11 @@ const mapStateToProps = (state) => {
   	coursesList: state.courses.get('coursesList').toArray(),
     coursesById: state.courses.get('coursesById').toJSON(),
   	communityById: state.community.get('communityById').toJSON(),
+    formData: state.coursesUI.get('formData').toJSON(),
     currentUser: state.community.get('currentlyLoggedIn'),
+    userRole: state.community.get('role'),
   	isCoursesListViewable: state.coursesUI.get('isCoursesListViewable'),
+    isFormViewable: state.coursesUI.get('isFormViewable'),
   	currentVisibleCourse: state.coursesUI.get('currentVisibleCourse')
   }
 }
@@ -77,6 +80,15 @@ const mapDispatchToProps = (dispatch) => {
     	dispatch(fetchCourses());
       dispatch(displayFetchedCourses());
     },
+    handleAddButtonClick: () => {
+      dispatch(fetchCourseForm());
+    },
+    handleFormUpdates: (index, type, value) => {
+      dispatch(updateCourseFormData(index, type, value));
+    },
+    handleAddFormSubmission: (values) => {
+      dispatch(addCourse(values[0], values[1], values[2], values[3], values[4], values[5]));
+    },
     handleThumbnailClick: (id) => {
       dispatch(fetchScholar(id));
       dispatch(fetchScholarCourses(id));
@@ -96,13 +108,19 @@ const mapDispatchToProps = (dispatch) => {
 const mergeProps = (stateProps, dispatchProps) => {
   return {
     currentUser: stateProps.currentUser,
+    userRole: stateProps.userRole,
     coursesList: stateProps.coursesList,
     coursesById: stateProps.coursesById,
     communityById: stateProps.communityById,
+    formData: stateProps.formData,
     isCoursesListViewable: stateProps.isCoursesListViewable,
+    isFormViewable: stateProps.isFormViewable,
     currentVisibleCourse: stateProps.currentVisibleCourse,
     mount: dispatchProps.mount,
     handleButtonClick: dispatchProps.handleButtonClick(stateProps.currentUser),
+    handleAddButtonClick: dispatchProps.handleAddButtonClick,
+    handleFormUpdates: dispatchProps.handleFormUpdates,
+    handleAddFormSubmission: dispatchProps.handleAddFormSubmission,
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick

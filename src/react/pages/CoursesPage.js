@@ -113,14 +113,20 @@ class Courses extends Component {
 
           <ItemsPanel 
             items={this.props.coursesById}
+            isAdmin={this.props.userRole=='admin' ? true : false}
             otherItems={this.props.communityById}
             itemIds={this.props.coursesList} 
             isListViewable={this.props.isCoursesListViewable}
             currentVisible={this.props.currentVisibleCourse}
+            isFormViewable={this.props.isFormViewable}
             handleListClick={this.props.handleListClick}
             handlePanelClick={this.props.handlePanelClick}
             handleThumbnailClick={this.props.handleThumbnailClick}
+            handleAddButtonClick={this.props.handleAddButtonClick}
+            handleFormUpdates={this.props.handleFormUpdates}
+            handleAddFormSubmission={this.props.handleAddFormSubmission}            
             handleButtonClick={this.props.handleButtonClick}
+            formData={this.props.formData}
             url={'/build/community'}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}/>
@@ -154,14 +160,19 @@ class Courses extends Component {
 Courses.propTypes = {
   isCoursesListViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
+  userRole: PropTypes.string.isRequired,
   currentVisibleCourse: PropTypes.number.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
   mount: PropTypes.func.isRequired,
   handleButtonClick: PropTypes.func.isRequired,
+  handleAddButtonClick: PropTypes.func,
+  handleFormUpdates: PropTypes.func,
   handleThumbnailClick: PropTypes.func.isRequired,
+  handleAddFormSubmission: PropTypes.func,
   coursesById: PropTypes.object.isRequired,
   coursesList: PropTypes.array.isRequired,
+  formData: PropTypes.object,
   communityById: PropTypes.object.isRequired
 }
 
