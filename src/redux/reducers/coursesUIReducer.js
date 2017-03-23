@@ -8,7 +8,7 @@ import {
 	FETCH_COURSE,
 	FETCH_COURSE_FORM,
 	FETCH_COURSE_FORM_DATA,
-	UPDATE_COURSE_FORM_DATA,
+	UPDATE_COURSE_FORM_DATA
 } from '../actions/coursesUIActions.js'
 
 //importing Immutable to create an immutable state 

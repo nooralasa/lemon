@@ -129,7 +129,9 @@ class Courses extends Component {
             formData={this.props.formData}
             url={'/build/community'}
             renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel}/>
+            renderItemPanel={this.renderItemPanel}
+            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            currentPage={'courses'}/>
         </div>
 
         <Footer />

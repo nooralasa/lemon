@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import CommunityPage from '../pages/CommunityPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
+import {fetchScholars, fetchScholarCourses, currentScholar, deleteScholar} from '../../redux/actions/communityActions';
 import {fetchCourses, fetchCourseUsers} from '../../redux/actions/coursesActions';
 import {fetchScholar, displayFetchedScholars} from '../../redux/actions/communityUIActions';
 import {fetchCourse} from '../../redux/actions/coursesUIActions';
@@ -37,6 +37,7 @@ const mapStateToProps = (state) => {
   	communityList: state.community.get('communityList').toArray(),
   	communityById: state.community.get('communityById').toJSON(),
     coursesById: state.courses.get('coursesById').toJSON(),
+    userRole: state.community.get('role'),
   	isCommunityListViewable: state.communityUI.get('isCommunityListViewable'),
   	currentVisibleScholar: state.communityUI.get('currentVisibleScholar')
   }
@@ -72,10 +73,44 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchScholars());
       dispatch(displayFetchedScholars());
     },
+    handleDeleteButtonClick: (id) => {
+      return () => {
+        dispatch(deleteScholar(id));
+        dispatch(fetchScholars());
+        dispatch(displayFetchedScholars());
+      }
+    },
     handleThumbnailClick: (id) => {
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
     }
+  }
+}
+
+/**
+ * a function declaration to be called  by React-Redux 
+ * this function can be used to use the state data fetched by mapStateToProps
+ * with the defined functions in mapDispatchToProps
+ * we use this to pass the currently logged in user to the handleButtonClick function
+ * @param stateProps all the props taken directly from the state
+ * @param dispatchProps all the functions defined above to dispatch events
+ * @return the mixture of these two props to be passed into the presentation component
+ **/
+const mergeProps = (stateProps, dispatchProps) => {
+  return {
+    currentUser: stateProps.currentUser,
+    userRole: stateProps.userRole,
+    communityList: stateProps.communityList,
+    communityById: stateProps.communityById,
+    coursesById: stateProps.coursesById,
+    userRole: stateProps.userRole,
+    isCommunityListViewable: stateProps.isCommunityListViewable,
+    currentVisibleScholar: stateProps.currentVisibleScholar,
+    mount: dispatchProps.mount,
+    handleListClick: dispatchProps.handleListClick,
+    handlePanelClick: dispatchProps.handlePanelClick,
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar),
+    handleThumbnailClick: dispatchProps.handleThumbnailClick
   }
 }
 
@@ -86,7 +121,8 @@ const mapDispatchToProps = (dispatch) => {
  **/
 const CommunityContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(CommunityPage)
 
 export default CommunityContainer;

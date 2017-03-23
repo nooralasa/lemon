@@ -15,7 +15,7 @@ import CoursesPage from '../pages/CoursesPage';
 
 //Redux actions for fetching data from the database and changing ui state
 import {fetchCourse, displayFetchedCourses, fetchCourseForm, updateCourseFormData} from '../../redux/actions/coursesUIActions';
-import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse} from '../../redux/actions/coursesActions';
+import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse, deleteCourse} from '../../redux/actions/coursesActions';
 import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
@@ -89,6 +89,13 @@ const mapDispatchToProps = (dispatch) => {
     handleAddFormSubmission: (values) => {
       dispatch(addCourse(values[0], values[1], values[2], values[3], values[4], values[5]));
     },
+    handleDeleteButtonClick: (id) => {
+      return () => {
+        dispatch(deleteCourse(id));
+        dispatch(fetchCourses());
+        dispatch(displayFetchedCourses());
+      }
+    },
     handleThumbnailClick: (id) => {
       dispatch(fetchScholar(id));
       dispatch(fetchScholarCourses(id));
@@ -123,7 +130,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission,
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
-    handleThumbnailClick: dispatchProps.handleThumbnailClick
+    handleThumbnailClick: dispatchProps.handleThumbnailClick,
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleCourse)
   }
 }
 

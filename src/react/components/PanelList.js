@@ -12,7 +12,6 @@ class AddControls extends Component {
   }
 
   render() {
-    console.log('I should be rendered.');
     return (
       <div style={{ marginBottom: 20}}>
         <rbs.Button bsSize="large" onClick={() => {this.handleUserClick()}} block><i className="fa fa-plus fa-fw" /></rbs.Button>
@@ -50,7 +49,8 @@ class PanelList extends Component {
   }
 
   render() {
-    if (this.props.isAdmin) {
+    console.log(this.props.currentPage);
+    if (this.props.isAdmin && this.props.currentPage!=='community') {
       return (
         <div style={{ margin: '0 auto'}}>
           <AddControls handleAddButtonClick={this.props.handleAddButtonClick}/>

@@ -115,6 +115,7 @@ class Community extends Component {
 
           <ItemsPanel 
             items={this.props.communityById}
+            isAdmin={this.props.userRole=='admin' ? true : false}
             otherItems={this.props.coursesById}
             itemIds={this.props.communityList} 
             isListViewable={this.props.isCommunityListViewable}
@@ -124,7 +125,9 @@ class Community extends Component {
             handleThumbnailClick={this.props.handleThumbnailClick}
             url={'/build/courses'}
             renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel}/>
+            renderItemPanel={this.renderItemPanel}
+            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            currentPage={'community'}/>
         </div>
 
         <Footer />

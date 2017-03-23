@@ -121,7 +121,9 @@ class Announcements extends Component {
             handleFormUpdates={this.props.handleFormUpdates}
             handleAddFormSubmission={this.props.handleAddFormSubmission} 
             renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel}/>
+            renderItemPanel={this.renderItemPanel}
+            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            currentPage={'announcements'}/>
         </div>
         
         <Footer />

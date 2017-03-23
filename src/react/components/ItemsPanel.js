@@ -12,7 +12,8 @@ class ItemsPanel extends Component {
           <PanelList 
             items={this.props.items}
             itemIds={this.props.itemIds}
-            isAdmin={this.props.isAdmin} 
+            isAdmin={this.props.isAdmin}
+            currentPage={this.props.currentPage} 
             onUserClick={this.props.handleListClick}
             renderBody={this.props.renderListBody}
             handleAddButtonClick={this.props.handleAddButtonClick} />
@@ -27,13 +28,14 @@ class ItemsPanel extends Component {
         </div>
       );
     } else {
-      console.log('this.props.isAdmin ', this.props.isAdmin);
-      console.log('this.props.isFormViewable ', this.props.isFormViewable);
       return (
         <div style={{ margin: '3%'}}>
           <ItemPanel 
             onUserClick={this.props.handlePanelClick}
-            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)} />
+            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)}
+            isAdmin={this.props.isAdmin}
+            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            url={this.props.url} />
         </div>
       );
     }

@@ -5,22 +5,35 @@ class ItemControls extends Component {
   constructor(props) {
     super(props);
     this.handleUserClick = this.handleUserClick.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
-  handleUserClick(id) {
+  handleUserClick() {
     this.props.onUserClick();
   }
 
+  handleDeleteClick() {
+    this.props.onDeleteBtnClick();
+  }
+
   render() {
-    return (
-      <div>
-        <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
-        { /* <rbs.ButtonGroup style={{float: 'right'}}>
-          <rbs.Button bsStyle="link"><i className="fa fa-angle-up fa-fw" /></rbs.Button>
-          <rbs.Button bsStyle="link"><i className="fa fa-angle-down fa-fw" /></rbs.Button>
-        </rbs.ButtonGroup> */ }
-      </div>
-    );
+    if (this.props.isAdmin) {
+      return (
+        <div>
+          <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
+          <rbs.ButtonGroup style={{float: 'right'}}>
+            <rbs.Button bsStyle="link"><i className="fa fa-edit fa-fw" /></rbs.Button>
+            <rbs.Button bsStyle="link"onClick={this.handleDeleteClick}><i className="fa fa-trash fa-fw" /></rbs.Button>
+          </rbs.ButtonGroup>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
+        </div>
+      );
+    }
   }
 }
 
@@ -31,7 +44,7 @@ ItemControls.propTypes = {
 class ItemPanel extends Component {
   render() {
     return (
-      <rbs.Panel header={<ItemControls onUserClick={this.props.onUserClick}/>} style={{ margin: '0 auto'}}>
+      <rbs.Panel header={<ItemControls onUserClick={this.props.onUserClick} isAdmin={this.props.isAdmin} onDeleteBtnClick={this.props.handleDeleteButtonClick}/>} style={{ margin: '0 auto'}}>
         {this.props.renderItemPanel}
       </rbs.Panel>
     );

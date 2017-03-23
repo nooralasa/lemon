@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import AnnouncementsPage from '../pages/AnnouncementsPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchAnnouncements, addAnnouncement} from '../../redux/actions/announcementsActions';
+import {fetchAnnouncements, addAnnouncement, deleteAnnouncement} from '../../redux/actions/announcementsActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
 import {fetchAnnouncement, displayFetchedAnnouncements, fetchAnnouncementForm, updateAnnouncementFormData} from '../../redux/actions/announcementsUIActions';
 
@@ -77,7 +77,14 @@ const mapDispatchToProps = (dispatch) => {
       return (values) => {
         dispatch(addAnnouncement(values[0], values[1], id));
       }
-    }
+    },
+    handleDeleteButtonClick: (id) => {
+      return () => {
+        dispatch(deleteAnnouncement(id));
+        dispatch(fetchAnnouncements());
+        dispatch(displayFetchedAnnouncements());
+      }
+    },
   }
 }
 
@@ -106,7 +113,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     handlePanelClick: dispatchProps.handlePanelClick,
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,
-    handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser)
+    handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser),
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleAnnouncement)
   }
 }
 
