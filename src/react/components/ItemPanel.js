@@ -6,6 +6,7 @@ class ItemControls extends Component {
     super(props);
     this.handleUserClick = this.handleUserClick.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
   }
 
   handleUserClick() {
@@ -16,14 +17,19 @@ class ItemControls extends Component {
     this.props.onDeleteBtnClick();
   }
 
+  handleEditClick() {
+    console.log('Editing here');
+    this.props.onEditBtnClick();
+  }
+
   render() {
     if (this.props.isAdmin) {
       return (
         <div>
           <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
           <rbs.ButtonGroup style={{float: 'right'}}>
-            <rbs.Button bsStyle="link"><i className="fa fa-edit fa-fw" /></rbs.Button>
-            <rbs.Button bsStyle="link"onClick={this.handleDeleteClick}><i className="fa fa-trash fa-fw" /></rbs.Button>
+            <rbs.Button bsStyle="link" onClick={this.handleEditClick}><i className="fa fa-edit fa-fw" /></rbs.Button>
+            <rbs.Button bsStyle="link" onClick={this.handleDeleteClick}><i className="fa fa-trash fa-fw" /></rbs.Button>
           </rbs.ButtonGroup>
         </div>
       );
@@ -44,7 +50,11 @@ ItemControls.propTypes = {
 class ItemPanel extends Component {
   render() {
     return (
-      <rbs.Panel header={<ItemControls onUserClick={this.props.onUserClick} isAdmin={this.props.isAdmin} onDeleteBtnClick={this.props.handleDeleteButtonClick}/>} style={{ margin: '0 auto'}}>
+      <rbs.Panel header={<ItemControls 
+          onUserClick={this.props.onUserClick} 
+          isAdmin={this.props.isAdmin} 
+          onDeleteBtnClick={this.props.handleDeleteButtonClick} 
+          onEditBtnClick={this.props.handleEditButtonClick}/>} style={{ margin: '0 auto'}}>
         {this.props.renderItemPanel}
       </rbs.Panel>
     );

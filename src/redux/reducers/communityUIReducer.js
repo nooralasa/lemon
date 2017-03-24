@@ -5,7 +5,8 @@
 //importing relevant action types
 import {
 	DISPLAY_FETCHED_SCHOLARS, 
-	FETCH_SCHOLAR} from '../actions/communityUIActions.js';
+	FETCH_SCHOLAR,
+	FETCH_SCHOLAR_FORM} from '../actions/communityUIActions.js';
 
 //importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
@@ -33,10 +34,19 @@ function communityUI(state = initialCommunityUIState, action) {
 
 		case DISPLAY_FETCHED_SCHOLARS:
 			state = state.set('isCommunityListViewable', true);
+			state = state.set('isFormViewable', false);
+			state = state.set('currentVisibleScholar', null);
 			return state
 
 		case FETCH_SCHOLAR:
 			state = state.set('isCommunityListViewable', false);
+			state = state.set('isFormViewable', false);
+			state = state.set('currentVisibleScholar', action.payload.id);
+			return state
+
+		case FETCH_SCHOLAR_FORM:
+			state = state.set('isCommunityListViewable', false);
+			state = state.set('isFormViewable', true);
 			state = state.set('currentVisibleScholar', action.payload.id);
 			return state
 

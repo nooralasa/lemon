@@ -5,6 +5,34 @@ import ItemPanel from '../components/ItemPanel';
 import renderForm from '../components/renderForm';
 
 class ItemsPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.formSubmissionHandler = this.formSubmissionHandler.bind(this);
+    this.formSubmissionMessage = this.formSubmissionMessage.bind(this);
+  }
+
+  formSubmissionHandler() {
+    if (this.props.currentVisible) {
+      return (values) => {
+        this.props.handleEditFormSubmission(values);
+        this.props.handlePanelClick();
+      }
+    } else {
+      return (values) => {
+        this.props.handleAddFormSubmission(values);
+        this.props.handlePanelClick();
+      }
+    }
+  }
+
+  formSubmissionMessage() {
+    if (this.props.currentVisible) { 
+      return this.props.editSubmitMessage
+    } else {
+      return this.props.addSubmitMessage
+    }
+  }
+
   render() {
     if (this.props.isListViewable) {
       return (
@@ -20,11 +48,13 @@ class ItemsPanel extends Component {
         </div>
       );
     } else if (this.props.isAdmin && this.props.isFormViewable) {
+      const submissionHandler = this.formSubmissionHandler();
+      const message = this.formSubmissionMessage()
       return (
         <div style={{ margin: '3%'}}>
           <ItemPanel 
             onUserClick={this.props.handlePanelClick}
-            renderItemPanel={renderForm(this.props.formData, this.props.handleFormUpdates, this.props.handleAddFormSubmission, this.props.handlePanelClick)} />
+            renderItemPanel={renderForm(this.props.formData, this.props.handleFormUpdates, submissionHandler, message)} />
         </div>
       );
     } else {
@@ -35,6 +65,7 @@ class ItemsPanel extends Component {
             renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)}
             isAdmin={this.props.isAdmin}
             handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            handleEditButtonClick={this.props.handleEditButtonClick}
             url={this.props.url} />
         </div>
       );

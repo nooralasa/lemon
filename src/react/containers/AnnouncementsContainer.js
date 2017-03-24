@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import AnnouncementsPage from '../pages/AnnouncementsPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchAnnouncements, addAnnouncement, deleteAnnouncement} from '../../redux/actions/announcementsActions';
+import {fetchAnnouncements, addAnnouncement, deleteAnnouncement, updateAnnouncement} from '../../redux/actions/announcementsActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
 import {fetchAnnouncement, displayFetchedAnnouncements, fetchAnnouncementForm, updateAnnouncementFormData} from '../../redux/actions/announcementsUIActions';
 
@@ -68,14 +68,30 @@ const mapDispatchToProps = (dispatch) => {
     	dispatch(displayFetchedAnnouncements());
     },
     handleAddButtonClick: () => {
+      dispatch(updateAnnouncementFormData(0, 'textBoxes', '',''));
+      dispatch(updateAnnouncementFormData(0, 'textAreaBoxes', '',''));
       dispatch(fetchAnnouncementForm());
     },
     handleFormUpdates: (index, type, value) => {
-      dispatch(updateAnnouncementFormData(index, type, value));
+      dispatch(updateAnnouncementFormData(index, type, value, ''));
     },
     handleAddFormSubmission: (id) => {
       return (values) => {
         dispatch(addAnnouncement(values[0], values[1], id));
+      }
+    },
+    handleEditFormSubmission: (announcementId, currentUser) => {
+      return (values) => {
+        dispatch(updateAnnouncement(announcementId, values[0], values[1], currentUser));
+      }
+    },
+    handleEditButtonClick: (announcementsById, currentVisibleAnnouncement) => {
+      return () => {
+        if (currentVisibleAnnouncement) {
+          dispatch(updateAnnouncementFormData(0, 'textBoxes', announcementsById[currentVisibleAnnouncement]['header'], announcementsById[currentVisibleAnnouncement]['header']));
+          dispatch(updateAnnouncementFormData(0, 'textAreaBoxes', announcementsById[currentVisibleAnnouncement]['body_params']['message'], announcementsById[currentVisibleAnnouncement]['body_params']['message']));
+          dispatch(fetchAnnouncementForm(currentVisibleAnnouncement));
+        }
       }
     },
     handleDeleteButtonClick: (id) => {
@@ -114,7 +130,9 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser),
-    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleAnnouncement)
+    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleAnnouncement, stateProps.currentUser),
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleAnnouncement),
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.announcementsById, stateProps.currentVisibleAnnouncement)
   }
 }
 

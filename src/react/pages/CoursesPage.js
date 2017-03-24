@@ -124,13 +124,17 @@ class Courses extends Component {
             handleThumbnailClick={this.props.handleThumbnailClick}
             handleAddButtonClick={this.props.handleAddButtonClick}
             handleFormUpdates={this.props.handleFormUpdates}
-            handleAddFormSubmission={this.props.handleAddFormSubmission}            
+            handleAddFormSubmission={this.props.handleAddFormSubmission} 
+            handleEditFormSubmission={this.props.handleEditFormSubmission}           
             handleButtonClick={this.props.handleButtonClick}
             formData={this.props.formData}
             url={'/build/community'}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}
             handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            handleEditButtonClick={this.props.handleEditButtonClick}
+            addSubmitMessage={'Add New Course'}
+            editSubmitMessage={'Edit Course'}
             currentPage={'courses'}/>
         </div>
 

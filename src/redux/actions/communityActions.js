@@ -172,7 +172,7 @@ export function addScholar(title, source, link, img, description) {
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function updateScholar(id, title, source, link, img, list, description) {
+export function updateScholar(id, role, title, source, link, img, list, description) {
 	return dispatch => {
 		dispatch(updateScholarRequest());
 
@@ -183,7 +183,7 @@ export function updateScholar(id, title, source, link, img, list, description) {
 			image: img,
 			portfolio: link,
 			chat_link: link,
-			role: 'scholar'
+			role: role
 		})
 		.then((res, err) => {
 			if (res) {

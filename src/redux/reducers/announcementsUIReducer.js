@@ -23,14 +23,16 @@ const initialAnnouncementsUIState = Immutable.fromJS({
 			{
 				label: 'Announcement Title',
 				placeholder: 'Enter the announcement title',
-				value: ''
+				value: '',
+				defaultvalue: ''
 			}
 		],
 		textAreaBoxes: [
 			{
 				label: 'Announcement Body',
 				placeholder: 'Enter the announcement body. You may use HTML tags for rendering purposes.',
-				value: ''
+				value: '',
+				defaultvalue: ''
 			}
 		]
 	}
@@ -66,6 +68,7 @@ function announcementsUI(state = initialAnnouncementsUIState, action) {
 
 		case UPDATE_ANNOUNCEMENT_FORM_DATA:
 			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'value'], value => action.payload.value);
+			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'defaultvalue'], defaultvalue => action.payload.defaultvalue);
 			return state
 
 		default: 

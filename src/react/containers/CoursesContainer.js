@@ -15,7 +15,7 @@ import CoursesPage from '../pages/CoursesPage';
 
 //Redux actions for fetching data from the database and changing ui state
 import {fetchCourse, displayFetchedCourses, fetchCourseForm, updateCourseFormData} from '../../redux/actions/coursesUIActions';
-import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse, deleteCourse} from '../../redux/actions/coursesActions';
+import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse, deleteCourse, updateCourse} from '../../redux/actions/coursesActions';
 import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
@@ -81,19 +81,43 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(displayFetchedCourses());
     },
     handleAddButtonClick: () => {
+      dispatch(updateCourseFormData(0, 'textBoxes', '',''));
+      dispatch(updateCourseFormData(1, 'textBoxes', '',''));
+      dispatch(updateCourseFormData(2, 'textBoxes', '',''));
+      dispatch(updateCourseFormData(3, 'textBoxes', '',''));
+      dispatch(updateCourseFormData(4, 'textBoxes', '',''));
+      dispatch(updateCourseFormData(0, 'textAreaBoxes', '',''));
       dispatch(fetchCourseForm());
     },
     handleFormUpdates: (index, type, value) => {
-      dispatch(updateCourseFormData(index, type, value));
+      dispatch(updateCourseFormData(index, type, value, ''));
     },
     handleAddFormSubmission: (values) => {
       dispatch(addCourse(values[0], values[1], values[2], values[3], values[4], values[5]));
+    },
+    handleEditFormSubmission: (id) => {
+      return (values) => {
+        dispatch(updateCourse(id, values[0], values[1], values[2], values[3], values[4], values[5]));
+      }
     },
     handleDeleteButtonClick: (id) => {
       return () => {
         dispatch(deleteCourse(id));
         dispatch(fetchCourses());
         dispatch(displayFetchedCourses());
+      }
+    },
+    handleEditButtonClick: (coursesById, currentVisibleCourse) => {
+      return () => {
+        if (currentVisibleCourse) {
+          dispatch(updateCourseFormData(0, 'textBoxes', coursesById[currentVisibleCourse]['body_params']['title'], coursesById[currentVisibleCourse]['body_params']['title']));
+          dispatch(updateCourseFormData(1, 'textBoxes', coursesById[currentVisibleCourse]['body_params']['chat_link'], coursesById[currentVisibleCourse]['body_params']['chat_link']));
+          dispatch(updateCourseFormData(2, 'textBoxes', coursesById[currentVisibleCourse]['body_params']['source'], coursesById[currentVisibleCourse]['body_params']['source']));  
+          dispatch(updateCourseFormData(3, 'textBoxes', coursesById[currentVisibleCourse]['body_params']['link'], coursesById[currentVisibleCourse]['body_params']['link']));
+          dispatch(updateCourseFormData(4, 'textBoxes', coursesById[currentVisibleCourse]['body_params']['img'], coursesById[currentVisibleCourse]['body_params']['img']));
+          dispatch(updateCourseFormData(0, 'textAreaBoxes', coursesById[currentVisibleCourse]['body_params']['description'], coursesById[currentVisibleCourse]['body_params']['description']));
+          dispatch(fetchCourseForm(currentVisibleCourse));
+        }
       }
     },
     handleThumbnailClick: (id) => {
@@ -128,10 +152,12 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission,
+    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleCourse),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
-    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleCourse)
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleCourse),
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.coursesById, stateProps.currentVisibleCourse)
   }
 }
 

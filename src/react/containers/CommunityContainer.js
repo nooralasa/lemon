@@ -14,9 +14,9 @@ import { connect } from 'react-redux';
 import CommunityPage from '../pages/CommunityPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchScholars, fetchScholarCourses, currentScholar, deleteScholar} from '../../redux/actions/communityActions';
+import {fetchScholars, fetchScholarCourses, currentScholar, deleteScholar, updateScholar} from '../../redux/actions/communityActions';
 import {fetchCourses, fetchCourseUsers} from '../../redux/actions/coursesActions';
-import {fetchScholar, displayFetchedScholars} from '../../redux/actions/communityUIActions';
+import {fetchScholar, displayFetchedScholars, fetchScholarForm} from '../../redux/actions/communityUIActions';
 import {fetchCourse} from '../../redux/actions/coursesUIActions';
 
 /**
@@ -37,6 +37,8 @@ const mapStateToProps = (state) => {
   	communityList: state.community.get('communityList').toArray(),
   	communityById: state.community.get('communityById').toJSON(),
     coursesById: state.courses.get('coursesById').toJSON(),
+    formData: state.communityUI.get('formData').toJSON(),
+    isFormViewable: state.communityUI.get('isFormViewable'),
     userRole: state.community.get('role'),
   	isCommunityListViewable: state.communityUI.get('isCommunityListViewable'),
   	currentVisibleScholar: state.communityUI.get('currentVisibleScholar')
@@ -80,6 +82,18 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(displayFetchedScholars());
       }
     },
+    handleEditButtonClick: (currentVisibleScholar) => {
+      return () => {
+        if (currentVisibleScholar) {
+          dispatch(fetchScholarForm(currentVisibleScholar));
+        }
+      }
+    },
+    handleEditFormSubmission: (id) => {
+      return () => {
+        dispatch(updateScholar(id, 'admin'));
+      }
+    },
     handleThumbnailClick: (id) => {
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
@@ -100,6 +114,8 @@ const mergeProps = (stateProps, dispatchProps) => {
   return {
     currentUser: stateProps.currentUser,
     userRole: stateProps.userRole,
+    formData: stateProps.formData,
+    isFormViewable: stateProps.isFormViewable,
     communityList: stateProps.communityList,
     communityById: stateProps.communityById,
     coursesById: stateProps.coursesById,
@@ -110,7 +126,9 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar),
-    handleThumbnailClick: dispatchProps.handleThumbnailClick
+    handleThumbnailClick: dispatchProps.handleThumbnailClick,
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.currentVisibleScholar),
+    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleScholar),
   }
 }
 

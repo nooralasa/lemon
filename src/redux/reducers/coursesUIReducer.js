@@ -24,34 +24,40 @@ const initialCoursesUIState = Immutable.fromJS({
 			{
 				label: 'Course Title',
 				placeholder: 'course title',
-				value: ''
+				value: '',
+				defaultvalue: ''
 			},
 			{
 				label: 'Gitter Room',
 				placeholder: "course's gitter room name",
-				value: ''
+				value: '',
+				defaultvalue: ''
 			},
 			{
 				label: 'Course Source',
 				placeholder: "content provider",
-				value: ''
+				value: '',
+				defaultvalue: ''
 			},
 			{
 				label: 'Enrolling Link',
 				placeholder: "link to course enrolling page",
-				value: ''
+				value: '',
+				defaultvalue: ''
 			},
 			{
 				label: 'Course Image URL',
 				placeholder: "url to the course's image",
-				value: ''
+				value: '',
+				defaultvalue: ''
 			}
 		],
 		textAreaBoxes: [
 			{
 				label: 'Course Description',
 				placeholder: 'A few paragraphs describing the course. You may use HTML tags for rendering purposes.',
-				value: ''
+				value: '',
+				defaultvalue: ''
 			}
 		]
 	}
@@ -87,6 +93,7 @@ function coursesUI(state = initialCoursesUIState, action) {
 
 		case UPDATE_COURSE_FORM_DATA:
 			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'value'], value => action.payload.value);
+			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'defaultvalue'], defaultvalue => action.payload.defaultvalue);			
 			return state
 
 		default: 

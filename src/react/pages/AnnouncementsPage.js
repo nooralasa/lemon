@@ -119,10 +119,14 @@ class Announcements extends Component {
             handlePanelClick={this.props.handlePanelClick}
             handleAddButtonClick={this.props.handleAddButtonClick}
             handleFormUpdates={this.props.handleFormUpdates}
-            handleAddFormSubmission={this.props.handleAddFormSubmission} 
+            handleAddFormSubmission={this.props.handleAddFormSubmission}
+            handleEditFormSubmission={this.props.handleEditFormSubmission} 
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}
             handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            handleEditButtonClick={this.props.handleEditButtonClick}
+            addSubmitMessage={'Add New Announcement'}
+            editSubmitMessage={'Edit Announcement'}
             currentPage={'announcements'}/>
         </div>
         

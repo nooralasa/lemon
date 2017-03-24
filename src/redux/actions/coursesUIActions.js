@@ -54,13 +54,14 @@ export function fetchCourseFormData() {
 	};
 }
 
-export function updateCourseFormData(index, type, value) {
+export function updateCourseFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_COURSE_FORM_DATA,
 		payload: {
 			index: index,
 			type: type,
-			value: value
+			value: value,
+			defaultvalue: defaultvalue
 		}
 	};
 }

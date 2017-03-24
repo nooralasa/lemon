@@ -120,6 +120,7 @@ class Community extends Component {
             itemIds={this.props.communityList} 
             isListViewable={this.props.isCommunityListViewable}
             currentVisible={this.props.currentVisibleScholar}
+            isFormViewable={this.props.isFormViewable}
             handleListClick={this.props.handleListClick}
             handlePanelClick={this.props.handlePanelClick}
             handleThumbnailClick={this.props.handleThumbnailClick}
@@ -127,6 +128,10 @@ class Community extends Component {
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}
             handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+            handleEditButtonClick={this.props.handleEditButtonClick}
+            handleEditFormSubmission={this.props.handleEditFormSubmission}           
+            formData={this.props.formData}
+            editSubmitMessage={'Make Admin'}
             currentPage={'community'}/>
         </div>
 

@@ -55,13 +55,14 @@ export function fetchAnnouncementFormData() {
 	};
 }
 
-export function updateAnnouncementFormData(index, type, value) {
+export function updateAnnouncementFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_ANNOUNCEMENT_FORM_DATA,
 		payload: {
 			index: index,
 			type: type,
-			value: value
+			value: value,
+			defaultvalue: defaultvalue
 		}
 	};
 }

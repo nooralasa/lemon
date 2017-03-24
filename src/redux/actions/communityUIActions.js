@@ -5,6 +5,7 @@
 // ---Action Types--- //
 export const DISPLAY_FETCHED_SCHOLARS = 'FETCH_SCHOLARS';
 export const FETCH_SCHOLAR = 'FETCH_SCHOLAR';
+export const FETCH_SCHOLAR_FORM = 'FETCH_SCHOLAR_FORM';
 
 /**
  * display the scholars list
@@ -29,6 +30,17 @@ export function fetchScholar(id) {
 
 	return {
 		type: FETCH_SCHOLAR,
+		payload: request
+	};
+}
+
+export function fetchScholarForm(id = null) {
+	const request = {
+		id: id
+	};
+
+	return {
+		type: FETCH_SCHOLAR_FORM,
 		payload: request
 	};
 }
