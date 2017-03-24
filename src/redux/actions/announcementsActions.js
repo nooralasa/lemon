@@ -86,7 +86,7 @@ function addAnnouncementRequest() {
 	};
 }
 
-function addAnnouncementSuccess(data) {
+export function addAnnouncementSuccess(data) {
 	const request = {
 		id: data.id,
 		header: data.header,

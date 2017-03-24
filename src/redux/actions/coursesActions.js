@@ -184,7 +184,7 @@ function addCourseRequest() {
 	};
 }
 
-function addCourseSuccess(data) {
+export function addCourseSuccess(data) {
 	const request = {
 		id: data.id,
 		body_params: {
@@ -211,28 +211,38 @@ function addCourseFailure(error) {
 	};
 }
 
-export function addCourse(title, room, source, link, img, description) {
-	return dispatch => {
-		dispatch(addCourseRequest());
+// export function addCourse(title, room, source, link, img, description) {
+// 	return dispatch => {
+// 		data = {
+// 			title: title,
+// 			source: source,
+// 			description: description,
+// 			image: img,
+// 			course_link: link,
+// 			chat_link: 'https://gitter.im/ML-LIME/'+room
+// 		}
+// 		// dispatch(addCourseRequest());
 
-		return axios.post('/api/v1/courses', {
-			title: title,
-			source: source,
-			description: description,
-			image: img,
-			course_link: link,
-			chat_link: 'https://gitter.im/ML-LIME/'+room
-		})
-		.then(res => {
-			console.log('adding course success!');
-			dispatch(addCourseSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('adding course failure!');
-			dispatch(addCourseFailure(err));	
-		});
-	}	
-}
+// 		dispatch(addCourseSuccess(data));
+
+// 		// return axios.post('/api/v1/courses', {
+// 		// 	title: title,
+// 		// 	source: source,
+// 		// 	description: description,
+// 		// 	image: img,
+// 		// 	course_link: link,
+// 		// 	chat_link: 'https://gitter.im/ML-LIME/'+room
+// 		// })
+// 		// .then(res => {
+// 		// 	console.log('adding course success!');
+// 		// 	dispatch(addCourseSuccess(res.data));		
+// 		// })
+// 		// .catch(err => {
+// 		// 	console.log('adding course failure!');
+// 		// 	dispatch(addCourseFailure(err));	
+// 		// });
+// 	}	
+// }
 
 function updateCourseRequest(id) {
 
