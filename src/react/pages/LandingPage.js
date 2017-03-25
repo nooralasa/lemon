@@ -33,7 +33,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button href='/auth/github' bsSize="large"><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
+                <rbs.Button href='/auth/gitlab' bsSize="large"><i className="fa fa-gitlab fa-fw" /> <span className="network-name">Login with Gitlab</span></rbs.Button>
               </div>
             </div>
           </div>
