@@ -105,40 +105,37 @@ class Courses extends Component {
    **/
   render() {
     return (
-      <Authenticate currentlyLoggedIn={this.props.currentUser}>
-        <Navbar items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Community','/build/community']]} />
-        
-        <div style={{padding: '50px 0'}}>
-          <Title>Courses</Title>
+      <Authenticate 
+        currentlyLoggedIn={this.props.currentUser}
+        title={'Courses'}
+        handleProfileClick={this.props.handleProfileClick}>
 
-          <ItemsPanel 
-            items={this.props.coursesById}
-            isAdmin={this.props.userRole=='admin' ? true : false}
-            otherItems={this.props.communityById}
-            itemIds={this.props.coursesList} 
-            isListViewable={this.props.isCoursesListViewable}
-            currentVisible={this.props.currentVisibleCourse}
-            isFormViewable={this.props.isFormViewable}
-            handleListClick={this.props.handleListClick}
-            handlePanelClick={this.props.handlePanelClick}
-            handleThumbnailClick={this.props.handleThumbnailClick}
-            handleAddButtonClick={this.props.handleAddButtonClick}
-            handleFormUpdates={this.props.handleFormUpdates}
-            handleAddFormSubmission={this.props.handleAddFormSubmission} 
-            handleEditFormSubmission={this.props.handleEditFormSubmission}           
-            handleButtonClick={this.props.handleButtonClick}
-            formData={this.props.formData}
-            url={'/build/community'}
-            renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel}
-            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
-            handleEditButtonClick={this.props.handleEditButtonClick}
-            addSubmitMessage={'Add New Course'}
-            editSubmitMessage={'Edit Course'}
-            currentPage={'courses'}/>
-        </div>
+        <ItemsPanel 
+          items={this.props.coursesById}
+          isAdmin={this.props.userRole=='admin' ? true : false}
+          otherItems={this.props.communityById}
+          itemIds={this.props.coursesList} 
+          isListViewable={this.props.isCoursesListViewable}
+          currentVisible={this.props.currentVisibleCourse}
+          isFormViewable={this.props.isFormViewable}
+          handleListClick={this.props.handleListClick}
+          handlePanelClick={this.props.handlePanelClick}
+          handleThumbnailClick={this.props.handleThumbnailClick}
+          handleAddButtonClick={this.props.handleAddButtonClick}
+          handleFormUpdates={this.props.handleFormUpdates}
+          handleAddFormSubmission={this.props.handleAddFormSubmission} 
+          handleEditFormSubmission={this.props.handleEditFormSubmission}           
+          handleButtonClick={this.props.handleButtonClick}
+          formData={this.props.formData}
+          url={'/build/community'}
+          renderListBody={this.renderListBody}
+          renderItemPanel={this.renderItemPanel}
+          handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+          handleEditButtonClick={this.props.handleEditButtonClick}
+          addSubmitMessage={'Add New Course'}
+          editSubmitMessage={'Edit Course'}
+          currentPage={'courses'}/>
 
-        <Footer />
       </Authenticate>
     );
   }

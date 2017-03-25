@@ -15,9 +15,6 @@ import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 // ---React Components--- //
-import Navbar from '../components/Navbar';
-import Title from '../components/Title';
-import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
 import renderModulePanel from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
@@ -107,11 +104,10 @@ class Community extends Component {
    **/
   render() {
     return (
-      <Authenticate currentlyLoggedIn={this.props.currentUser}>
-        <Navbar items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Community','/build/community']]} />
-        
-        <div style={{padding: '50px 0'}}>
-          <Title>Community</Title>
+      <Authenticate 
+        currentlyLoggedIn={this.props.currentUser}
+        title={'Community'}
+        handleProfileClick={this.props.handleProfileClick}>
 
           <ItemsPanel 
             items={this.props.communityById}
@@ -133,9 +129,7 @@ class Community extends Component {
             formData={this.props.formData}
             editSubmitMessage={'Make Admin'}
             currentPage={'community'}/>
-        </div>
-
-        <Footer />
+            
       </Authenticate>
     );
   }

@@ -16,6 +16,7 @@ import AnnouncementsPage from '../pages/AnnouncementsPage';
 //Redux actions for fetching data from the database and changing ui state
 import {fetchAnnouncements, addAnnouncement, deleteAnnouncement, updateAnnouncement} from '../../redux/actions/announcementsActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
+import {fetchScholar} from '../../redux/actions/communityUIActions';
 import {fetchAnnouncement, displayFetchedAnnouncements, fetchAnnouncementForm, updateAnnouncementFormData} from '../../redux/actions/announcementsUIActions';
 
 const FIRST_ANNOUNCEMENT_ID = 1;
@@ -101,6 +102,11 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(displayFetchedAnnouncements());
       }
     },
+    handleProfileClick: (id) => {
+      return () => {
+        dispatch(fetchScholar(id));
+      }
+    }
   }
 }
 
@@ -132,7 +138,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleAnnouncement, stateProps.currentUser),
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleAnnouncement),
-    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.announcementsById, stateProps.currentVisibleAnnouncement)
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.announcementsById, stateProps.currentVisibleAnnouncement),
+    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser)
   }
 }
 

@@ -31,13 +31,28 @@ import React, { Component, PropTypes } from 'react';
  * @import NotFoundPage a page to be rendered for misentered urls (404)
  **/
 import NotFoundPage from '../pages/NotFoundPage';
+import Navbar from '../components/Navbar';
+import Title from '../components/Title';
+import Footer from '../components/Footer';
 
 class Authenticate extends Component {
   render() {
   	if (this.props.currentlyLoggedIn) {
-      console.log('Authenticated App');
       return (
-        <div>{this.props.children}</div>
+        <div>
+          <Navbar 
+            items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Community','/build/community']]} 
+            renderProfile={true} 
+            handleProfileClick= {this.props.handleProfileClick}/>
+        
+          <div style={{padding: '50px 0'}}>
+            <Title>{this.props.title}</Title>
+
+            {this.props.children}
+          </div>
+
+          <Footer />
+        </div>
       );
     } else {
       console.log('Unauthenticated App');

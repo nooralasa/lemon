@@ -100,37 +100,34 @@ class Announcements extends Component {
    **/
   render() {
     return (
-      <Authenticate currentlyLoggedIn={this.props.currentUser}>
-        <Navbar items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Community','/build/community']]} />
+      <Authenticate 
+        currentlyLoggedIn={this.props.currentUser}
+        title={'Announcements'}
+        handleProfileClick={this.props.handleProfileClick}>
 
-        <div style={{padding: '50px 0'}}>
-          <Title>Announcements</Title>
+        <ItemsPanel 
+          items={this.props.announcementsById}
+          isAdmin={this.props.userRole=='admin' ? true : false}
+          isFormViewable={this.props.isFormViewable}
+          formData={this.props.formData}
+          itemIds={this.props.announcementsList} 
+          otherItems={this.props.communityById}
+          isListViewable={this.props.isAnnouncementsListViewable}
+          currentVisible={this.props.currentVisibleAnnouncement}
+          handleListClick={this.props.handleListClick}
+          handlePanelClick={this.props.handlePanelClick}
+          handleAddButtonClick={this.props.handleAddButtonClick}
+          handleFormUpdates={this.props.handleFormUpdates}
+          handleAddFormSubmission={this.props.handleAddFormSubmission}
+          handleEditFormSubmission={this.props.handleEditFormSubmission} 
+          renderListBody={this.renderListBody}
+          renderItemPanel={this.renderItemPanel}
+          handleDeleteButtonClick={this.props.handleDeleteButtonClick}
+          handleEditButtonClick={this.props.handleEditButtonClick}
+          addSubmitMessage={'Add New Announcement'}
+          editSubmitMessage={'Edit Announcement'}
+          currentPage={'announcements'}/>
 
-          <ItemsPanel 
-            items={this.props.announcementsById}
-            isAdmin={this.props.userRole=='admin' ? true : false}
-            isFormViewable={this.props.isFormViewable}
-            formData={this.props.formData}
-            itemIds={this.props.announcementsList} 
-            otherItems={this.props.communityById}
-            isListViewable={this.props.isAnnouncementsListViewable}
-            currentVisible={this.props.currentVisibleAnnouncement}
-            handleListClick={this.props.handleListClick}
-            handlePanelClick={this.props.handlePanelClick}
-            handleAddButtonClick={this.props.handleAddButtonClick}
-            handleFormUpdates={this.props.handleFormUpdates}
-            handleAddFormSubmission={this.props.handleAddFormSubmission}
-            handleEditFormSubmission={this.props.handleEditFormSubmission} 
-            renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel}
-            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
-            handleEditButtonClick={this.props.handleEditButtonClick}
-            addSubmitMessage={'Add New Announcement'}
-            editSubmitMessage={'Edit Announcement'}
-            currentPage={'announcements'}/>
-        </div>
-        
-        <Footer />
       </Authenticate>
     );
   }

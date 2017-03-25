@@ -123,6 +123,11 @@ const mapDispatchToProps = (dispatch) => {
     handleThumbnailClick: (id) => {
       dispatch(fetchScholar(id));
       dispatch(fetchScholarCourses(id));
+    },
+    handleProfileClick: (id) => {
+      return () => {
+        dispatch(fetchScholar(id));
+      }
     }
   }
 }
@@ -157,7 +162,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleCourse),
-    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.coursesById, stateProps.currentVisibleCourse)
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.coursesById, stateProps.currentVisibleCourse),
+    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser)
   }
 }
 
