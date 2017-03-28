@@ -16,7 +16,7 @@ Courses:
   Text => Course Image Link    
   Textarea => Announcement Body
 */
-function renderTexts(texts, handleChange) {
+function renderTexts(texts, handleChange, otherScholar) {
   const textInputs = texts.map((text, index) => 
     <rbs.FormGroup key={index} controlId={"textBoxes"+index}>
       <rbs.ControlLabel>{text.label}</rbs.ControlLabel>
@@ -29,14 +29,16 @@ function renderTexts(texts, handleChange) {
         }}/>
     </rbs.FormGroup>
   );
-  return (
-    <div>
-      {textInputs}
-    </div>
-  );
+  if (!otherScholar) {
+    return (
+      <div>
+        {textInputs}
+      </div>
+    );
+  }
 }
 
-function renderTextAreas(textareas, handleChange) {
+function renderTextAreas(textareas, handleChange, otherScholar) {
   const textInputs = textareas.map((textarea, index) =>
     <rbs.FormGroup key={index} controlId={"textAreaBoxes"+index}>
       <rbs.ControlLabel>{textarea.label}</rbs.ControlLabel>
@@ -49,20 +51,23 @@ function renderTextAreas(textareas, handleChange) {
         }}/>
     </rbs.FormGroup>
   );
-  return (
-    <div>
-      {textInputs}
-    </div>
-  );
-}
+  if (!otherScholar) {
+    return (
+      <div>
+        {textInputs}
+      </div>
+    );
+  }
+} 
 
 
-function renderForm(formData, handleChange, handleSubmit, message) {
+function renderForm(formData, handleChange, handleSubmit, message, otherScholar) {
   return (
     <form>
-      { renderTexts(formData.textBoxes, handleChange) }
 
-      { renderTextAreas(formData.textAreaBoxes, handleChange) }
+      { renderTexts(formData.textBoxes, handleChange, otherScholar) }
+
+      { renderTextAreas(formData.textAreaBoxes, handleChange, otherScholar) }
 
       <rbs.Button onClick={() => {
         let values = []
@@ -70,7 +75,12 @@ function renderForm(formData, handleChange, handleSubmit, message) {
           formData[boxes].forEach((box) => values.push(box.value));
         });
 
-        handleSubmit(values);
+        if (otherScholar) {
+          handleSubmit();
+        } else {
+          handleSubmit(values);
+        }
+        
         
         console.log('submit');
       }}>

@@ -126,6 +126,7 @@ class Announcements extends Component {
           handleEditButtonClick={this.props.handleEditButtonClick}
           addSubmitMessage={'Add New Announcement'}
           editSubmitMessage={'Edit Announcement'}
+          currentUser={this.props.currentUser}
           currentPage={'announcements'}/>
 
       </Authenticate>

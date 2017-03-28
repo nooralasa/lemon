@@ -135,7 +135,7 @@ export function fetchScholarCourses(id) {
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function addScholar(title, source, link, img, description) {
+export function addScholar(title, source, link, chat_link, img, description) {
 	return dispatch => {
 		dispatch(addScholarRequest());
 
@@ -148,7 +148,7 @@ export function addScholar(title, source, link, img, description) {
 			about: description,
 			image: img,
 			portfolio: link,
-			chat_link: link,
+			chat_link: chat_link,
 			role: 'scholar'
 		})
 		.then((res, err) => {
@@ -172,17 +172,26 @@ export function addScholar(title, source, link, img, description) {
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function updateScholar(id, role, title, source, link, img, list, description) {
+export function updateScholar(id, role, title, source, link, chat_link, img, description) {
 	return dispatch => {
 		dispatch(updateScholarRequest());
 
+		console.log({
+			name: title,
+			affiliation: source,
+			about: description,
+			image: img,
+			portfolio: link,
+			chat_link: chat_link,
+			role: role
+		})
 		return axios.put(`/api/v1/users/${id}`, {
 			name: title,
 			affiliation: source,
 			about: description,
 			image: img,
 			portfolio: link,
-			chat_link: link,
+			chat_link: chat_link,
 			role: role
 		})
 		.then((res, err) => {
@@ -335,10 +344,11 @@ export function addScholarSuccess(data) {
 			title: data.name,
 			source: data.affiliation,
 			link: data.portfolio,
+			chat_link: data.chat_link,
 			img: data.image,
-			list: [],
 			role: 'scholar',
-			description: data.description
+			list: [],
+			description: data.about
 		}
 	};
 
@@ -361,10 +371,11 @@ export function updateScholarSuccess(data) {
 			title: data.name,
 			source: data.affiliation,
 			link: data.portfolio,
+			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
 			role: 'scholar',
-			description: data.description
+			description: data.about
 		}
 	};
 

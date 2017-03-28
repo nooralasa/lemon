@@ -6,7 +6,8 @@
 import {
 	DISPLAY_FETCHED_SCHOLARS, 
 	FETCH_SCHOLAR,
-	FETCH_SCHOLAR_FORM} from '../actions/communityUIActions.js';
+	FETCH_SCHOLAR_FORM,
+	UPDATE_SCHOLAR_FORM_DATA} from '../actions/communityUIActions.js';
 
 //importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
@@ -17,8 +18,46 @@ const initialCommunityUIState = Immutable.fromJS({
 	currentVisibleScholar: null,
 	isFormViewable: false,
 	formData: {
-		textBoxes: [],
-		textAreaBoxes: []
+		textBoxes: [
+			{
+				label: "Scholar's Name",
+				placeholder: 'your name',
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: "Scholar's Affiliation",
+				placeholder: "your university or company",
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: "Scholar's Portfolio Link",
+				placeholder: "your personal portfolio",
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: "Scholar's Gitter Link",
+				placeholder: "your gitter chat page",
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: "Scholar's Image URL",
+				placeholder: "url to your hosted image",
+				value: '',
+				defaultvalue: ''
+			}
+		],
+		textAreaBoxes: [
+			{
+				label: "Scholar's Bio",
+				placeholder: 'A few paragraphs describing you. You may use HTML tags for rendering purposes.',
+				value: '',
+				defaultvalue: ''
+			}
+		]
 	}
 });
 
@@ -48,6 +87,11 @@ function communityUI(state = initialCommunityUIState, action) {
 			state = state.set('isCommunityListViewable', false);
 			state = state.set('isFormViewable', true);
 			state = state.set('currentVisibleScholar', action.payload.id);
+			return state
+
+		case UPDATE_SCHOLAR_FORM_DATA:
+			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'value'], value => action.payload.value);
+			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'defaultvalue'], defaultvalue => action.payload.defaultvalue);			
 			return state
 
 		default: 

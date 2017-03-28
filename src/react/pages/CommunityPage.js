@@ -120,6 +120,7 @@ class Community extends Component {
             handleListClick={this.props.handleListClick}
             handlePanelClick={this.props.handlePanelClick}
             handleThumbnailClick={this.props.handleThumbnailClick}
+            handleFormUpdates={this.props.handleFormUpdates}
             url={'/build/courses'}
             renderListBody={this.renderListBody}
             renderItemPanel={this.renderItemPanel}
@@ -128,6 +129,8 @@ class Community extends Component {
             handleEditFormSubmission={this.props.handleEditFormSubmission}           
             formData={this.props.formData}
             editSubmitMessage={'Make Admin'}
+            editProfileSubmitMessage={'Edit Profile'}
+            currentUser={this.props.currentUser}
             currentPage={'community'}/>
             
       </Authenticate>

@@ -6,6 +6,7 @@
 export const DISPLAY_FETCHED_SCHOLARS = 'FETCH_SCHOLARS';
 export const FETCH_SCHOLAR = 'FETCH_SCHOLAR';
 export const FETCH_SCHOLAR_FORM = 'FETCH_SCHOLAR_FORM';
+export const UPDATE_SCHOLAR_FORM_DATA = 'UPDATE_SCHOLAR_FORM_DATA';
 
 /**
  * display the scholars list
@@ -42,5 +43,17 @@ export function fetchScholarForm(id = null) {
 	return {
 		type: FETCH_SCHOLAR_FORM,
 		payload: request
+	};
+}
+
+export function updateScholarFormData(index, type, value, defaultvalue) {
+	return {
+		type: UPDATE_SCHOLAR_FORM_DATA,
+		payload: {
+			index: index,
+			type: type,
+			value: value,
+			defaultvalue: defaultvalue
+		}
 	};
 }

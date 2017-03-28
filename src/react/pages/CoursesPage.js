@@ -134,6 +134,7 @@ class Courses extends Component {
           handleEditButtonClick={this.props.handleEditButtonClick}
           addSubmitMessage={'Add New Course'}
           editSubmitMessage={'Edit Course'}
+          currentUser={this.props.currentUser}
           currentPage={'courses'}/>
 
       </Authenticate>

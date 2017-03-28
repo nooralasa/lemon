@@ -35,11 +35,11 @@ const mapStateToProps = (state) => {
   return {
     currentUser: state.community.get('currentlyLoggedIn'),
     userRole: state.community.get('role'),
-  	announcementsList: state.announcements.get('announcementsList').toArray(),
-  	announcementsById: state.announcements.get('announcementsById').toJSON(),
+    announcementsList: state.announcements.get('announcementsList').toArray(),
+    announcementsById: state.announcements.get('announcementsById').toJSON(),
     communityById: state.community.get('communityById').toJSON(),
-  	isAnnouncementsListViewable: state.announcementsUI.get('isAnnouncementsListViewable'),
-  	currentVisibleAnnouncement: state.announcementsUI.get('currentVisibleAnnouncement'),
+    isAnnouncementsListViewable: state.announcementsUI.get('isAnnouncementsListViewable'),
+    currentVisibleAnnouncement: state.announcementsUI.get('currentVisibleAnnouncement'),
     isFormViewable: state.announcementsUI.get('isFormViewable'),
     formData: state.announcementsUI.get('formData').toJSON()
   }
@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     handlePanelClick: () => {
       dispatch(fetchAnnouncements());
-    	dispatch(displayFetchedAnnouncements());
+      dispatch(displayFetchedAnnouncements());
     },
     handleAddButtonClick: () => {
       dispatch(updateAnnouncementFormData(0, 'textBoxes', '',''));

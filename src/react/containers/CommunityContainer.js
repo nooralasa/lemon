@@ -16,7 +16,7 @@ import CommunityPage from '../pages/CommunityPage';
 //Redux actions for fetching data from the database and changing ui state
 import {fetchScholars, fetchScholarCourses, currentScholar, deleteScholar, updateScholar} from '../../redux/actions/communityActions';
 import {fetchCourses, fetchCourseUsers} from '../../redux/actions/coursesActions';
-import {fetchScholar, displayFetchedScholars, fetchScholarForm} from '../../redux/actions/communityUIActions';
+import {fetchScholar, displayFetchedScholars, fetchScholarForm, updateScholarFormData} from '../../redux/actions/communityUIActions';
 import {fetchCourse} from '../../redux/actions/coursesUIActions';
 
 /**
@@ -34,14 +34,14 @@ const mapStateToProps = (state) => {
   return {
     currentUser: state.community.get('currentlyLoggedIn'),
     userRole: state.community.get('role'),
-  	communityList: state.community.get('communityList').toArray(),
-  	communityById: state.community.get('communityById').toJSON(),
+    communityList: state.community.get('communityList').toArray(),
+    communityById: state.community.get('communityById').toJSON(),
     coursesById: state.courses.get('coursesById').toJSON(),
     formData: state.communityUI.get('formData').toJSON(),
     isFormViewable: state.communityUI.get('isFormViewable'),
     userRole: state.community.get('role'),
-  	isCommunityListViewable: state.communityUI.get('isCommunityListViewable'),
-  	currentVisibleScholar: state.communityUI.get('currentVisibleScholar')
+    isCommunityListViewable: state.communityUI.get('isCommunityListViewable'),
+    currentVisibleScholar: state.communityUI.get('currentVisibleScholar')
   }
 }
 
@@ -62,7 +62,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchScholars());
       dispatch(fetchCourses());
       if (!isCommunityListViewable && currentVisibleScholar) {
-        console.log('Im inside');
         dispatch(fetchScholarCourses(currentVisibleScholar));
       }
       dispatch(currentScholar());
@@ -75,6 +74,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchScholars());
       dispatch(displayFetchedScholars());
     },
+    handleFormUpdates: (index, type, value) => {
+      dispatch(updateScholarFormData(index, type, value, ''));
+    },
     handleDeleteButtonClick: (id) => {
       return () => {
         dispatch(deleteScholar(id));
@@ -82,16 +84,28 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(displayFetchedScholars());
       }
     },
-    handleEditButtonClick: (currentVisibleScholar) => {
+    handleEditButtonClick: (communityById, currentUser, currentVisibleScholar) => {
       return () => {
         if (currentVisibleScholar) {
+          if (currentVisibleScholar==currentUser) {
+            dispatch(updateScholarFormData(0, 'textBoxes', communityById[currentVisibleScholar]['body_params']['title'], communityById[currentVisibleScholar]['body_params']['title']));
+            dispatch(updateScholarFormData(1, 'textBoxes', communityById[currentVisibleScholar]['body_params']['source'], communityById[currentVisibleScholar]['body_params']['source']));  
+            dispatch(updateScholarFormData(2, 'textBoxes', communityById[currentVisibleScholar]['body_params']['link'], communityById[currentVisibleScholar]['body_params']['link']));
+            dispatch(updateScholarFormData(3, 'textBoxes', communityById[currentVisibleScholar]['body_params']['chat_link'], communityById[currentVisibleScholar]['body_params']['chat_link']));
+            dispatch(updateScholarFormData(4, 'textBoxes', communityById[currentVisibleScholar]['body_params']['img'], communityById[currentVisibleScholar]['body_params']['img']));
+            dispatch(updateScholarFormData(0, 'textAreaBoxes', communityById[currentVisibleScholar]['body_params']['description'], communityById[currentVisibleScholar]['body_params']['description']));
+          }
           dispatch(fetchScholarForm(currentVisibleScholar));
         }
       }
     },
     handleEditFormSubmission: (id) => {
-      return () => {
-        dispatch(updateScholar(id, 'admin'));
+      return (values = null) => {
+        if (values) {
+          dispatch(updateScholar(id, null, values[0], values[1], values[2], values[3], values[4], values[5]));
+        } else {
+          dispatch(updateScholar(id, 'admin'));
+        }
       }
     },
     handleThumbnailClick: (id) => {
@@ -132,9 +146,10 @@ const mergeProps = (stateProps, dispatchProps) => {
     handlePanelClick: dispatchProps.handlePanelClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar),
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
-    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.currentVisibleScholar),
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.communityById,stateProps.currentUser, stateProps.currentVisibleScholar),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleScholar),
-    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser)
+    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
+    handleFormUpdates: dispatchProps.handleFormUpdates
   }
 }
 

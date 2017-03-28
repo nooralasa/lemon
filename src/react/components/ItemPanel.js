@@ -23,7 +23,11 @@ class ItemControls extends Component {
   }
 
   render() {
-    if (this.props.isAdmin) {
+    console.log('Im about to view my profile');
+    console.log('this.props.isAdmin ', this.props.isAdmin);
+    console.log('this.props.isProfile ', this.props.isProfile);
+    if (this.props.isAdmin || this.props.isProfile) {
+      console.log('Im viewing my profile');
       return (
         <div>
           <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
@@ -53,6 +57,7 @@ class ItemPanel extends Component {
       <rbs.Panel header={<ItemControls 
           onUserClick={this.props.onUserClick} 
           isAdmin={this.props.isAdmin} 
+          isProfile={this.props.isProfile} 
           onDeleteBtnClick={this.props.handleDeleteButtonClick} 
           onEditBtnClick={this.props.handleEditButtonClick}/>} style={{ margin: '0 auto'}}>
         {this.props.renderItemPanel}
