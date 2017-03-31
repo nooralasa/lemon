@@ -9,6 +9,7 @@
 import { combineReducers } from 'redux';
 
 // ---Reducers--- //
+import registration from './registrationReducer'
 import announcements from './announcementsReducer';
 import announcementsUI from './announcementsUIReducer';
 import courses from './coursesReducer';
@@ -18,6 +19,7 @@ import communityUI from './communityUIReducer';
 
 //exporting the single appReducer that redux's combineReducers produces
 export default combineReducers({
+	registration,
   announcements,
   announcementsUI,
   courses,

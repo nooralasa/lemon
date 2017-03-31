@@ -335,7 +335,6 @@ export function deleteCourseSuccess(data) {
 	};
 }
 
-
 // ---Pure action creators specifying network information--- //
 
 /**

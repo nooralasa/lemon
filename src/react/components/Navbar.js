@@ -12,6 +12,17 @@ class Navbar extends Component {
         {navItems}
         {
           (() => {
+            if (this.props.login) {
+              return (
+                <rbs.NavItem key={3} eventKey={3} onClick={() => window.location.replace('/auth/gitlab-login')}>
+                  <rbs.Button bsSize="small"><span>Log In</span></rbs.Button>
+                </rbs.NavItem>
+              );
+            } 
+          })()
+        }
+        {
+          (() => {
             if (this.props.renderProfile) {
               return (
                 <rbs.NavDropdown eventKey={4} title={<i className="fa fa-user" ariaHidden="true"/>} id="basic-nav-dropdown">

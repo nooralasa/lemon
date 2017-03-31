@@ -33,7 +33,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button href='/auth/gitlab' bsSize="large"><i className="fa fa-gitlab fa-fw" /> <span className="network-name">Login with Gitlab</span></rbs.Button>
+                <rbs.Button href='/build/register/1' bsSize="large"><span className="network-name">Get Started - Registeration</span></rbs.Button>
               </div>
             </div>
           </div>
@@ -70,7 +70,9 @@ class Landing extends Component {
   render() {
     return (
       <div className="landing">
-        <Navbar items={[['About','#about'], ['Contact', '#contact']]}/>
+        <Navbar 
+          items={[]}
+          login={true}/>
 
         <HeaderInstance />
 

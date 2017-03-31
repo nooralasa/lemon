@@ -21,7 +21,9 @@ function moduleTitle(body_params) {
 //add user to chat link and add thumbnail when Enroll button is pressed
 function moduleControls(body_params, btn1, btn2, handleBtn1, course_id) {
   function handleBtnClick() {
-    handleBtn1(course_id);
+    if (handleBtn1) {
+      handleBtn1(course_id);
+    }
     window.open(body_params['link']);
   }
   return (
