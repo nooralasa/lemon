@@ -6,122 +6,47 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 
-var tutorial = {
-  1: {
-    id: 1,
-    heading: 'Welcome to Learning Innovators Middle East!',
-    body: ["LIME is a capacity-building program that will offer a series of online courses.",
-    "This tutorial will take you through registration. Click the next arrow to get started!"],
-    button: null,
-    a: null
-  },
-
-  2: {
-    id: 2,
-    heading: null,
-    body: ["First, create a Github account. In LIME, we'll be working on and sharing projects through Github. Check your inbox for a verification email, then return to this page after verifying your email address."],
-    button: 'Create an account!',
-    a: 'http://www.google.com'
-  },
-
-  3: {
-    id: 3,
-    heading: null,
-    body: ['Next, update your profile. Upload a profile picture, add your name and a public email, specify your university under "company," and type a short blurb about yourself so we know who you are!'],
-    button: 'Customize my profile!',
-    a:'#'
-  },
-
-  4: {
-    id: 4,
-    heading: null,
-    body: ["Now you're ready to login to LIME through Github!"],
-    button: 'Link my accounts!',
-    a: '#'
-  },
-
-  5: {
-    id: 5,
-    heading: null,
-    body: ["We've created a portfolio page for you. You can customize this later; for now, you can fork it to add it to your Github."],
-    button: 'Fork my repo!',
-    a: '#'
-  },
-
-  6: {
-    id: 6,
-    heading: null,
-    body: ['Success! You now have a repository for your personal LIME portfolio called lime-portfolio. You can customize it and make it your own by editing the repo.'],
-    button: 'Customize my portfolio!',
-    a: '#'
-  },
-
-  7: {
-    id: 7,
-    heading: null,
-    body: ["Gitter is a chat platform. Let's sign up for Gitter and add you to the LIME community so you can ask for help if you ever get stuck or have a question for us."],
-    button: 'Sign up for Gitter!',
-    a: '#'
-  },
-
-  8: {
-    id: 8,
-    heading: null,
-    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging. You'll always be able to access it through the URL below."],
-    button: 'Take me to Gitter!',
-    a: '#'
-  },
-
-  9: {
-    id: 9,
-    heading: "You're all set!",
-    body: ["You're now all set up and ready to start learning. Click the button to complete registration!"],
-    button: 'End this tutorial!',
-    a: '#'
-  }
-};
-
-
 class Flexbox extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isButtonActive: false,
-      currentStep: 1
-    };
 
     this.handleForwardClick = this.handleForwardClick.bind(this);
     this.handleBackClick = this.handleBackClick.bind(this);
-    this.handleButtonActive = this.handleButtonActive.bind(this);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+    // this.handleButtonActive = this.handleButtonActive.bind(this);
 
   }
 
   handleForwardClick() {
-    this.setState(prevState => ({
-      currentStep: prevState.currentStep + 1
-    }));
-
+    this.props.incrementStep();
+    browserHistory.push('/build/register/'+(this.props.currentStep+1));
   }
 
   handleBackClick() {
-    this.setState(prevState => ({
-      currentStep: prevState.currentStep - 1
-    }));
+    this.props.decrementStep();
+    browserHistory.push('/build/register/'+(this.props.currentStep-1));
   }
 
-  handleButtonActive() {
-    this.setState(prevState => ({
-      isButtonActive: !prevState.isButtonActive
-    }));
+  handleButtonClick(id, a) {
+    console.log('Im about to run the fn');
+    this.props.onButtonClick(id, a);
   }
+
+  // handleButtonActive() {
+  //   this.setState(prevState => ({
+  //     isButtonActive: !prevState.isButtonActive
+  //   }));
+  // }
 
   render() {
     var button = [];
-    if (this.props.tutorial[this.state.currentStep].button) {
+    console.log('this.props.currentStep ', this.props.currentStep);
+    console.log('this.props.tutorial ', this.props.tutorial);
+    if (this.props.tutorial[this.props.currentStep].button) {
       button.push(<ButtonLink 
-        currentStep={this.state.currentStep}
+        currentStep={this.props.currentStep}
         allSteps={this.props.tutorial}
-      />);
+        handleButtonClick={this.handleButtonClick} />);
     }
     return (
       /*not responsive*/
@@ -129,18 +54,18 @@ class Flexbox extends Component {
       {/*<div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom:'50px'}}>*/}
         <div className='col-md-5'>
           <RegistrationHeading
-            currentStep={this.state.currentStep}
-            allSteps={this.props.tutorial}
-            />
+            currentStep={this.props.currentStep}
+            allSteps={this.props.tutorial} />
           <RegistrationText
-            currentStep={this.state.currentStep}
-            allSteps={this.props.tutorial}
-            />
+            currentStep={this.props.currentStep}
+            allSteps={this.props.tutorial} />
           <div>{button}</div>
-          <Progress currentStep={this.state.currentStep} allSteps={this.props.tutorial} onForwardClick={this.handleForwardClick} onBackClick={this.handleBackClick}/>
+          <Progress currentStep={this.props.currentStep} allSteps={this.props.tutorial} onForwardClick={this.handleForwardClick} onBackClick={this.handleBackClick}/>
         </div>
         <div className='col-md-7'>
-          <RegistrationImage />
+          <RegistrationImage
+            currentStep={this.props.currentStep}
+            allSteps={this.props.tutorial} />
         </div>
       </div>
     );
@@ -188,8 +113,8 @@ class ButtonLink extends Component {
   render() {
     return (
       <div>
-        <button style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}>
-          <a href={this.props.allSteps[this.props.currentStep].a} style={{color:'white', textDecoration:'none'}}>{this.props.allSteps[this.props.currentStep].button}</a>
+        <button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}} style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}>
+          <a style={{color:'white', textDecoration:'none'}}>{this.props.allSteps[this.props.currentStep].button}</a>
         </button>
       </div>
     )
@@ -201,7 +126,7 @@ class RegistrationImage extends Component {
     return (  
       <div>
         <rbs.Image
-          src="/styles/img/img.png"
+          src={this.props.allSteps[this.props.currentStep].img}
           width="100%"
         />
       </div>  
@@ -218,7 +143,8 @@ class PastCircle extends Component {
           width:'15px',
           height:'15px',
           margin:'0 3px'
-          }}>
+          }}
+          onClick={() => window.location.replace('/build/register/'+this.props.id)}>
         &nbsp;
       </div>
     );
@@ -235,7 +161,8 @@ class CurrentCircle extends Component {
           width:'15px',
           height:'15px',
           margin:'0 3px'
-          }}>
+          }}
+          onClick={() => window.location.replace('/build/register/'+this.props.id)}>
         &nbsp;
       </div>
     );
@@ -251,7 +178,8 @@ class FutureCircle extends Component {
           width:'15px',
           height:'15px',
           margin:'0 3px'
-          }}>
+          }}
+          onClick={() => window.location.replace('/build/register/'+this.props.id)}>
         &nbsp;
       </div>
     );
@@ -267,36 +195,36 @@ class Progress extends Component {
     var circles = [];
     var i = 1;
     while (i < this.props.currentStep) {
-      circles.push(<PastCircle />);
+      circles.push(<PastCircle id={i}/>);
       i++;
     };
 
-    circles.push(<CurrentCircle />);
+    circles.push(<CurrentCircle id={this.props.currentStep}/>);
     i++;
 
-    while ((9 - i) > 0) {
-      circles.push(<FutureCircle />);
+    while ((10 - i) > 0) {
+      circles.push(<FutureCircle id={i}/>);
       i++;
     };
 
     return (
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems:'center', marginTop:'20px', marginBottom:'30px'}}>
 
-        <button
+        {/*<button
           style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
           onClick={this.props.onBackClick}>
           &#60;
-        </button>
+        </button>*/}
 
         <div style={{display:'flex', flexDirection:'row', justifyContent: 'center', alignItems:'center', marginLeft:'15px', marginRight:'15px'}}>  
           {circles}
         </div>
 
-        <button
+        {/*<button
           style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
           onClick={this.props.onForwardClick}>
           &#62;
-        </button>
+        </button>*/}
       </div>
     );
   }
@@ -304,15 +232,30 @@ class Progress extends Component {
 
 class Registration extends Component {
 
+  /**
+   * a function declaration that is called  by React just before this component 
+   * is rendered; here we call the mount function which dispatches relevant Redux
+   * actions to set up the state for rendering the announcements page
+   **/
+  componentDidMount() {
+    this.props.mount();
+  }
+
   render() {
     return (
       <div>
-        <Navbar items={[['About','#about'], ['Contact', '#contact']]}/>
+        <Navbar items={[]}/>
         <div>
           <div className="container-fluid" style={{paddingTop: '100px'}}>
             <div className="row" style={{textAlign:'center', margin:'0 auto'}}>
               {/*add backgroundColor:'blue'*/}
-              <Flexbox tutorial={tutorial}/>
+              <Flexbox 
+                tutorial={this.props.tutorialsById} 
+                currentStep={this.props.currentTutorial}
+                isButtonActive={this.props.isButtonActive}
+                incrementStep={this.props.incrementStep}
+                decrementStep={this.props.decrementStep}
+                onButtonClick={this.props.onButtonClick}/>
             </div>
           </div>
         </div>

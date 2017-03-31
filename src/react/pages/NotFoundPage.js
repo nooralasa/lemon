@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 import Navbar from '../components/Navbar';
-import Body from '../components/Body';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
@@ -28,9 +27,9 @@ class NotFound extends Component {
   render() {
     return (
       <div className="notfound">
-        <Navbar items={[['About','#about'], ['Contact', '#contact']]}/>
+        <Navbar items={[]}/>
         
-        <Body>
+        <div style={{padding: '50px 0'}}>
           <Title>Page Not Found</Title>
             <div className="container">
               <div className="row">
@@ -38,13 +37,13 @@ class NotFound extends Component {
                   <hr className="section-heading-spacer" />
                   <div className="clearfix" />
                   <p className="lead center">
-                    We're sorry, the page you requested could not be found. 
+                    "We're sorry, the page you requested could not be found." 
                   </p>
                   <hr className="section-heading-spacer-right" />
                 </div>
               </div>
             </div>
-        </Body>
+        </div>
 
         <Footer />
       </div>

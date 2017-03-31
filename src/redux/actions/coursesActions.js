@@ -1,6 +1,13 @@
+// --------------------------------------------------------------------- //
+// These are the action declarations that update the courses data state. //
+// --------------------------------------------------------------------- //
+
+//import axios for making http calls 
 import axios from 'axios';
+//import immutable to create immutable states
 import * as Immutable from 'immutable';
 
+// ---Action Types--- //
 export const FETCH_COURSES_REQUEST = 'FETCH_COURSES_REQUEST';
 export const FETCH_COURSES_FAILURE = 'FETCH_COURSES_FAILURE';
 export const FETCH_COURSES_SUCCESS = 'FETCH_COURSES_SUCCESS';
@@ -25,29 +32,15 @@ export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
 export const DELETE_COURSE_FAILURE = 'DELETE_COURSE_FAILURE';
 export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
 
-function enrollInCourseRequest() {
+// ---impure action creator creators making asynchonous API calls--- //
 
-	return {
-		type: ENROLL_IN_COURSE_REQUEST
-	};
-}
-
-function enrollInCourseSuccess(data) {
-
-	return {
-		type: ENROLL_IN_COURSE_SUCCESS,
-		request: data
-	};
-}
-
-function enrollInCourseFailure(error) {
-
-	return {
-		type: ENROLL_IN_COURSE_FAILURE,
-		payload: {error: error}
-	};
-}
-
+/**
+ * an impure action creator that makes an API call to associate a scholar and a course
+ * in the database
+ * @param user_id the id of the scholar to be associated
+ * @param course_id the id of the course to be associated 
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
 export function enrollInCourse(user_id, course_id) {
 	return dispatch => {
 		dispatch(enrollInCourseRequest());
@@ -67,15 +60,158 @@ export function enrollInCourse(user_id, course_id) {
 	}	
 }
 
+/**
+ * an impure action creator that makes an API call to get all courses from the database
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function fetchCourses() {
+	return dispatch => {
+		dispatch(fetchCoursesRequest());
 
-function fetchCoursesRequest() {
+		return axios.get('/api/v1/courses')
+		.then(res => {
+			console.log('fetching courses success!');
+			dispatch(fetchCoursesSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('fetching courses failure!');
+			dispatch(fetchCoursesFailure(err));	
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to get all the scholars who are 
+ * associated with the specified course from the database
+ * @param id the id of the course
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function fetchCourseUsers(id) {
+	return dispatch => {
+		dispatch(fetchCourseUsersRequest());
+
+		return axios.get('/api/v1/courses/users/'+id)
+		.then(res => {
+			dispatch(fetchCourseUsersSuccess(res.data, id));		
+		})
+		.catch(err => {
+			dispatch(fetchCourseUsersFailure(err));	
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to add a course to the database  
+ * @param title the title of the course
+ * @param room the name of the gitter room for the course 
+ * @param source the third party offering the course
+ * @param link url to the enrolling page
+ * @param img source of the course image
+ * @param description text description of the course
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function addCourse(title, room, source, link, img, description) {
+	return dispatch => {
+		dispatch(addCourseRequest());
+
+		return axios.post('/api/v1/courses', {
+			title: title,
+			source: source,
+			description: description,
+			image: img,
+			course_link: link,
+			chat_link: 'https://gitter.im/ML-LIME/'+room
+		})
+		.then(res => {
+			console.log('adding course success!');
+			dispatch(addCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('adding course failure!');
+			dispatch(addCourseFailure(err));	
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to update a course to the database  
+ * @param id the id of the course to be updated
+ * @param title the new title of the course
+ * @param room the new name of the gitter room for the course 
+ * @param source the new third party offering the course
+ * @param link the new url to the enrolling page
+ * @param img the new source of the course image
+ * @param description the new text description of the course
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function updateCourse(id, title, source, link, img, list, description) {
+	return dispatch => {
+		dispatch(updateCourseRequest());
+
+		return axios.put(`/api/v1/courses/${id}`, {
+			title: title,
+			source: source,
+			description: description,
+			image: img,
+			course_link: link,
+			chat_link: link
+		})
+		.then(res => {
+			console.log('updating course success!');
+			dispatch(updateCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('updating course failure!');
+			dispatch(updateCourseFailure(err));	
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to delete a course from the database  
+ * @param id the id of the course to be deleted
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function deleteCourse(id) {
+	return dispatch => {
+		dispatch(deleteCourseRequest());
+
+		return axios.delete(`/api/v1/courses/${id}`)
+		.then(res => {
+			console.log('deleting course success!');
+			dispatch(deleteCourseSuccess(res.data));		
+		})
+		.catch(err => {
+			console.log('deleting course failure!');
+			dispatch(deleteCourseFailure(err));	
+		});
+	}	
+}
+
+// ---Pure action creators updating the store on API call success--- //
+
+/**
+ * indicates that the API call for enrolling a user into a course succeeded
+ * @param data an object containing the user and course ids
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload an object containing the user and course ids
+ **/
+export function enrollInCourseSuccess(data) {
 
 	return {
-		type: FETCH_COURSES_REQUEST
+		type: ENROLL_IN_COURSE_SUCCESS,
+		payload: data
 	};
 }
 
-function fetchCoursesSuccess(data) {
+/**
+ * indicates that the API call for getting all courses from the database succeeded
+ * @param data a list of all course objects as returned by the database 
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload.coursesList a list of course ids
+ * @return object.payload.coursesById an object mapping ids to courses
+ **/
+export function fetchCoursesSuccess(data) {
 	let coursesList = Immutable.List();
 	let coursesById = Immutable.Map();
 	data.forEach(function(item) {
@@ -107,38 +243,15 @@ function fetchCoursesSuccess(data) {
 	};
 }
 
-function fetchCoursesFailure(error) {
-
-	return {
-		type: FETCH_COURSES_FAILURE,
-		payload: {error: error}
-	};
-}
-
-export function fetchCourses() {
-	return dispatch => {
-		dispatch(fetchCoursesRequest());
-
-		return axios.get('/api/v1/courses')
-		.then(res => {
-			console.log('fetching courses success!');
-			dispatch(fetchCoursesSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('fetching courses failure!');
-			dispatch(fetchCoursesFailure(err));	
-		});
-	}	
-}
-
-function fetchCourseUsersRequest() {
-
-	return {
-		type: FETCH_COURSE_USERS_REQUEST
-	};
-}
-
-function fetchCourseUsersSuccess(data, id) {
+/**
+ * indicates that the API call for getting all users associated with a course succeeded
+ * @param data a list of ids of all users associated with a course
+ * @param id the id of the course  
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload.courseId the id of the course in question
+ * @return object.payload.list a list of enrolled scholar ids
+ **/
+export function fetchCourseUsersSuccess(data, id) {
 	let list = Immutable.List();
 	data.forEach(function(item) {
 		list = list.push(item.user_id);
@@ -155,35 +268,12 @@ function fetchCourseUsersSuccess(data, id) {
 	};
 }
 
-function fetchCourseUsersFailure(error) {
-
-	return {
-		type: FETCH_COURSE_USERS_FAILURE,
-		payload: {error: error}
-	};
-}
-
-export function fetchCourseUsers(id) {
-	return dispatch => {
-		dispatch(fetchCourseUsersRequest());
-
-		return axios.get('/api/v1/courses/users/'+id)
-		.then(res => {
-			dispatch(fetchCourseUsersSuccess(res.data, id));		
-		})
-		.catch(err => {
-			dispatch(fetchCourseUsersFailure(err));	
-		});
-	}	
-}
-
-function addCourseRequest() {
-
-	return {
-		type: ADD_COURSE_REQUEST
-	};
-}
-
+/**
+ * indicates that the API call for adding a course to the database succeeded
+ * @param data a course object as returned by the database
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the course object as expected by react components
+ **/
 export function addCourseSuccess(data) {
 	const request = {
 		id: data.id,
@@ -203,56 +293,13 @@ export function addCourseSuccess(data) {
 	};
 }
 
-function addCourseFailure(error) {
-
-	return {
-		type: ADD_COURSE_FAILURE,
-		payload: {error: error}
-	};
-}
-
-// export function addCourse(title, room, source, link, img, description) {
-// 	return dispatch => {
-// 		data = {
-// 			title: title,
-// 			source: source,
-// 			description: description,
-// 			image: img,
-// 			course_link: link,
-// 			chat_link: 'https://gitter.im/ML-LIME/'+room
-// 		}
-// 		// dispatch(addCourseRequest());
-
-// 		dispatch(addCourseSuccess(data));
-
-// 		// return axios.post('/api/v1/courses', {
-// 		// 	title: title,
-// 		// 	source: source,
-// 		// 	description: description,
-// 		// 	image: img,
-// 		// 	course_link: link,
-// 		// 	chat_link: 'https://gitter.im/ML-LIME/'+room
-// 		// })
-// 		// .then(res => {
-// 		// 	console.log('adding course success!');
-// 		// 	dispatch(addCourseSuccess(res.data));		
-// 		// })
-// 		// .catch(err => {
-// 		// 	console.log('adding course failure!');
-// 		// 	dispatch(addCourseFailure(err));	
-// 		// });
-// 	}	
-// }
-
-function updateCourseRequest(id) {
-
-	return {
-		type: UPDATE_COURSE_REQUEST,
-		payload: {id: id}
-	};
-}
-
-function updateCourseSuccess(data) {
+/**
+ * indicates that the API call for updating a course in the database succeeded
+ * @param data a course object as returned by the database
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the course object as expected by react components
+ **/
+export function updateCourseSuccess(data) {
 	const request = {
 		id: data.id,
 		body_params: {
@@ -271,46 +318,13 @@ function updateCourseSuccess(data) {
 	};
 }
 
-function updateCourseFailure(error) {
-
-	return {
-		type: UPDATE_COURSE_FAILURE,
-		payload: {error: error}
-	};
-}
-
-export function updateCourse(id, title, source, link, img, list, description) {
-	return dispatch => {
-		dispatch(updateCourseRequest());
-
-		return axios.put(`/api/v1/courses/${id}`, {
-			title: title,
-			source: source,
-			description: description,
-			image: img,
-			course_link: link,
-			chat_link: link
-		})
-		.then(res => {
-			console.log('updating course success!');
-			dispatch(updateCourseSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('updating course failure!');
-			dispatch(updateCourseFailure(err));	
-		});
-	}	
-}
-
-function deleteCourseRequest(id) {
-
-	return {
-		type: DELETE_COURSE_REQUEST,
-		payload: {id: id}
-	};
-}
-
-function deleteCourseSuccess(data) {
+/**
+ * indicates that the API call for deleting a course in the database succeeded
+ * @param data an object containing the course id
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload an object containing the course id
+ **/
+export function deleteCourseSuccess(data) {
 	const request = {
 		id: data.id,
 	};
@@ -321,26 +335,158 @@ function deleteCourseSuccess(data) {
 	};
 }
 
+// ---Pure action creators specifying network information--- //
+
+/**
+ * indicates that an API call to enroll a scholar in a course has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function enrollInCourseRequest() {
+
+	return {
+		type: ENROLL_IN_COURSE_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call to enroll a scholar in a course failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function enrollInCourseFailure(error) {
+
+	return {
+		type: ENROLL_IN_COURSE_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call for retrieving all courses has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function fetchCoursesRequest() {
+
+	return {
+		type: FETCH_COURSES_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call for retrieving all courses failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function fetchCoursesFailure(error) {
+
+	return {
+		type: FETCH_COURSES_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call for retrieving all enrolled scholars has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function fetchCourseUsersRequest() {
+
+	return {
+		type: FETCH_COURSE_USERS_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call for retrieving all enrolled scholars failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function fetchCourseUsersFailure(error) {
+
+	return {
+		type: FETCH_COURSE_USERS_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call for adding a course has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function addCourseRequest() {
+
+	return {
+		type: ADD_COURSE_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call for adding a course failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function addCourseFailure(error) {
+
+	return {
+		type: ADD_COURSE_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call for updating a course has been initiated
+ * @param id the course id to be updated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function updateCourseRequest(id) {
+
+	return {
+		type: UPDATE_COURSE_REQUEST,
+		payload: {id: id}
+	};
+}
+
+/**
+ * indicates that an API call for updating a course failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function updateCourseFailure(error) {
+
+	return {
+		type: UPDATE_COURSE_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call for deleting a course has been initiated
+ * @param id the course id to be deleted
+ * @return object.type the action type to be passed to the reducer
+ **/
+function deleteCourseRequest(id) {
+
+	return {
+		type: DELETE_COURSE_REQUEST,
+		payload: {id: id}
+	};
+}
+
+/**
+ * indicates that an API call for deleting a course a course failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
 function deleteCourseFailure(error) {
 
 	return {
 		type: DELETE_COURSE_FAILURE,
 		payload: {error: error}
 	};
-}
-
-export function deleteCourse(id) {
-	return dispatch => {
-		dispatch(deleteCourseRequest());
-
-		return axios.delete(`/api/v1/courses/${id}`)
-		.then(res => {
-			console.log('deleting course success!');
-			dispatch(deleteCourseSuccess(res.data));		
-		})
-		.catch(err => {
-			console.log('deleting course failure!');
-			dispatch(deleteCourseFailure(err));	
-		});
-	}	
 }

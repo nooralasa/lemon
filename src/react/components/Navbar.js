@@ -10,7 +10,38 @@ class Navbar extends Component {
     return (
       <rbs.Nav pullRight>
         {navItems}
-      </rbs.Nav>
+        {
+          (() => {
+            if (this.props.login) {
+              return (
+                <rbs.NavItem key={3} eventKey={3} onClick={() => window.location.replace('/auth/gitlab-login')}>
+                  <rbs.Button bsSize="small"><span>Log In</span></rbs.Button>
+                </rbs.NavItem>
+              );
+            } 
+          })()
+        }
+        {
+          (() => {
+            if (this.props.renderProfile) {
+              return (
+                <rbs.NavDropdown eventKey={4} title={<i className="fa fa-user" ariaHidden="true"/>} id="basic-nav-dropdown">
+                  <rbs.MenuItem 
+                    onClick={() => {
+                      browserHistory.push("/build/community");
+                      this.props.handleProfileClick();
+                    }} 
+                    eventKey={4.1}>
+                    Profile
+                  </rbs.MenuItem>
+                  <rbs.MenuItem divider />
+                  <rbs.MenuItem href="/logout" eventKey={4.2}>Log Out</rbs.MenuItem>
+                </rbs.NavDropdown>
+              );
+            } 
+          })()
+        }
+      </rbs.Nav> 
     );
   }
 
@@ -19,20 +50,12 @@ class Navbar extends Component {
       <rbs.Navbar collapseOnSelect fixedTop>
         <rbs.Navbar.Header>
           <rbs.Navbar.Brand>
-            <a href="/">LIME</a>
+            <a href="/build/">LIME</a>
           </rbs.Navbar.Brand>
           <rbs.Navbar.Toggle />
         </rbs.Navbar.Header>
         <rbs.Navbar.Collapse>
           { this.renderRightNavItems(this.props.items) }
-          { /* <rbs.Nav pullRight>
-            { /* Links don't work here
-                 Add id and onClick callback
-                 http://stackoverflow.com/questions/28554349/bootstrap-3-navbar-links-not-working
-              }
-            <rbs.NavItem eventKey={1} href={this.props.links[0]}>{this.props.items[0]}</rbs.NavItem>
-            <rbs.NavItem eventKey={2} href={this.props.links[1]}>{this.props.items[1]}</rbs.NavItem>
-          </rbs.Nav> */}
         </rbs.Navbar.Collapse>
       </rbs.Navbar>
     );

@@ -6,6 +6,7 @@
   "proxy": "http://127.0.0.1:3001/",
   "devDependencies": {
     "gh-pages": "^0.12.0",
+    "gulp": "^3.9.1",
     "immutable": "^3.8.1",
     "react-redux": "^5.0.2",
     "react-scripts": "0.8.5",
@@ -15,6 +16,7 @@
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "github-api": "^3.0.0",
+    "html-to-react": "^1.2.4",
     "moment": "^2.17.1",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
@@ -27,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && sw-precache --config=sw-precache-config.js",
+    "build": "react-scripts build && sw-precache --config=sw-precache-config.js && cd build && sed -i.bak s:static:build/static:g index.html",
     "deploy": "npm run build&&surge build lemon.surge.sh",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

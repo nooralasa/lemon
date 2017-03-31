@@ -1,3 +1,8 @@
+// ------------------------------------ //
+// This is the reducer for course data. //
+// ------------------------------------ //
+
+//importing relevant action types
 import {
 	ADD_COURSE_REQUEST, 
 	ADD_COURSE_SUCCESS, 
@@ -19,115 +24,88 @@ import {
 	ENROLL_IN_COURSE_SUCCESS
 } from '../actions/coursesActions.js'
 
+//importing Immutable to create an immutable state 
 import * as Immutable from 'immutable';
 
+//the initial state declaration before dispatching any actions
 const initialCoursesState = Immutable.fromJS({
-	apiCalling: {
-		isFetching: false,
-		errorFetching: null,
-		isAdding: false,
-		errorAdding: null,
-		isUpdating: false,
-		currentlyUpdating: null,
-		errorUpdating: null,
-		isDeleting: false,
-		currentlyDeleting: null,
-		errorDeleting: null
+	networkStatus: {
+		isRequesting: false,
+		requests: [],
+		responses: []
 	},
 	coursesList: [],
 	coursesById: {}
 });
 
+
+/**
+ * Reducer for course data
+ * This reducer handles adding, updating, deleting and fetching courses as well as
+ * enrolling scholars into courses and getting the course's list of enrolled scholars
+ * @param state the current state of the app
+ *							set to initialCoursesState when the app is first started
+ * @param action the dispatched action
+ **/
 function courses(state = initialCoursesState, action) {
 	switch (action.type) {
-		case ENROLL_IN_COURSE_REQUEST:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
-			return state
-
+		
 		case ENROLL_IN_COURSE_SUCCESS:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
-			return state
-
-		case ENROLL_IN_COURSE_FAILURE:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
-			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
-			return state
-
-		case FETCH_COURSES_REQUEST:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			return state
 
 		case FETCH_COURSES_SUCCESS:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesList', coursesList => action.payload.coursesList);
 			state = state.update('coursesById', coursesById => action.payload.coursesById);
 			return state
 
-		case FETCH_COURSES_FAILURE:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
-			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
-			return state
-
-		case FETCH_COURSE_USERS_REQUEST:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => true);
-			return state
-
 		case FETCH_COURSE_USERS_SUCCESS:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.updateIn(['coursesById', action.payload.courseId, 'body_params', 'list'], list => action.payload.list);
 			return state
 
-		case FETCH_COURSE_USERS_FAILURE:
-			state = state.updateIn(['apiCalling','isFetching'], isFetching => false);
-			state = state.updateIn(['apiCalling','errorFetching'], errorFetching => action.payload.error);
-			return state
-
-		case ADD_COURSE_REQUEST:
-			state = state.updateIn(['apiCalling','isAdding'], isAdding => true);
-			return state
-
 		case ADD_COURSE_SUCCESS:
-			state = state.updateIn(['apiCalling','isAdding'], isAdding => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesList', coursesList => coursesList.push(action.payload.id));
 			state = state.update('coursesById', coursesById => coursesById.set(action.payload.id, action.payload));
 			return state
 
-		case ADD_COURSE_FAILURE:
-			state = state.updateIn(['apiCalling','isAdding'], isAdding => false);
-			state = state.updateIn(['apiCalling','errorAdding'], errorAdding => action.payload.error);
-			return state
-
-		case UPDATE_COURSE_REQUEST:
-			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => true);
-			state = state.updateIn(['apiCalling','currentlyUpdating'], currentlyUpdating => action.payload.id);
-			return state
-
 		case UPDATE_COURSE_SUCCESS:
-			state = state.updateIn(['apiCalling','isUpdating'], isUpdating => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesById', coursesById => coursesById.set(action.payload.id, action.payload));
 			return state
 
-		case UPDATE_COURSE_FAILURE:
-			state = state.update('isUpdating', isUpdating => false);
-			state = state.update('currentlyUpdating', currentlyUpdating => null);
-			state = state.update('errorUpdating', errorUpdating => action.payload.error);
-			return state
-
-		case DELETE_COURSE_REQUEST:
-			state = state.updateIn(['apiCalling','isDeleting'], isDeleting => true);
-			state = state.updateIn(['apiCalling','currentlyDeleting'], currentlyDeleting => action.payload.id);
-			return state
-
 		case DELETE_COURSE_SUCCESS:
-			state = state.updateIn(['apiCalling','isDeleting'], isDeleting => false);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			state = state.update('coursesList', coursesList => coursesList.delete(coursesList.indexOf(action.payload.id)));
 			state = state.update('coursesById', coursesById => coursesById.delete(action.payload.id));
 			return state
 
+		case ENROLL_IN_COURSE_REQUEST:
+		case FETCH_COURSES_REQUEST:
+		case FETCH_COURSE_USERS_REQUEST:
+		case ADD_COURSE_REQUEST:
+		case UPDATE_COURSE_REQUEST:
+		case DELETE_COURSE_REQUEST:
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => true);
+			state = state.updateIn(['networkStatus','requests'], requests => requests.push(action.type));
+			return state
+
+		case ENROLL_IN_COURSE_FAILURE:
+		case FETCH_COURSES_FAILURE:
+		case FETCH_COURSE_USERS_FAILURE:
+		case ADD_COURSE_FAILURE:
+		case UPDATE_COURSE_FAILURE:
 		case DELETE_COURSE_FAILURE:
-			state = state.update('isDeleting', isDeleting => false);
-			state = state.update('currentlyDeleting', currentlyDeleting => null);
-			state = state.update('errorDeleting', errorDeleting => action.payload.error);
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
 			return state
 
 		default: 

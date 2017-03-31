@@ -1,3 +1,18 @@
+// ----------------------------------------------------- //
+// The Landing Page                                      //
+// The React Component to be endered with the /login uri //
+// ----------------------------------------------------- //
+
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ * @import PropTypes an object with validators to typecheck the based props
+ * @import rbs the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ * @import browserHistory the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ **/
 import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 import { browserHistory } from 'react-router';
@@ -7,14 +22,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 class HeaderInstance extends Component {
-  constructor(props) {
-    super(props);
-    this.handleLogIn = this.handleLogIn.bind(this);
-  }
 
-  handleLogIn() {
-    this.props.onUserClick();
-  }
   render() {
     return (  
       <div className="intro-header">
@@ -25,7 +33,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button href='/auth/github' onClick={() => this.handleLogIn()}bsSize="large"><i className="fa fa-github fa-fw" /> <span className="network-name">Login with Github</span></rbs.Button>
+                <rbs.Button href='/build/register/1' bsSize="large"><span className="network-name">Get Started - Registeration</span></rbs.Button>
               </div>
             </div>
           </div>
@@ -62,9 +70,11 @@ class Landing extends Component {
   render() {
     return (
       <div className="landing">
-        <Navbar items={[['About','#about'], ['Contact', '#contact']]}/>
+        <Navbar 
+          items={[]}
+          login={true}/>
 
-        <HeaderInstance onUserClick={this.props.handleLogInAttempt}/>
+        <HeaderInstance />
 
         <a name="about" />
         <AboutInstance />
@@ -74,11 +84,6 @@ class Landing extends Component {
       </div>
     );
   }
-}
-
-Landing.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  handleLogInAttempt: PropTypes.func.isRequired
 }
 
 export default Landing;

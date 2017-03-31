@@ -35,11 +35,11 @@ class ThumbnailsList extends Component {
 
   render() {
     return (
-      <rbs.Panel style={{marginTop:25}}>
+      <div className="row" style={{marginTop:25, maxWidth:800}}>
         <p style={{textAlign: 'left'}}>{this.props.header}</p>
         <br/>
         {this.renderThumbnails(this.props.list, this.props.items, this.props.url)}
-      </rbs.Panel>
+      </div>
     );
   }
 }
