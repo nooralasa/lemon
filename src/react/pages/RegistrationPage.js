@@ -124,13 +124,15 @@ class ButtonLink extends Component {
   render() {
     return (
       <div>
-        <button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}} style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}>
+        <rbs.Button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}}
+          style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}
+          >
           <a style={{color:'white', textDecoration:'none'}}
             target="_blank"
             onClick={this.props.onButtonActive}>
             {this.props.allSteps[this.props.currentStep].button}
           </a>
-        </button>
+        </rbs.Button>
       </div>
     )
   }
@@ -232,7 +234,7 @@ class Progress extends Component {
         </button>)
     } else {
       buttonActive.push(<button
-          style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}>
+          style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#dddddd'}}>
           &#62;
         </button>)
     };
