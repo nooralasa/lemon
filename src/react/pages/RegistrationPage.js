@@ -9,11 +9,14 @@ import Footer from '../components/Footer';
 class Flexbox extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isButtonActive:false
+    }
 
     this.handleForwardClick = this.handleForwardClick.bind(this);
     this.handleBackClick = this.handleBackClick.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
-    // this.handleButtonActive = this.handleButtonActive.bind(this);
+    this.handleButtonActive = this.handleButtonActive.bind(this);
 
   }
 
@@ -32,11 +35,11 @@ class Flexbox extends Component {
     this.props.onButtonClick(id, a);
   }
 
-  // handleButtonActive() {
-  //   this.setState(prevState => ({
-  //     isButtonActive: !prevState.isButtonActive
-  //   }));
-  // }
+  handleButtonActive() {
+    this.setState(prevState => ({
+      isButtonActive: !prevState.isButtonActive
+    }));
+  }
 
   render() {
     var button = [];
@@ -46,21 +49,29 @@ class Flexbox extends Component {
       button.push(<ButtonLink 
         currentStep={this.props.currentStep}
         allSteps={this.props.tutorial}
-        handleButtonClick={this.handleButtonClick} />);
+        handleButtonClick={this.handleButtonClick}
+        onButtonActive={this.handleButtonActive}
+      />);
     }
+
     return (
-      /*not responsive*/
       <div>
-      {/*<div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom:'50px'}}>*/}
         <div className='col-md-5'>
           <RegistrationHeading
             currentStep={this.props.currentStep}
             allSteps={this.props.tutorial} />
+
           <RegistrationText
             currentStep={this.props.currentStep}
             allSteps={this.props.tutorial} />
-          <div>{button}</div>
-          <Progress currentStep={this.props.currentStep} allSteps={this.props.tutorial} onForwardClick={this.handleForwardClick} onBackClick={this.handleBackClick}/>
+
+          <Progress currentStep={this.props.currentStep}
+            allSteps={this.props.tutorial}
+            button={button}
+            buttonActive={this.state.isButtonActive}
+            onForwardClick={this.handleForwardClick}
+            onBackClick={this.handleBackClick}
+            onButtonActive={this.handleButtonActive}/>
         </div>
         <div className='col-md-7'>
           <RegistrationImage
@@ -114,7 +125,11 @@ class ButtonLink extends Component {
     return (
       <div>
         <button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}} style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}>
-          <a style={{color:'white', textDecoration:'none'}}>{this.props.allSteps[this.props.currentStep].button}</a>
+          <a style={{color:'white', textDecoration:'none'}}
+            target="_blank"
+            onClick={this.props.onButtonActive}>
+            {this.props.allSteps[this.props.currentStep].button}
+          </a>
         </button>
       </div>
     )
@@ -144,7 +159,7 @@ class PastCircle extends Component {
           height:'15px',
           margin:'0 3px'
           }}
-          onClick={() => window.location.replace('/build/register/'+this.props.id)}>
+          /*onClick={() => window.location.replace('/build/register/'+this.props.id)}*/>
         &nbsp;
       </div>
     );
@@ -162,7 +177,7 @@ class CurrentCircle extends Component {
           height:'15px',
           margin:'0 3px'
           }}
-          onClick={() => window.location.replace('/build/register/'+this.props.id)}>
+          /*onClick={() => window.location.replace('/build/register/'+this.props.id)}*/>
         &nbsp;
       </div>
     );
@@ -179,7 +194,7 @@ class FutureCircle extends Component {
           height:'15px',
           margin:'0 3px'
           }}
-          onClick={() => window.location.replace('/build/register/'+this.props.id)}>
+          /*onClick={() => window.location.replace('/build/register/'+this.props.id)}*/>
         &nbsp;
       </div>
     );
@@ -207,24 +222,35 @@ class Progress extends Component {
       i++;
     };
 
-    return (
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems:'center', marginTop:'20px', marginBottom:'30px'}}>
+    var buttonActive = [];
 
-        {/*<button
+    if (this.props.buttonActive) {
+        buttonActive.push(<button
           style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
-          onClick={this.props.onBackClick}>
-          &#60;
-        </button>*/}
-
-        <div style={{display:'flex', flexDirection:'row', justifyContent: 'center', alignItems:'center', marginLeft:'15px', marginRight:'15px'}}>  
-          {circles}
-        </div>
-
-        {/*<button
-          style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
-          onClick={this.props.onForwardClick}>
+          onClick={() => {this.props.onForwardClick(); this.props.onButtonActive();}}>
           &#62;
-        </button>*/}
+        </button>)
+    } else {
+      buttonActive.push(<button
+          style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}>
+          &#62;
+        </button>)
+    };
+
+    return (
+      <div>
+        <div>{this.props.button}</div>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems:'center', marginTop:'20px', marginBottom:'30px'}}>
+          <button
+            style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
+            onClick={this.props.onBackClick}>
+            &#60;
+          </button>
+          <div style={{display:'flex', flexDirection:'row', justifyContent: 'center', alignItems:'center', marginLeft:'15px', marginRight:'15px'}}>  
+            {circles}
+          </div>
+          {buttonActive}
+        </div>
       </div>
     );
   }
