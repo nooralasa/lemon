@@ -52,7 +52,7 @@ class ItemsPanel extends Component {
     const isOtherProfile = (this.props.currentPage==='community' && this.props.currentUser!==this.props.currentVisible);
     if (this.props.isListViewable) {
       return (
-        <div style={{ margin: '3%'}}>
+        <div style={{ margin: '3%', maxWidth: 800}}>
           <PanelList 
             items={this.props.items}
             itemIds={this.props.itemIds}
@@ -67,7 +67,7 @@ class ItemsPanel extends Component {
       const submissionHandler = this.formSubmissionHandler();
       const message = this.formSubmissionMessage(isProfile);
       return (
-        <div style={{ margin: '3%'}}>
+        <div style={{ margin: '3%', maxWidth: 800}}>
           <ItemPanel 
             onUserClick={this.props.handlePanelClick}
             renderItemPanel={renderForm(this.props.formData, this.props.handleFormUpdates, submissionHandler, message, isOtherProfile)} />
@@ -75,10 +75,10 @@ class ItemsPanel extends Component {
       );
     } else {
       return (
-        <div style={{ margin: '3%'}}>
+        <div style={{ margin: '3%', maxWidth: 800}}>
           <ItemPanel 
             onUserClick={this.props.handlePanelClick}
-            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)}
+            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById, this.props.currentVisibleSubmission, this.props.handleSubmissionButton1Click)}
             isAdmin={this.props.isAdmin}
             isProfile={isProfile}
             handleDeleteButtonClick={this.deleteButtonHandler}

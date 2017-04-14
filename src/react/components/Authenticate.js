@@ -41,7 +41,8 @@ class Authenticate extends Component {
       return (
         <div>
           <Navbar 
-            items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Community','/build/community']]} 
+            main='/build/announcements'
+            items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Activities','/build/activities'], ['Community','/build/community']]} 
             renderProfile={true} 
             handleProfileClick= {this.props.handleProfileClick}/>
         

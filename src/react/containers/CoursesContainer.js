@@ -65,7 +65,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(fetchCourse(currentVisibleCourse));
         dispatch(fetchCourseUsers(currentVisibleCourse));
       }
-      dispatch(currentScholar());
+      dispatch(currentScholar((res) => {return res}));
     },
     handleButtonClick: (user_id) => {
       return (course_id) => {

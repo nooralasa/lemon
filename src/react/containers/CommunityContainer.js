@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => {
       if (!isCommunityListViewable && currentVisibleScholar) {
         dispatch(fetchScholarCourses(currentVisibleScholar));
       }
-      dispatch(currentScholar());
+      dispatch(currentScholar((res) => {return res}));
     },
     handleListClick: (id) => {
       dispatch(fetchScholar(id));

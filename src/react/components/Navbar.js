@@ -50,7 +50,7 @@ class Navbar extends Component {
       <rbs.Navbar collapseOnSelect fixedTop>
         <rbs.Navbar.Header>
           <rbs.Navbar.Brand>
-            <a href="/build/">LIME</a>
+            <a href={this.props.main}>LIME</a>
           </rbs.Navbar.Brand>
           <rbs.Navbar.Toggle />
         </rbs.Navbar.Header>

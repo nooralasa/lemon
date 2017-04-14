@@ -57,7 +57,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     mount: () => {
-      dispatch(currentScholar());
+      dispatch(currentScholar((res) => {return res}));
       dispatch(fetchAnnouncements(() => {dispatch(fetchAnnouncement(FIRST_ANNOUNCEMENT_ID));}));
       dispatch(fetchScholars());
     },

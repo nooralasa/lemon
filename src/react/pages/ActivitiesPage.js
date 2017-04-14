@@ -1,6 +1,6 @@
 // ------------------------------------------------------- //
-// The Courses Page                                        //
-// The React Component to be endered with the /courses uri //
+// The Activities Page                                        //
+// The React Component to be endered with the /activities uri //
 // ------------------------------------------------------- //
 
 /** 
@@ -19,21 +19,26 @@ import Navbar from '../components/Navbar';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
-import {renderModulePanel} from '../components/renderModulePanel';
+import {renderActivityPanel, renderSubmissionPanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
 
 /** 
- * The Courses Page Componenet
- * This component renders the entire page when the /courses uri is fetched
+ * The Activities Page Componenet
+ * This component renders the entire page when the /activities uri is fetched
  **/
-class Courses extends Component {
+class Activities extends Component {
+  constructor(props) {
+    super(props);
+    this.renderListBody = this.renderListBody.bind(this);
+    this.renderItemPanel = this.renderItemPanel.bind(this);
+  }
 
   /**
    * specifies how the body of a list item should be rendered
    * this function is to be used by the PanelList component to customize 
-   * each item in the courses' list 
-   * @param body_params the data of one of the courses
-   * @return a course's picture, name and source fit in one of the list's items
+   * each item in the activities' list 
+   * @param body_params the data of one of the activities
+   * @return a activity's picture, name and source fit in one of the list's items
    **/
   renderListBody(body_params) {
     return (
@@ -43,36 +48,44 @@ class Courses extends Component {
         </rbs.Media.Left>
         <rbs.Media.Body>
           <rbs.Media.Heading style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{body_params['title']}</rbs.Media.Heading>
-          <p style={{color:'grey'}}>{body_params['source']}</p>
+          <p style={{color:'grey'}}>{this.props.coursesById[body_params['course_id']].body_params.title}</p>
         </rbs.Media.Body>
       </rbs.Media>
     );
   }
 
   /**
-   * specifies how a course should be rendered in its panel if clicked
+   * specifies how a activity should be rendered in its panel if clicked
    * this function is to be used by the ItemPanel Component  
-   * @param course the course that is currently being viewed
+   * @param activity the activity that is currently being viewed
    * @param communityById all scholars this will be used to render the scholars that 
-   *                      are enrolled in this course
+   *                      are enrolled in this activity
    * @param handleThumbnailClick a function to handle clicking on one of the scholar
-   *                             thumbnails that are enrolled in this course
+   *                             thumbnails that are enrolled in this activity
    * @param url the page that React Router must render when a class thumbnail is 
    *            clicked (/community in this case)
-   * @componenet handleButtonClick a fucntion handling enrolling into a course
-   * @return a div containing all the contents of the course
+   * @componenet handleButtonClick a fucntion handling enrolling into a activity
+   * @return a div containing all the contents of the activity
    **/
-  renderItemPanel(course, communityById, handleThumbnailClick, url, handleButtonClick) {
-    return renderModulePanel(course, 'Enroll Now', handleButtonClick, 'Course Channel', 'Course Description', communityById, 'Enrolled Scholars', handleThumbnailClick, url);
+  renderItemPanel(activity, coursesById, handleThumbnailClick, url, handleButtonClick, objectivesById, requirementsById, submissionsById, communityById, currentVisibleSubmission, handleSubmissionButtonClick) {
+    console.log('currentVisibleSubmission ', currentVisibleSubmission);
+    if (currentVisibleSubmission) {
+      console.log('submission view');
+      return renderSubmissionPanel(submissionsById[currentVisibleSubmission], handleButtonClick, activity.body_params.title, objectivesById, requirementsById, submissionsById, communityById[submissionsById[currentVisibleSubmission].body_params.user_id].body_params, handleSubmissionButtonClick);
+    } else {
+      console.log('activity view');
+      return renderActivityPanel(activity, handleButtonClick, coursesById[activity.body_params.course_id].body_params.title, objectivesById, requirementsById, submissionsById, communityById[activity.body_params.expert_id].body_params.title, handleThumbnailClick);
+    }
   }
 
   /**
    * a function declaration that is called by React just before this component 
    * is rendered; here we call the mount function which dispatches relevant Redux
-   * actions to set up the state for rendering the courses page
+   * actions to set up the state for rendering the activities page
    **/
   componentDidMount() {
-    this.props.mount(this.props.isCoursesListViewable, this.props.currentVisibleCourse);
+    console.log('ComponenetDidMount');
+    this.props.mount(this.props.isActivitiesListViewable, this.props.currentVisibleActivity);
   }
 
   /**
@@ -80,20 +93,20 @@ class Courses extends Component {
    * @component Navbar the navbar to be customized for logged in users
    *  @prop items a list of lists. Each list contains the name of each item on
    *              the navbar and the uri that it links to
-   * @component Title renders the title of the Courses Page
-   *  @prop children the title of the page (Courses)
-   * @component ItemsPanel to be customize to render all courses
-   *  @prop items the data to be rendered in this page (coursesById)
-   *  @prop itemIds a list of ids of each of the items above (coursesList)
+   * @component Title renders the title of the Activities Page
+   *  @prop children the title of the page (Activities)
+   * @component ItemsPanel to be customize to render all activities
+   *  @prop items the data to be rendered in this page (activitiesById)
+   *  @prop itemIds a list of ids of each of the items above (activitiesList)
    *  @prop otherItems other data that may be relevant to rendering this item
-   *                   here communityById is needed to render enrolled courses
+   *                   here communityById is needed to render enrolled activities
    *  @prop isListViewable a ui state used for conditional rendering. If true
    *                       PanelList will be rendered, else: ItemPanel
-   *  @prop currentVisible indicates which item (course) should be rendered
+   *  @prop currentVisible indicates which item (activity) should be rendered
    *                       if the ItemPanel is in view
    *  @prop handleListClick a function to handle clicking on an item in the PanelList
    *  @prop handlePanelClick a function to handle clicking the back button in ItemPanel
-   *  @prop handleThumbnailClick a function to handle clicking an enrolled course
+   *  @prop handleThumbnailClick a function to handle clicking an enrolled activity
    *  @prop handleButtonClick a function to handle clicking the enroll button
    *  @prop url the url that the thumbnail click should link to
    *  @prop renderListBody a function specifying how an item within the PanelList
@@ -101,41 +114,46 @@ class Courses extends Component {
    *  @prop renderItemPanel a function specifying how the view of the ItemPanel 
    *                       should be rendered for a given item (scholar)
    * @component Footer the footer of the application
-   * @return the courses' page
+   * @return the activities' page
    **/
   render() {
     return (
       <Authenticate 
         currentlyLoggedIn={this.props.currentUser}
-        title={'Courses'}
+        title={'Activities'}
         handleProfileClick={this.props.handleProfileClick}>
 
         <ItemsPanel 
-          items={this.props.coursesById}
+          items={this.props.activitiesById}
           isAdmin={this.props.userRole=='admin' ? true : false}
-          otherItems={this.props.communityById}
-          itemIds={this.props.coursesList} 
-          isListViewable={this.props.isCoursesListViewable}
-          currentVisible={this.props.currentVisibleCourse}
+          otherItems={this.props.coursesById}
+          objectivesById={this.props.objectivesById} 
+          requirementsById={this.props.requirementsById}
+          submissionsById={this.props.submissionsById}
+          communityById={this.props.communityById}
+          itemIds={this.props.activitiesList} 
+          isListViewable={this.props.isActivitiesListViewable}
+          currentVisible={this.props.currentVisibleActivity}
+          currentVisibleSubmission={this.props.currentVisibleSubmission}
           isFormViewable={this.props.isFormViewable}
           handleListClick={this.props.handleListClick}
           handlePanelClick={this.props.handlePanelClick}
           handleThumbnailClick={this.props.handleThumbnailClick}
           handleAddButtonClick={this.props.handleAddButtonClick}
+          handleSubmissionButton1Click={this.props.handleSubmissionButton1Click}
           handleFormUpdates={this.props.handleFormUpdates}
           handleAddFormSubmission={this.props.handleAddFormSubmission} 
           handleEditFormSubmission={this.props.handleEditFormSubmission}           
           handleButtonClick={this.props.handleButtonClick}
           formData={this.props.formData}
-          url={'/build/community'}
           renderListBody={this.renderListBody}
           renderItemPanel={this.renderItemPanel}
           handleDeleteButtonClick={this.props.handleDeleteButtonClick}
           handleEditButtonClick={this.props.handleEditButtonClick}
-          addSubmitMessage={'Add New Course'}
-          editSubmitMessage={'Edit Course'}
+          addSubmitMessage={'Add New Activity'}
+          editSubmitMessage={'Edit Activity'}
           currentUser={this.props.currentUser}
-          currentPage={'courses'}/>
+          currentPage={'activities'}/>
 
       </Authenticate>
     );
@@ -144,10 +162,10 @@ class Courses extends Component {
 
 /**
  * an object validating that the following props have been passed in from 
- * the CoursesContainer which passes this data from the Redux store 
- * @prop isCoursesListViewable boolean indicating whether the list is in view
- * @prop currentVisibleCourse the id of the course to be rendered if 
- *                             isCoursesListViewable is false
+ * the ActivitiesContainer which passes this data from the Redux store 
+ * @prop isActivitiesListViewable boolean indicating whether the list is in view
+ * @prop currentVisibleActivity the id of the activity to be rendered if 
+ *                             isActivitiesListViewable is false
  * @prop handlePanelClick a function to handle changing the ui state when clicking 
  *                        the back button in ItemPanel
  * @prop handleListClick a function to handle changing the ui state when clicking 
@@ -156,16 +174,16 @@ class Courses extends Component {
  *                            enrolled class is clicked in the ThumbnailsList
  * @prop handleButtonClick a function to handle associating a scholar to a class 
  *                         in the backend if a scholar enrolls into a class
- * @prop coursesById an object mapping each course id to its course data
+ * @prop activitiesById an object mapping each activity id to its activity data
  * @prop communityById an object mapping each scholar id to its scholar data
- * @prop coursesList a list of course ids
- * @prop mount a function for fetching scholar and course data before rendering
+ * @prop activitiesList a list of activity ids
+ * @prop mount a function for fetching scholar and activity data before rendering
  **/
-Courses.propTypes = {
-  isCoursesListViewable: PropTypes.bool.isRequired,
+Activities.propTypes = {
+  isActivitiesListViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
-  currentVisibleCourse: PropTypes.number.isRequired,
+  currentVisibleActivity: PropTypes.number.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
   mount: PropTypes.func.isRequired,
@@ -174,10 +192,10 @@ Courses.propTypes = {
   handleFormUpdates: PropTypes.func,
   handleThumbnailClick: PropTypes.func.isRequired,
   handleAddFormSubmission: PropTypes.func,
-  coursesById: PropTypes.object.isRequired,
-  coursesList: PropTypes.array.isRequired,
+  activitiesById: PropTypes.object.isRequired,
+  activitiesList: PropTypes.array.isRequired,
   formData: PropTypes.object,
   communityById: PropTypes.object.isRequired
 }
 
-export default Courses;
+export default Activities;

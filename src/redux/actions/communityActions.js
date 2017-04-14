@@ -43,7 +43,7 @@ export const DELETE_SCHOLAR_SUCCESS = 'DELTE_SCHOLAR_SUCCESS';
  * user from the database 
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function currentScholar() {
+export function currentScholar(cb) {
 	return dispatch => {
 		console.log('The async action ran')
 		dispatch(currentScholarRequest());
@@ -53,9 +53,9 @@ export function currentScholar() {
 			if (res) {
 				console.log('current_user');
 				console.log(res.data);
-				dispatch(currentScholarSuccess(res.data));
+				dispatch(currentScholarSuccess(res.data, cb));
 			} else if (err) {
-				dispatch(currentScholarFailure(err));
+				dispatch(currentScholarFailure(err, cb));
 			} 
 		});
 	}	
@@ -232,11 +232,13 @@ export function deleteScholar(id) {
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the id of the currently logged in user
  **/
-export function currentScholarSuccess(data) {
+export function currentScholarSuccess(data, cb) {
 	const request = {
 		user_id: data.user_id,
 		role: data.role
 	};
+
+	cb('success');
 
 	return {
 		type: CURRENT_SCHOLAR_SUCCESS,
@@ -423,9 +425,12 @@ function currentScholarRequest() {
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
  **/
-function currentScholarFailure(error) {
+function currentScholarFailure(error, cb) {
 	console.log('current scholar failure action creator');
 	console.log(error);
+
+	cb('error');
+	
 	return {
 		type: CURRENT_SCHOLAR_FAILURE,
 		payload: {error: error}

@@ -16,7 +16,7 @@ import * as rbs from 'react-bootstrap/lib';
 
 // ---React Components--- //
 import ItemsPanel from '../components/ItemsPanel';
-import renderModulePanel from '../components/renderModulePanel';
+import {renderModulePanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
 
 /** 

@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
     mount: (id) => {
       return () => {
         dispatch(setCurrentTutorial(parseInt(id)));
-        dispatch(currentScholar());
+        dispatch(currentScholar((res) => {return res}));
         dispatch(fetchScholars());
       }
     },
@@ -45,7 +45,6 @@ const mapDispatchToProps = (dispatch) => {
           case 3:
           case 6:
           case 8:
-            console.log('Hello there');
             window.open(a);
             window.location.replace('/build/register/'+(id+1));
             return
@@ -54,12 +53,10 @@ const mapDispatchToProps = (dispatch) => {
           case 4:
           case 7:
           case 9:
-            console.log('Hi there');
             window.location.replace(a);
             return
 
           case 5:
-            console.log('yo there');
             dispatch(forkPortfolio(user_id, function() {
               window.location.replace('/build/register/6');
             }));

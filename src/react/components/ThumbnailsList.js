@@ -12,7 +12,9 @@ class ThumbnailsList extends Component {
           style={{width: 150}}
           onClick={() => 
             {
-              browserHistory.push(url);
+              if (url) {
+                browserHistory.push(url);
+              }
               this.props.onUserClick(id);
             }
           }
@@ -35,7 +37,7 @@ class ThumbnailsList extends Component {
 
   render() {
     return (
-      <div className="row" style={{marginTop:25, maxWidth:800}}>
+      <div style={{marginTop:25, maxWidth:800}}>
         <p style={{textAlign: 'left'}}>{this.props.header}</p>
         <br/>
         {this.renderThumbnails(this.props.list, this.props.items, this.props.url)}

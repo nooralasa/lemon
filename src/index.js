@@ -62,6 +62,7 @@ import AnnouncementsContainer from './react/containers/AnnouncementsContainer';
 import CoursesContainer from './react/containers/CoursesContainer';
 import CommunityContainer from './react/containers/CommunityContainer';
 import RegistrationContainer from './react/containers/RegistrationContainer';
+import ActivitiesContainer from './react/containers/ActivitiesContainer';
 import NotFoundPage from './react/pages/NotFoundPage';
 
 import {currentScholar} from './redux/actions/communityActions';
@@ -93,6 +94,7 @@ ReactDOM.render(
 		  <Route path="/build/announcements" component={AnnouncementsContainer} />
 		  <Route path="/build/courses" component={CoursesContainer} />
 		  <Route path="/build/community" component={CommunityContainer} />
+		  <Route path="/build/activities" component={ActivitiesContainer} />
 		  <Route path="/build/register/:id" component={RegistrationContainer} />
 		  <Route path="/build/404" component={NotFoundPage} />
 		</Router>

@@ -221,4 +221,90 @@ const store = {
 	}
 };
 
+const activities = {
+	networkStatus: {
+		isRequesting: false,
+		requests: [],
+		responses: []
+	},
+	activitiesList: [1],
+	activitiesById: {
+		1: {
+			id: 1,
+			body_params: {
+				title 			: 'Recipe Page Activity',
+				description : 'The food you eat reveals a lot about your roots and personal identity. Pick a significant dish that reminds you of home and create an app that features information about it you would like to share (ex: cultural significance, history/region of origin, recipe and preparation, etc). ',
+				example			: 'example.gitlab.com',
+				image 			: 'example.gitlab.com',
+				chat_link 	: 'example.gitlab.com',
+				timestamp 	: 'Monday 4/6/2017',
+				course_id: '2',
+				expert_id		: '1128287',
+				requirementsList: [1, 2, 3],
+				objectivesList: [1, 2, 3, 4],
+				submissionsList: [1]
+			}
+		}
+	},
+	requirementsById: {
+		1: {
+			id: 1,
+			body_params: {
+				description: 'The final design must have a text element.'
+			}
+		},
+		2: {
+			id: 2,
+			body_params: {
+				description: 'Your design must include at least two different font sizes and two different font types.'
+			}
+		},
+		3: {
+			id: 3,
+			body_params: {
+				description: 'Personalize your recipe app with four or more colors.'
+			}
+		}
+	},
+	objectivesById: {
+		1: {
+			id: 1,
+			body_params: {
+				description: 'Selecting views/planning layout'
+			}
+		},
+		2: {
+			id: 2,
+			body_params: {
+				description: 'Navigating Android Studio'
+			}
+		},
+		3: {
+			id: 3,
+			body_params: {
+				description: 'TextView and ImageView'
+			}
+		},
+		4: {
+			id: 4,
+			body_params: {
+				description: 'Colors, Fonts, Style'
+			}
+		}
+	},
+	submissionsById: {
+		1: {
+			id: 1,
+			body_params: {
+				description: 'Kates Submission',		
+				gitlab_link: 'example.gitlab.com',		
+ 				gdoc_link: 'example.gdoc.com',	
+				screenshot: 'example.gitlab.com',		
+ 				timestamp: 'Monday 4/6/2017',		
+	  		user_id: '1128287'
+	  	}
+		}
+	}
+};
+
 export default store;

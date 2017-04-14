@@ -5,7 +5,6 @@ import Navbar from '../components/Navbar';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
-import renderModulePanel from '../components/renderModulePanel';
 
 const hiddenOverFlow = {overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
 
@@ -27,7 +26,7 @@ class NotFound extends Component {
   render() {
     return (
       <div className="notfound">
-        <Navbar items={[]}/>
+        <Navbar main='/build/' items={[]}/>
         
         <div style={{padding: '50px 0'}}>
           <Title>Page Not Found</Title>

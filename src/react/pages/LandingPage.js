@@ -33,7 +33,7 @@ class HeaderInstance extends Component {
                 <h1 className="title">LIME</h1>
                 <h3 className="subtitle">Learning Innovators Middle East</h3>
                 <hr className="intro-divider" />
-                <rbs.Button href='/build/register/1' bsSize="large"><span className="network-name">Get Started - Registeration</span></rbs.Button>
+                <rbs.Button href='/build/register/1' bsSize="large"><span className="network-name">Get Started - Registration</span></rbs.Button>
               </div>
             </div>
           </div>
@@ -53,9 +53,9 @@ class AboutInstance extends Component {
               <hr className="section-heading-spacer" />
               <div className="clearfix" />
               <p className="lead">
-                Learning Innovators Middle East is a capacity building program that will train hundreds of young software developers in the Middle East to develop learning technology that directly benefits refugee education, with a particular focus on higher education. 
+                Learning Innovators Middle East is a capacity-building program intended for students in higher education studying in the Middle East. LIME will provide hundreds of software developers valuable skills in technology so they may better address emerging problems of the region, with an emphasis on refugee higher education.
                 <br /><br />
-                The program will offer a series of online courses, followed by a face to face workshop in Lebanon or Jordan, and a prototyping  fund that supports the development of promising applications. 
+                The program will offer a series of online courses followed by a face to face workshop in Lebanon or Jordan, and will support the development of promising applications with a prototyping fund. 
               </p>
               <hr className="section-heading-spacer-right" />
             </div>
