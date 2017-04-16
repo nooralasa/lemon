@@ -24,6 +24,7 @@ import Title from '../components/Title';
 import ItemsPanel from '../components/ItemsPanel';
 import Footer from '../components/Footer';
 import Authenticate from '../components/Authenticate';
+import {renderAnnouncementPanel} from '../components/renderModulePanel';
 
 /** 
  * The Announcements' Page Componenet
@@ -52,16 +53,9 @@ class Announcements extends Component {
    * @return a div containing all the contents of the announcement
    **/
   renderItemPanel(announcement, communityById) {
-    return (
-      <div>
-        <p style={{textAlign: 'center'}}>{announcement['header']}</p>
-        <hr />
-        {/* Exposed to XSS attacks but it is ok cause announcements are only added by admins */}
-        <p style={{fontWeight: 'normal'}} dangerouslySetInnerHTML={{__html: announcement['body_params']['message']}} />
-        <br />
-        <p style={{float: 'right', fontWeight: 'normal', color: 'grey', fontSize: '10px', margin: 0}}><span>{announcement['body_params']['timestamp']}</span> by {communityById[announcement['body_params']['user']]['body_params']['title']}</p>        
-      </div>
-    );
+    return () => {
+      return renderAnnouncementPanel(announcement, communityById[announcement['body_params']['user']]['body_params']);
+    }
   }
 
   /**
@@ -121,7 +115,7 @@ class Announcements extends Component {
           handleAddFormSubmission={this.props.handleAddFormSubmission}
           handleEditFormSubmission={this.props.handleEditFormSubmission} 
           renderListBody={this.renderListBody}
-          renderItemPanel={this.renderItemPanel}
+          renderItemPanel={this.renderItemPanel(this.props.announcementsById[this.props.currentVisibleAnnouncement], this.props.communityById)}
           handleDeleteButtonClick={this.props.handleDeleteButtonClick}
           handleEditButtonClick={this.props.handleEditButtonClick}
           addSubmitMessage={'Add New Announcement'}

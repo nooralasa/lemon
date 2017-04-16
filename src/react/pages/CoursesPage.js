@@ -19,7 +19,7 @@ import Navbar from '../components/Navbar';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
-import {renderModulePanel} from '../components/renderModulePanel';
+import {renderCoursePanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
 
 /** 
@@ -62,8 +62,10 @@ class Courses extends Component {
    * @componenet handleButtonClick a fucntion handling enrolling into a course
    * @return a div containing all the contents of the course
    **/
-  renderItemPanel(course, communityById, handleThumbnailClick, url, handleButtonClick) {
-    return renderModulePanel(course, 'Enroll Now', handleButtonClick, 'Course Channel', 'Course Description', communityById, 'Enrolled Scholars', handleThumbnailClick, url);
+  renderItemPanel(course, communityById, handleThumbnailClick, handleButtonClick) {
+    return () => {
+      return renderCoursePanel(course, communityById, handleThumbnailClick,  handleButtonClick);
+    }
   }
 
   /**
@@ -129,7 +131,7 @@ class Courses extends Component {
           formData={this.props.formData}
           url={'/build/community'}
           renderListBody={this.renderListBody}
-          renderItemPanel={this.renderItemPanel}
+          renderItemPanel={this.renderItemPanel(this.props.coursesById[this.props.currentVisibleCourse], this.props.communityById, this.props.handleThumbnailClick, this.props.handleButtonClick)}
           handleDeleteButtonClick={this.props.handleDeleteButtonClick}
           handleEditButtonClick={this.props.handleEditButtonClick}
           addSubmitMessage={'Add New Course'}

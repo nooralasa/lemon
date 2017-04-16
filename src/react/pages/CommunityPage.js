@@ -16,7 +16,7 @@ import * as rbs from 'react-bootstrap/lib';
 
 // ---React Components--- //
 import ItemsPanel from '../components/ItemsPanel';
-import {renderModulePanel} from '../components/renderModulePanel';
+import {renderCommunityPanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
 
 /** 
@@ -62,8 +62,10 @@ class Community extends Component {
    *                               a single scholar or course panel 
    * @return a div containing all the contents of the scholar
    **/
-  renderItemPanel(scholar, coursesById, handleThumbnailClick, url) {
-    return renderModulePanel(scholar, 'Personal Portfolio', null, 'Direct Message', 'About Scholar', coursesById, 'Enrolled Courses', handleThumbnailClick, url);
+  renderItemPanel(scholar, coursesById, handleThumbnailClick) {
+    return () => {
+      return renderCommunityPanel(scholar, coursesById, handleThumbnailClick);
+    }
   }
 
   /**
@@ -123,7 +125,7 @@ class Community extends Component {
             handleFormUpdates={this.props.handleFormUpdates}
             url={'/build/courses'}
             renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel}
+            renderItemPanel={this.renderItemPanel(this.props.communityById[this.props.currentVisibleScholar], this.props.coursesById, this.props.handleThumbnailClick)}
             handleDeleteButtonClick={this.props.handleDeleteButtonClick}
             handleEditButtonClick={this.props.handleEditButtonClick}
             handleEditFormSubmission={this.props.handleEditFormSubmission}           

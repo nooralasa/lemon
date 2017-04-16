@@ -67,14 +67,13 @@ class Activities extends Component {
    * @componenet handleButtonClick a fucntion handling enrolling into a activity
    * @return a div containing all the contents of the activity
    **/
-  renderItemPanel(activity, coursesById, handleThumbnailClick, url, handleButtonClick, objectivesById, requirementsById, submissionsById, communityById, currentVisibleSubmission, handleSubmissionButtonClick) {
-    console.log('currentVisibleSubmission ', currentVisibleSubmission);
-    if (currentVisibleSubmission) {
-      console.log('submission view');
-      return renderSubmissionPanel(submissionsById[currentVisibleSubmission], handleButtonClick, activity.body_params.title, objectivesById, requirementsById, submissionsById, communityById[submissionsById[currentVisibleSubmission].body_params.user_id].body_params, handleSubmissionButtonClick);
-    } else {
-      console.log('activity view');
-      return renderActivityPanel(activity, handleButtonClick, coursesById[activity.body_params.course_id].body_params.title, objectivesById, requirementsById, submissionsById, communityById[activity.body_params.expert_id].body_params.title, handleThumbnailClick);
+  renderItemPanel(activity, coursesById, handleThumbnailClick, handleButtonClick, objectivesById, requirementsById, submissionsById, communityById, currentVisibleSubmission, handleSubmissionButtonClick) {
+    return () => {
+      if (currentVisibleSubmission) {
+        return renderSubmissionPanel(submissionsById[currentVisibleSubmission], handleButtonClick, activity.body_params.title, objectivesById, requirementsById, submissionsById, communityById[submissionsById[currentVisibleSubmission].body_params.user_id].body_params, handleSubmissionButtonClick);
+      } else {
+        return renderActivityPanel(activity, handleButtonClick, coursesById[activity.body_params.course_id].body_params.title, objectivesById, requirementsById, submissionsById, communityById[activity.body_params.expert_id].body_params.title, handleThumbnailClick);
+      }
     }
   }
 
@@ -147,7 +146,18 @@ class Activities extends Component {
           handleButtonClick={this.props.handleButtonClick}
           formData={this.props.formData}
           renderListBody={this.renderListBody}
-          renderItemPanel={this.renderItemPanel}
+          renderItemPanel={this.renderItemPanel(
+            this.props.activitiesById[this.props.currentVisibleActivity],
+            this.props.coursesById,
+            this.props.handleThumbnailClick,
+            this.props.handleButtonClick,
+            this.props.objectivesById,
+            this.props.requirementsById,
+            this.props.submissionsById,
+            this.props.communityById,
+            this.props.currentVisibleSubmission,
+            this.props.handleSubmissionButton1Click
+          )}
           handleDeleteButtonClick={this.props.handleDeleteButtonClick}
           handleEditButtonClick={this.props.handleEditButtonClick}
           addSubmitMessage={'Add New Activity'}

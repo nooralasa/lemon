@@ -78,7 +78,7 @@ class ItemsPanel extends Component {
         <div style={{ margin: '3%', maxWidth: 800}}>
           <ItemPanel 
             onUserClick={this.props.handlePanelClick}
-            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById, this.props.currentVisibleSubmission, this.props.handleSubmissionButton1Click)}
+            renderItemPanel={this.props.renderItemPanel()}
             isAdmin={this.props.isAdmin}
             isProfile={isProfile}
             handleDeleteButtonClick={this.deleteButtonHandler}

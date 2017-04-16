@@ -1,21 +1,6 @@
 import React from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
-/*
-Announcements:
-  Text => Announcement Title 
-  Textarea => Announcement Body
-*/
-
-/*
-Courses:
-  Text => Course Title 
-  Text => Course Room
-  Text => Course Source
-  Text => Course Link
-  Text => Course Image Link    
-  Textarea => Announcement Body
-*/
 function renderTexts(texts, handleChange, otherScholar) {
   const textInputs = texts.map((text, index) => 
     <rbs.FormGroup key={index} controlId={"textBoxes"+index}>

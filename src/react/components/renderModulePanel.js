@@ -22,8 +22,7 @@ function moduleTitle(body_params, course) {
   );
 }
 
-//add user to chat link and add thumbnail when Enroll button is pressed
-function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2) {
+function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link2, link1, handleBtn2, id2) {
   function handleBtn1Click() {
     if (handleBtn1 && id1) {
       handleBtn1(id1);
@@ -122,54 +121,67 @@ function nextModule(module) {
   );
 }
 
-export function renderModulePanel(item, btn1, handleBtn1, btn2, descriptionHeader, otherItems, thumbnailsHeader, onUserClick, url) {
+function renderTitleAndControls(body_params, subtitle, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2) {
   return (
-      <div>
-        <div className="row">
-          <div className="col-md-6">
-            {moduleTitle(item['body_params'])}
-          </div>
-          <div className="col-md-6" style={{maxWidth:300, marginTop:10}}>
-            {moduleControls(item['body_params'], btn1, btn2, handleBtn1, item['id'])}
-          </div>
-        </div>
-        {nextModule(moduleDescription(item['body_params'], descriptionHeader))}
-        {nextModule(<ThumbnailsList list={item['body_params']['list']} items={otherItems} header={thumbnailsHeader} onUserClick={onUserClick} url={url}/>)}
+    <div className="row">
+      <div className="col-md-6">
+        {moduleTitle(body_params, subtitle)}
       </div>
-    );
+      <div className="col-md-6" style={{maxWidth:300, marginTop:10}}>
+        {moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2)}
+      </div>
+    </div>
+  );
 }
 
-export function renderActivityPanel(activity, handleBtn1, course, objectivesById, requirementsById, submissionsById, user, onUserClick) {
+export function renderAnnouncementPanel(announcement, user) {
   return (
     <div>
-      <div className="row">
-        <div className="col-md-6">
-          {moduleTitle(activity['body_params'], course)}
-        </div>
-        <div className="col-md-6" style={{maxWidth:300, marginTop:10}}>
-          {moduleControls(activity['body_params'], 'Add Submission', 'Gitter Chat', handleBtn1)}
-        </div>
-      </div>
+      <p style={{textAlign: 'center'}}>{announcement['header']}</p>
+      <hr />
+      <p style={{fontWeight: 'normal'}} dangerouslySetInnerHTML={{__html: announcement['body_params']['message']}} />
+      {moduleAuthor(announcement.body_params.timestamp, user.title)}       
+    </div>
+  );
+}
+
+export function renderCoursePanel(course, communityById, onThumbnailClick, handleBtn1) {
+  return (
+    <div>
+      {renderTitleAndControls(course['body_params'], null, 'Enroll Now', 'Course Channel', handleBtn1, course['id'])}
+      {nextModule(moduleDescription(course['body_params'], 'Course Description'))}
+      {nextModule(<ThumbnailsList list={course['body_params']['list']} items={communityById} header={'Enrolled Scholars'} onUserClick={onThumbnailClick} url={'/build/community'}/>)}
+    </div>
+  );
+}
+
+export function renderCommunityPanel(scholar, coursesById, onThumbnailClick) {
+  return (
+    <div>
+      {renderTitleAndControls(scholar['body_params'], null, 'Personal Portfolio', 'Direct Message')}
+      {nextModule(moduleDescription(scholar['body_params'], 'About Scholar'))}
+      {nextModule(<ThumbnailsList list={scholar['body_params']['list']} items={coursesById} header={'Enrolled Courses'} onUserClick={onThumbnailClick} url={'/build/courses'}/>)}
+    </div>
+  );
+}
+
+export function renderActivityPanel(activity, handleBtn1, course, objectivesById, requirementsById, submissionsById, user, onThumbnailClick) {
+  return (
+    <div>
+      {renderTitleAndControls(activity['body_params'], course, 'Add Submission', 'Gitter Chat', handleBtn1)}
       {nextModule(moduleDescription(activity['body_params'], 'Activity Overview'))}
       {nextModule(moduleChecklist('Learning Objectives', activity.body_params.objectivesList, objectivesById))}
       {nextModule(moduleChecklist('Requirements', activity.body_params.requirementsList, requirementsById))}
-      {nextModule(<ThumbnailsList list={activity['body_params']['submissionsList']} items={submissionsById} header='Submissions' onUserClick={onUserClick} />)}
+      {nextModule(<ThumbnailsList list={activity['body_params']['submissionsList']} items={submissionsById} header='Submissions' onUserClick={onThumbnailClick} />)}
       {moduleAuthor(activity.body_params.timestamp, user)}
     </div>
   );
 }
 
-export function renderSubmissionPanel(submission, handleBtn1, course, objectivesById, requirementsById, submissionsById, user, handleSubmissionButton1Click) {
+export function renderSubmissionPanel(submission, handleBtn1, activity, objectivesById, requirementsById, submissionsById, user, handleSubmissionButton1Click) {
   return (
     <div>
-      <div className="row">
-        <div className="col-md-6">
-          {moduleTitle(submission['body_params'], course)}
-        </div>
-        <div className="col-md-6" style={{maxWidth:300, marginTop:10}}>
-          {moduleControls(submission['body_params'], 'View Activity', 'Message Scholar', handleSubmissionButton1Click, submission['body_params'].activity_id, null, null, null, user.chat_link)}
-        </div>
-      </div>
+      {renderTitleAndControls(submission['body_params'], activity, 'View Activity', 'Message Scholar', handleSubmissionButton1Click, submission['body_params'].activity_id, user.chat_link)}
       {nextModule(moduleDescription(submission['body_params'], 'Short Description'))}
       {nextModule(moduleLink('Documentation', submission.body_params.gdoc_link))}
       {nextModule(moduleLink('Code', submission.body_params.gitlab_link))}
