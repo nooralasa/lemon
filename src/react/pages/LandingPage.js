@@ -13,10 +13,8 @@
  * @import browserHistory the react-bootstrap module with predefined react components 
  *             with bootstrap styling
  **/
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import * as rbs from 'react-bootstrap/lib';
-import { browserHistory } from 'react-router';
-
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';

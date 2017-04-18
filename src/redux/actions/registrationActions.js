@@ -4,8 +4,6 @@
 
 //import axios for making http calls 
 import axios from 'axios';
-//import immutable to create immutable states
-import * as Immutable from 'immutable';
 
 // ---Action Types--- //
 export const INCREMENT_CURRENT_TUTORIAL = 'INCREMENT_CURRENT_TUTORIAL';

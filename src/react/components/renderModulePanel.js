@@ -22,7 +22,7 @@ function moduleTitle(body_params, course) {
   );
 }
 
-function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link2, link1, handleBtn2, id2) {
+function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2) {
   function handleBtn1Click() {
     if (handleBtn1 && id1) {
       handleBtn1(id1);
@@ -121,7 +121,7 @@ function nextModule(module) {
   );
 }
 
-function renderTitleAndControls(body_params, subtitle, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2) {
+function renderTitleAndControls(body_params, subtitle, btn1, btn2, handleBtn1, id1, link2, link1, handleBtn2, id2) {
   return (
     <div className="row">
       <div className="col-md-6">
@@ -178,10 +178,10 @@ export function renderActivityPanel(activity, handleBtn1, course, objectivesById
   );
 }
 
-export function renderSubmissionPanel(submission, handleBtn1, activity, objectivesById, requirementsById, submissionsById, user, handleSubmissionButton1Click) {
+export function renderSubmissionPanel(submission, handleBtn1, activity, objectivesById, requirementsById, submissionsById, user) {
   return (
     <div>
-      {renderTitleAndControls(submission['body_params'], activity, 'View Activity', 'Message Scholar', handleSubmissionButton1Click, submission['body_params'].activity_id, user.chat_link)}
+      {renderTitleAndControls(submission['body_params'], activity, 'View Activity', 'Message Scholar', handleBtn1, submission['body_params'].activity_id, user.chat_link)}
       {nextModule(moduleDescription(submission['body_params'], 'Short Description'))}
       {nextModule(moduleLink('Documentation', submission.body_params.gdoc_link))}
       {nextModule(moduleLink('Code', submission.body_params.gitlab_link))}

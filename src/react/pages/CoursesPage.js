@@ -12,21 +12,25 @@
  *             with bootstrap styling
  **/
 import React, { Component, PropTypes } from 'react';
-import * as rbs from 'react-bootstrap/lib';
 
 // ---React Components--- //
-import Navbar from '../components/Navbar';
-import Title from '../components/Title';
-import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
-import {renderCoursePanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
+import {renderCoursePanel} from '../components/renderModulePanel';
+import {renderModuleForm} from '../components/renderForm';
+import {renderListGroupItems, renderCoursesListBody} from '../components/renderModuleList';
 
 /** 
  * The Courses Page Componenet
  * This component renders the entire page when the /courses uri is fetched
  **/
 class Courses extends Component {
+  constructor(props) {
+    super(props);
+    this.renderListItems = this.renderListItems.bind(this);
+    this.renderItemPanel = this.renderItemPanel.bind(this);
+    this.renderItemForm = this.renderItemForm.bind(this);
+  }
 
   /**
    * specifies how the body of a list item should be rendered
@@ -35,18 +39,8 @@ class Courses extends Component {
    * @param body_params the data of one of the courses
    * @return a course's picture, name and source fit in one of the list's items
    **/
-  renderListBody(body_params) {
-    return (
-      <rbs.Media>
-       <rbs.Media.Left>
-          <rbs.Image width={64} height={64} src={body_params['img']} rounded />
-        </rbs.Media.Left>
-        <rbs.Media.Body>
-          <rbs.Media.Heading style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{body_params['title']}</rbs.Media.Heading>
-          <p style={{color:'grey'}}>{body_params['source']}</p>
-        </rbs.Media.Body>
-      </rbs.Media>
-    );
+  renderListItems() {
+    return renderListGroupItems(this.props.coursesList, this.props.coursesById, renderCoursesListBody, this.props.handleListClick);
   }
 
   /**
@@ -62,10 +56,12 @@ class Courses extends Component {
    * @componenet handleButtonClick a fucntion handling enrolling into a course
    * @return a div containing all the contents of the course
    **/
-  renderItemPanel(course, communityById, handleThumbnailClick, handleButtonClick) {
-    return () => {
-      return renderCoursePanel(course, communityById, handleThumbnailClick,  handleButtonClick);
-    }
+  renderItemPanel() {
+    return renderCoursePanel(this.props.coursesById[this.props.currentVisibleCourse], this.props.communityById, this.props.handleThumbnailClick, this.props.handleButtonClick);
+  }
+
+  renderItemForm() {
+    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleCourse, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
   }
 
   /**
@@ -112,32 +108,24 @@ class Courses extends Component {
         title={'Courses'}
         handleProfileClick={this.props.handleProfileClick}>
 
-        <ItemsPanel 
-          items={this.props.coursesById}
-          isAdmin={this.props.userRole=='admin' ? true : false}
-          otherItems={this.props.communityById}
-          itemIds={this.props.coursesList} 
-          isListViewable={this.props.isCoursesListViewable}
-          currentVisible={this.props.currentVisibleCourse}
-          isFormViewable={this.props.isFormViewable}
-          handleListClick={this.props.handleListClick}
-          handlePanelClick={this.props.handlePanelClick}
-          handleThumbnailClick={this.props.handleThumbnailClick}
-          handleAddButtonClick={this.props.handleAddButtonClick}
-          handleFormUpdates={this.props.handleFormUpdates}
-          handleAddFormSubmission={this.props.handleAddFormSubmission} 
-          handleEditFormSubmission={this.props.handleEditFormSubmission}           
-          handleButtonClick={this.props.handleButtonClick}
-          formData={this.props.formData}
-          url={'/build/community'}
-          renderListBody={this.renderListBody}
-          renderItemPanel={this.renderItemPanel(this.props.coursesById[this.props.currentVisibleCourse], this.props.communityById, this.props.handleThumbnailClick, this.props.handleButtonClick)}
-          handleDeleteButtonClick={this.props.handleDeleteButtonClick}
-          handleEditButtonClick={this.props.handleEditButtonClick}
-          addSubmitMessage={'Add New Course'}
-          editSubmitMessage={'Edit Course'}
-          currentUser={this.props.currentUser}
-          currentPage={'courses'}/>
+        <ItemsPanel
+          logic={{
+            isListViewable: this.props.isCoursesListViewable,
+            isFormViewable: this.props.userRole==='admin' && this.props.isFormViewable,
+            isAddControlsVisible: this.props.userRole==='admin',
+            isItemControlsVisible: this.props.userRole==='admin'
+          }}
+          render={{
+            renderListItems: this.renderListItems,
+            renderItemPanel: this.renderItemPanel,
+            renderItemForm: this.renderItemForm
+          }} 
+          handler={{
+            handlePanelClick: this.props.handlePanelClick,
+            handleAddButtonClick: this.props.handleAddButtonClick,
+            handleDeleteButtonClick: this.props.handleDeleteButtonClick,
+            handleEditButtonClick: this.props.handleEditButtonClick
+          }} />
 
       </Authenticate>
     );
@@ -167,19 +155,24 @@ Courses.propTypes = {
   isCoursesListViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
-  currentVisibleCourse: PropTypes.number.isRequired,
+  currentVisibleCourse: PropTypes.string.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
   mount: PropTypes.func.isRequired,
   handleButtonClick: PropTypes.func.isRequired,
-  handleAddButtonClick: PropTypes.func,
-  handleFormUpdates: PropTypes.func,
+  handleAddButtonClick: PropTypes.func.isRequired,
+  handleFormUpdates: PropTypes.func.isRequired,
   handleThumbnailClick: PropTypes.func.isRequired,
-  handleAddFormSubmission: PropTypes.func,
+  handleAddFormSubmission: PropTypes.func.isRequired,
   coursesById: PropTypes.object.isRequired,
   coursesList: PropTypes.array.isRequired,
-  formData: PropTypes.object,
-  communityById: PropTypes.object.isRequired
+  communityById: PropTypes.object.isRequired,
+  formData: PropTypes.object.isRequired,
+  isFormViewable: PropTypes.bool.isRequired,
+  handleEditFormSubmission: PropTypes.func.isRequired,
+  handleDeleteButtonClick: PropTypes.func.isRequired,
+  handleEditButtonClick: PropTypes.func.isRequired,
+  handleProfileClick: PropTypes.func.isRequired
 }
 
 export default Courses;

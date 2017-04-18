@@ -39,7 +39,6 @@ const mapStateToProps = (state) => {
     coursesById: state.courses.get('coursesById').toJSON(),
     formData: state.communityUI.get('formData').toJSON(),
     isFormViewable: state.communityUI.get('isFormViewable'),
-    userRole: state.community.get('role'),
     isCommunityListViewable: state.communityUI.get('isCommunityListViewable'),
     currentVisibleScholar: state.communityUI.get('currentVisibleScholar')
   }
@@ -77,17 +76,20 @@ const mapDispatchToProps = (dispatch) => {
     handleFormUpdates: (index, type, value) => {
       dispatch(updateScholarFormData(index, type, value, ''));
     },
-    handleDeleteButtonClick: (id) => {
+    handleDeleteButtonClick: (id, currentUser) => {
       return () => {
         dispatch(deleteScholar(id));
         dispatch(fetchScholars());
         dispatch(displayFetchedScholars());
+        if (id===currentUser) {
+          window.location.replace('/logout');
+        }
       }
     },
     handleEditButtonClick: (communityById, currentUser, currentVisibleScholar) => {
       return () => {
         if (currentVisibleScholar) {
-          if (currentVisibleScholar==currentUser) {
+          if (currentVisibleScholar===currentUser) {
             dispatch(updateScholarFormData(0, 'textBoxes', communityById[currentVisibleScholar]['body_params']['title'], communityById[currentVisibleScholar]['body_params']['title']));
             dispatch(updateScholarFormData(1, 'textBoxes', communityById[currentVisibleScholar]['body_params']['source'], communityById[currentVisibleScholar]['body_params']['source']));  
             dispatch(updateScholarFormData(2, 'textBoxes', communityById[currentVisibleScholar]['body_params']['link'], communityById[currentVisibleScholar]['body_params']['link']));
@@ -138,15 +140,14 @@ const mergeProps = (stateProps, dispatchProps) => {
     communityList: stateProps.communityList,
     communityById: stateProps.communityById,
     coursesById: stateProps.coursesById,
-    userRole: stateProps.userRole,
     isCommunityListViewable: stateProps.isCommunityListViewable,
     currentVisibleScholar: stateProps.currentVisibleScholar,
     mount: dispatchProps.mount,
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
-    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar),
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar, stateProps.currentUser),
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
-    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.communityById,stateProps.currentUser, stateProps.currentVisibleScholar),
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.communityById, stateProps.currentUser, stateProps.currentVisibleScholar),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleScholar),
     handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
     handleFormUpdates: dispatchProps.handleFormUpdates

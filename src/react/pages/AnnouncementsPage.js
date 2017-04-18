@@ -19,18 +19,24 @@ import React, { Component, PropTypes } from 'react';
 
 
 // ---React Components--- //
-import Navbar from '../components/Navbar';
-import Title from '../components/Title';
 import ItemsPanel from '../components/ItemsPanel';
-import Footer from '../components/Footer';
 import Authenticate from '../components/Authenticate';
 import {renderAnnouncementPanel} from '../components/renderModulePanel';
+import {renderModuleForm} from '../components/renderForm';
+import {renderListGroupItems, renderAnnouncementsListBody} from '../components/renderModuleList';
 
 /** 
  * The Announcements' Page Componenet
  * This component renders the entire page when the /announcements uri is fetched
  **/
 class Announcements extends Component {
+  constructor(props) {
+    super(props);
+    this.renderListItems = this.renderListItems.bind(this);
+    this.renderItemPanel = this.renderItemPanel.bind(this);
+    this.renderItemForm = this.renderItemForm.bind(this);
+  }
+
   /**
    * specifies how the body of a list item should be rendered
    * this function is to be used by the PanelList component to customize 
@@ -38,10 +44,8 @@ class Announcements extends Component {
    * @param body_params the data of one of the announcements
    * @return the announcement's message cropped to fit in the list item 
    **/
-  renderListBody(body_params) {
-    return (
-      <p style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{body_params['message']}</p>
-    );
+  renderListItems() {
+    return renderListGroupItems(this.props.announcementsList, this.props.announcementsById, renderAnnouncementsListBody, this.props.handleListClick);
   }
 
   /**
@@ -52,10 +56,13 @@ class Announcements extends Component {
    *                      of the announcement and render their name
    * @return a div containing all the contents of the announcement
    **/
-  renderItemPanel(announcement, communityById) {
-    return () => {
-      return renderAnnouncementPanel(announcement, communityById[announcement['body_params']['user']]['body_params']);
-    }
+  renderItemPanel() {
+    const announcement = this.props.announcementsById[this.props.currentVisibleAnnouncement];
+    return renderAnnouncementPanel(announcement, this.props.communityById[announcement['body_params']['user']]['body_params']);
+  }
+
+  renderItemForm() {
+    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleAnnouncement, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
   }
 
   /**
@@ -100,28 +107,23 @@ class Announcements extends Component {
         handleProfileClick={this.props.handleProfileClick}>
 
         <ItemsPanel 
-          items={this.props.announcementsById}
-          isAdmin={this.props.userRole=='admin' ? true : false}
-          isFormViewable={this.props.isFormViewable}
-          formData={this.props.formData}
-          itemIds={this.props.announcementsList} 
-          otherItems={this.props.communityById}
-          isListViewable={this.props.isAnnouncementsListViewable}
-          currentVisible={this.props.currentVisibleAnnouncement}
-          handleListClick={this.props.handleListClick}
-          handlePanelClick={this.props.handlePanelClick}
-          handleAddButtonClick={this.props.handleAddButtonClick}
-          handleFormUpdates={this.props.handleFormUpdates}
-          handleAddFormSubmission={this.props.handleAddFormSubmission}
-          handleEditFormSubmission={this.props.handleEditFormSubmission} 
-          renderListBody={this.renderListBody}
-          renderItemPanel={this.renderItemPanel(this.props.announcementsById[this.props.currentVisibleAnnouncement], this.props.communityById)}
-          handleDeleteButtonClick={this.props.handleDeleteButtonClick}
-          handleEditButtonClick={this.props.handleEditButtonClick}
-          addSubmitMessage={'Add New Announcement'}
-          editSubmitMessage={'Edit Announcement'}
-          currentUser={this.props.currentUser}
-          currentPage={'announcements'}/>
+          logic={{
+            isListViewable: this.props.isAnnouncementsListViewable,
+            isFormViewable: this.props.userRole==='admin' && this.props.isFormViewable,
+            isAddControlsVisible: this.props.userRole==='admin',
+            isItemControlsVisible: this.props.userRole==='admin'
+          }}
+          render={{
+            renderListItems: this.renderListItems,
+            renderItemPanel: this.renderItemPanel,
+            renderItemForm: this.renderItemForm
+          }} 
+          handler={{
+            handlePanelClick: this.props.handlePanelClick,
+            handleAddButtonClick: this.props.handleAddButtonClick,
+            handleDeleteButtonClick: this.props.handleDeleteButtonClick,
+            handleEditButtonClick: this.props.handleEditButtonClick
+          }} />
 
       </Authenticate>
     );
@@ -147,16 +149,22 @@ Announcements.propTypes = {
   isAnnouncementsListViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
-  currentVisibleAnnouncement: PropTypes.number.isRequired,
+  currentVisibleAnnouncement: PropTypes.string.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
-  handleAddButtonClick: PropTypes.func,
-  handleAddFormSubmission: PropTypes.func,
-  handleFormUpdates: PropTypes.func,
+  handleAddButtonClick: PropTypes.func.isRequired,
+  handleAddFormSubmission: PropTypes.func.isRequired,
+  handleFormUpdates: PropTypes.func.isRequired,
   announcementsById: PropTypes.object.isRequired,
   communityById: PropTypes.object.isRequired,
   announcementsList: PropTypes.array.isRequired,
-  mount: PropTypes.func.isRequired
+  isFormViewable: PropTypes.bool.isRequired,
+  formData: PropTypes.object.isRequired,
+  mount: PropTypes.func.isRequired,
+  handleEditFormSubmission:  PropTypes.func.isRequired,
+  handleDeleteButtonClick: PropTypes.func.isRequired,
+  handleEditButtonClick: PropTypes.func.isRequired,
+  handleProfileClick: PropTypes.func.isRequired
 }
 
 export default Announcements;

@@ -12,15 +12,13 @@
  *             with bootstrap styling
  **/
 import React, { Component, PropTypes } from 'react';
-import * as rbs from 'react-bootstrap/lib';
 
 // ---React Components--- //
-import Navbar from '../components/Navbar';
-import Title from '../components/Title';
-import Footer from '../components/Footer';
 import ItemsPanel from '../components/ItemsPanel';
-import {renderActivityPanel, renderSubmissionPanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
+import {renderActivityPanel, renderSubmissionPanel} from '../components/renderModulePanel';
+import {renderListGroupItems, renderActivitiesListBody} from '../components/renderModuleList';
+import {renderModuleForm} from '../components/renderForm';
 
 /** 
  * The Activities Page Componenet
@@ -29,7 +27,7 @@ import Authenticate from '../components/Authenticate';
 class Activities extends Component {
   constructor(props) {
     super(props);
-    this.renderListBody = this.renderListBody.bind(this);
+    this.renderListItems = this.renderListItems.bind(this);
     this.renderItemPanel = this.renderItemPanel.bind(this);
   }
 
@@ -40,18 +38,12 @@ class Activities extends Component {
    * @param body_params the data of one of the activities
    * @return a activity's picture, name and source fit in one of the list's items
    **/
-  renderListBody(body_params) {
-    return (
-      <rbs.Media>
-       <rbs.Media.Left>
-          <rbs.Image width={64} height={64} src={body_params['img']} rounded />
-        </rbs.Media.Left>
-        <rbs.Media.Body>
-          <rbs.Media.Heading style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{body_params['title']}</rbs.Media.Heading>
-          <p style={{color:'grey'}}>{this.props.coursesById[body_params['course_id']].body_params.title}</p>
-        </rbs.Media.Body>
-      </rbs.Media>
-    );
+  renderListItems() {
+    return renderListGroupItems(this.props.activitiesList, this.props.activitiesById, renderActivitiesListBody, this.props.handleListClick, (id) => { return this.props.coursesById[this.props.activitiesById[id].body_params.course_id].body_params.title});
+  }
+
+  renderItemForm() {
+    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
   }
 
   /**
@@ -67,13 +59,12 @@ class Activities extends Component {
    * @componenet handleButtonClick a fucntion handling enrolling into a activity
    * @return a div containing all the contents of the activity
    **/
-  renderItemPanel(activity, coursesById, handleThumbnailClick, handleButtonClick, objectivesById, requirementsById, submissionsById, communityById, currentVisibleSubmission, handleSubmissionButtonClick) {
-    return () => {
-      if (currentVisibleSubmission) {
-        return renderSubmissionPanel(submissionsById[currentVisibleSubmission], handleButtonClick, activity.body_params.title, objectivesById, requirementsById, submissionsById, communityById[submissionsById[currentVisibleSubmission].body_params.user_id].body_params, handleSubmissionButtonClick);
-      } else {
-        return renderActivityPanel(activity, handleButtonClick, coursesById[activity.body_params.course_id].body_params.title, objectivesById, requirementsById, submissionsById, communityById[activity.body_params.expert_id].body_params.title, handleThumbnailClick);
-      }
+  renderItemPanel() {
+    const activity = this.props.activitiesById[this.props.currentVisibleActivity];
+    if (this.props.currentVisibleSubmission) {
+      return renderSubmissionPanel(this.props.submissionsById[this.props.currentVisibleSubmission], this.props.handleSubmissionButton1Click, activity.body_params.title, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById[this.props.submissionsById[this.props.currentVisibleSubmission].body_params.user_id].body_params);
+    } else {
+      return renderActivityPanel(activity, this.props.handleButtonClick, this.props.coursesById[activity.body_params.course_id].body_params.title, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById[activity.body_params.expert_id].body_params.title, this.props.handleThumbnailClick);
     }
   }
 
@@ -123,47 +114,23 @@ class Activities extends Component {
         handleProfileClick={this.props.handleProfileClick}>
 
         <ItemsPanel 
-          items={this.props.activitiesById}
-          isAdmin={this.props.userRole=='admin' ? true : false}
-          otherItems={this.props.coursesById}
-          objectivesById={this.props.objectivesById} 
-          requirementsById={this.props.requirementsById}
-          submissionsById={this.props.submissionsById}
-          communityById={this.props.communityById}
-          itemIds={this.props.activitiesList} 
-          isListViewable={this.props.isActivitiesListViewable}
-          currentVisible={this.props.currentVisibleActivity}
-          currentVisibleSubmission={this.props.currentVisibleSubmission}
-          isFormViewable={this.props.isFormViewable}
-          handleListClick={this.props.handleListClick}
-          handlePanelClick={this.props.handlePanelClick}
-          handleThumbnailClick={this.props.handleThumbnailClick}
-          handleAddButtonClick={this.props.handleAddButtonClick}
-          handleSubmissionButton1Click={this.props.handleSubmissionButton1Click}
-          handleFormUpdates={this.props.handleFormUpdates}
-          handleAddFormSubmission={this.props.handleAddFormSubmission} 
-          handleEditFormSubmission={this.props.handleEditFormSubmission}           
-          handleButtonClick={this.props.handleButtonClick}
-          formData={this.props.formData}
-          renderListBody={this.renderListBody}
-          renderItemPanel={this.renderItemPanel(
-            this.props.activitiesById[this.props.currentVisibleActivity],
-            this.props.coursesById,
-            this.props.handleThumbnailClick,
-            this.props.handleButtonClick,
-            this.props.objectivesById,
-            this.props.requirementsById,
-            this.props.submissionsById,
-            this.props.communityById,
-            this.props.currentVisibleSubmission,
-            this.props.handleSubmissionButton1Click
-          )}
-          handleDeleteButtonClick={this.props.handleDeleteButtonClick}
-          handleEditButtonClick={this.props.handleEditButtonClick}
-          addSubmitMessage={'Add New Activity'}
-          editSubmitMessage={'Edit Activity'}
-          currentUser={this.props.currentUser}
-          currentPage={'activities'}/>
+          logic={{
+            isListViewable: this.props.isActivitiesListViewable,
+            isFormViewable: this.props.userRole==='admin' && this.props.isFormViewable,
+            isAddControlsVisible: this.props.userRole==='admin',
+            isItemControlsVisible: this.props.userRole==='admin'
+          }}
+          render={{
+            renderListItems: this.renderListItems,
+            renderItemPanel: this.renderItemPanel,
+            renderItemForm: this.renderItemForm
+          }} 
+          handler={{
+            handlePanelClick: this.props.handlePanelClick,
+            handleAddButtonClick: this.props.handleAddButtonClick,
+            handleDeleteButtonClick: this.props.handleDeleteButtonClick,
+            handleEditButtonClick: this.props.handleEditButtonClick
+          }} />
 
       </Authenticate>
     );

@@ -45,7 +45,6 @@ function renderTextAreas(textareas, handleChange, otherScholar) {
   }
 } 
 
-
 function renderForm(formData, handleChange, handleSubmit, message, otherScholar) {
   return (
     <form>
@@ -75,6 +74,33 @@ function renderForm(formData, handleChange, handleSubmit, message, otherScholar)
   );
 }
 
+export function renderModuleForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick) {
+  return renderForm(formData, handleFormUpdates, (() => {
+    if (currentVisible) {
+      return (values) => {
+        handleEditFormSubmission(values);
+        handlePanelClick();
+      }
+    } else {
+      return (values) => {
+        handleAddFormSubmission(values);
+        handlePanelClick();
+      }
+    }
+  })(), 'Submit', false);
+}
 
-
-export default renderForm;
+export function renderCommunityForm(formData, handleFormUpdates, currentVisibleScholar, currentUser, handleEditFormSubmission, handlePanelClick) {
+  return renderForm(formData, handleFormUpdates, 
+    (values) => {
+      handleEditFormSubmission(values);
+      handlePanelClick();
+    }, 
+    (() => {
+      if (currentVisibleScholar===currentUser) { 
+        return 'Submit';
+      } else {
+        return 'Make admin';
+      }
+  })(), currentVisibleScholar!==currentUser);
+}

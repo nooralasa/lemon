@@ -12,18 +12,26 @@
  *             with bootstrap styling
  **/
 import React, { Component, PropTypes } from 'react';
-import * as rbs from 'react-bootstrap/lib';
 
 // ---React Components--- //
 import ItemsPanel from '../components/ItemsPanel';
 import {renderCommunityPanel} from '../components/renderModulePanel';
 import Authenticate from '../components/Authenticate';
+import {renderCommunityForm} from '../components/renderForm';
+import {renderListGroupItems, renderCommunityListBody} from '../components/renderModuleList';
+
 
 /** 
  * The Community Page Componenet
  * This component renders the entire page when the /community uri is fetched
  **/
 class Community extends Component {
+  constructor(props) {
+    super(props);
+    this.renderListItems = this.renderListItems.bind(this);
+    this.renderItemPanel = this.renderItemPanel.bind(this);
+    this.renderItemForm = this.renderItemForm.bind(this);
+  }
 
   /**
    * specifies how the body of a list item should be rendered
@@ -32,20 +40,12 @@ class Community extends Component {
    * @param body_params the data of one of the scholars
    * @return a scholar's picture, name and affiliation fit in one of the list's items
    **/
-  renderListBody(body_params) {
-    return (
-      <rbs.Media>
-       {/* The scholar's image on the left of the list item */}
-       <rbs.Media.Left>
-          <rbs.Image width={64} height={64} src={body_params['img']} circle />
-        </rbs.Media.Left>
-        {/* The scholar's name and affiliation to the right */}
-        <rbs.Media.Body>
-          <rbs.Media.Heading style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{body_params['title']}</rbs.Media.Heading>
-          <p style={{color:'grey'}}>{body_params['source']}</p>
-        </rbs.Media.Body>
-      </rbs.Media>
-    );
+  renderListItems() {
+    return renderListGroupItems(this.props.communityList, this.props.communityById, renderCommunityListBody, this.props.handleListClick);
+  }
+
+  renderItemForm() {
+    return renderCommunityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleScholar, this.props.currentUser, this.props.handleEditFormSubmission, this.props.handlePanelClick);
   }
 
   /**
@@ -62,10 +62,8 @@ class Community extends Component {
    *                               a single scholar or course panel 
    * @return a div containing all the contents of the scholar
    **/
-  renderItemPanel(scholar, coursesById, handleThumbnailClick) {
-    return () => {
-      return renderCommunityPanel(scholar, coursesById, handleThumbnailClick);
-    }
+  renderItemPanel() {
+    return renderCommunityPanel(this.props.communityById[this.props.currentVisibleScholar], this.props.coursesById, this.props.handleThumbnailClick);
   }
 
   /**
@@ -112,28 +110,23 @@ class Community extends Component {
         handleProfileClick={this.props.handleProfileClick}>
 
           <ItemsPanel 
-            items={this.props.communityById}
-            isAdmin={this.props.userRole=='admin' ? true : false}
-            otherItems={this.props.coursesById}
-            itemIds={this.props.communityList} 
-            isListViewable={this.props.isCommunityListViewable}
-            currentVisible={this.props.currentVisibleScholar}
-            isFormViewable={this.props.isFormViewable}
-            handleListClick={this.props.handleListClick}
-            handlePanelClick={this.props.handlePanelClick}
-            handleThumbnailClick={this.props.handleThumbnailClick}
-            handleFormUpdates={this.props.handleFormUpdates}
-            url={'/build/courses'}
-            renderListBody={this.renderListBody}
-            renderItemPanel={this.renderItemPanel(this.props.communityById[this.props.currentVisibleScholar], this.props.coursesById, this.props.handleThumbnailClick)}
-            handleDeleteButtonClick={this.props.handleDeleteButtonClick}
-            handleEditButtonClick={this.props.handleEditButtonClick}
-            handleEditFormSubmission={this.props.handleEditFormSubmission}           
-            formData={this.props.formData}
-            editSubmitMessage={'Make Admin'}
-            editProfileSubmitMessage={'Edit Profile'}
-            currentUser={this.props.currentUser}
-            currentPage={'community'}/>
+            logic={{
+              isListViewable: this.props.isCommunityListViewable,
+              isFormViewable: (this.props.userRole==='admin' || this.props.currentUser===this.props.currentVisibleScholar) && this.props.isFormViewable,
+              isAddControlsVisible: false,
+              isItemControlsVisible: this.props.userRole==='admin' || this.props.currentUser===this.props.currentVisibleScholar
+            }}
+            render={{
+              renderListItems: this.renderListItems,
+              renderItemPanel: this.renderItemPanel,
+              renderItemForm: this.renderItemForm
+            }} 
+            handler={{
+              handlePanelClick: this.props.handlePanelClick,
+              handleAddButtonClick: null,
+              handleDeleteButtonClick: this.props.handleDeleteButtonClick,
+              handleEditButtonClick: this.props.handleEditButtonClick
+            }} />
             
       </Authenticate>
     );
@@ -160,14 +153,22 @@ class Community extends Component {
 Community.propTypes = {
   isCommunityListViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
-  currentVisibleScholar: PropTypes.number.isRequired,
+  currentVisibleScholar: PropTypes.string.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
   handleThumbnailClick: PropTypes.func.isRequired,
   communityById: PropTypes.object.isRequired,
   communityList: PropTypes.array.isRequired,
   coursesById: PropTypes.object.isRequired,
-  mount: PropTypes.func.isRequired
+  mount: PropTypes.func.isRequired,
+  userRole: PropTypes.string.isRequired,
+  formData: PropTypes.object.isRequired,
+  isFormViewable: PropTypes.bool.isRequired,
+  handleDeleteButtonClick: PropTypes.func.isRequired,
+  handleEditButtonClick: PropTypes.func.isRequired,
+  handleEditFormSubmission: PropTypes.func.isRequired,
+  handleProfileClick: PropTypes.func.isRequired,
+  handleFormUpdates: PropTypes.func.isRequired
 }
 
 export default Community;

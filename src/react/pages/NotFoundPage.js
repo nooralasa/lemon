@@ -1,10 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 import Navbar from '../components/Navbar';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
-import ItemsPanel from '../components/ItemsPanel';
 
 const hiddenOverFlow = {overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
 

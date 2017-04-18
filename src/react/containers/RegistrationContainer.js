@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     mount: (id) => {
       return () => {
-        dispatch(setCurrentTutorial(parseInt(id)));
+        dispatch(setCurrentTutorial(parseInt(id, 10)));
         dispatch(currentScholar((res) => {return res}));
         dispatch(fetchScholars());
       }

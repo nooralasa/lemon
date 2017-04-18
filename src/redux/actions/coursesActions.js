@@ -144,7 +144,7 @@ export function addCourse(title, room, source, link, img, description) {
  * @param description the new text description of the course
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function updateCourse(id, title, source, link, img, list, description) {
+export function updateCourse(id, title, room, source, link, img, description) {
 	return dispatch => {
 		dispatch(updateCourseRequest());
 
@@ -154,7 +154,7 @@ export function updateCourse(id, title, source, link, img, list, description) {
 			description: description,
 			image: img,
 			course_link: link,
-			chat_link: link
+			chat_link: 'https://gitter.im/ML-LIME/'+room
 		})
 		.then(res => {
 			console.log('updating course success!');
@@ -281,6 +281,7 @@ export function addCourseSuccess(data) {
 			title: data.title,
 			source: data.source,
 			link: data.course_link,
+			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
 			description: data.description
@@ -306,6 +307,7 @@ export function updateCourseSuccess(data) {
 			title: data.title,
 			source: data.source,
 			link: data.course_link,
+			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
 			description: data.description

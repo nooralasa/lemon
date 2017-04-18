@@ -7,7 +7,6 @@ import {
 	DISPLAY_FETCHED_ANNOUNCEMENTS, 
 	FETCH_ANNOUNCEMENT,
 	FETCH_ANNOUNCEMENT_FORM, 
-	FETCH_ANNOUNCEMENT_FORM_DATA,
 	UPDATE_ANNOUNCEMENT_FORM_DATA,} from '../actions/announcementsUIActions.js';
 
 //importing Immutable to create an immutable state 

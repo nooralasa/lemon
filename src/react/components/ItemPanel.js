@@ -2,38 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
 class ItemControls extends Component {
-  constructor(props) {
-    super(props);
-    this.handleUserClick = this.handleUserClick.bind(this);
-    this.handleDeleteClick = this.handleDeleteClick.bind(this);
-    this.handleEditClick = this.handleEditClick.bind(this);
-  }
-
-  handleUserClick() {
-    this.props.onUserClick();
-  }
-
-  handleDeleteClick() {
-    this.props.onDeleteBtnClick();
-  }
-
-  handleEditClick() {
-    console.log('Editing here');
-    this.props.onEditBtnClick();
-  }
 
   render() {
-    console.log('Im about to view my profile');
-    console.log('this.props.isAdmin ', this.props.isAdmin);
-    console.log('this.props.isProfile ', this.props.isProfile);
-    if (this.props.isAdmin || this.props.isProfile) {
-      console.log('Im viewing my profile');
+    if (this.props.isItemControlsVisible) {
       return (
         <div>
-          <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
+          <rbs.Button bsStyle="link" onClick={this.props.onUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
           <rbs.ButtonGroup style={{float: 'right'}}>
-            <rbs.Button bsStyle="link" onClick={this.handleEditClick}><i className="fa fa-edit fa-fw" /></rbs.Button>
-            <rbs.Button bsStyle="link" onClick={this.handleDeleteClick}><i className="fa fa-trash fa-fw" /></rbs.Button>
+            <rbs.Button bsStyle="link" onClick={this.props.onEditBtnClick}><i className="fa fa-edit fa-fw" /></rbs.Button>
+            <rbs.Button bsStyle="link" onClick={this.props.onDeleteBtnClick}><i className="fa fa-trash fa-fw" /></rbs.Button>
           </rbs.ButtonGroup>
         </div>
       );
@@ -56,8 +33,7 @@ class ItemPanel extends Component {
     return (
       <rbs.Panel header={<ItemControls 
           onUserClick={this.props.onUserClick} 
-          isAdmin={this.props.isAdmin} 
-          isProfile={this.props.isProfile} 
+          isItemControlsVisible={this.props.isItemControlsVisible} 
           onDeleteBtnClick={this.props.handleDeleteButtonClick} 
           onEditBtnClick={this.props.handleEditButtonClick}/>} style={{ margin: '0 auto'}}>
         {this.props.renderItemPanel}
@@ -68,7 +44,10 @@ class ItemPanel extends Component {
 
 ItemPanel.propTypes = {
   onUserClick: PropTypes.func.isRequired,
-  renderItemPanel: PropTypes.node.isRequired
+  renderItemPanel: PropTypes.func.isRequired,
+  isItemControlsVisible: PropTypes.bool.isRequired,
+  handleDeleteButtonClick: PropTypes.func.isRequired,
+  handleEditButtonClick: PropTypes.func.isRequired
 }
 
 export default ItemPanel;

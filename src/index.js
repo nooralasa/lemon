@@ -17,10 +17,10 @@
  *												components
  * @import IndexRedirect redirects to the specified Route element
  **/
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom'; 
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 
 /**	
  * Redux Imports
@@ -44,7 +44,7 @@ import createLogger from 'redux-logger';
  * @import storeSetUp a function that sets up the initial state of the store
  **/
 import appReducer from './redux/reducers/index';
-import storeSetUp from './redux/storeSetUp';
+// import storeSetUp from './redux/storeSetUp';
 
 /**	
  * React Containers
@@ -64,9 +64,6 @@ import CommunityContainer from './react/containers/CommunityContainer';
 import RegistrationContainer from './react/containers/RegistrationContainer';
 import ActivitiesContainer from './react/containers/ActivitiesContainer';
 import NotFoundPage from './react/pages/NotFoundPage';
-
-import {currentScholar} from './redux/actions/communityActions';
-
 
 //set up the redux store by passing in the state reducer and relevant middleware
 //also add the Redux devToolsExtension to be able to debug the store in browser

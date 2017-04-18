@@ -73,10 +73,6 @@ class Flexbox extends Component {
 }
 
 class RegistrationHeading extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (  
       <div>
@@ -89,10 +85,6 @@ class RegistrationHeading extends Component {
 }
 
 class RegistrationText extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (  
       <div>
@@ -105,11 +97,6 @@ class RegistrationText extends Component {
 }
 
 class ButtonLink extends Component {
-  constructor(props) {
-    super(props);
-
-  }
-
   render() {
     return (
       <div>
@@ -187,10 +174,6 @@ class FutureCircle extends Component {
 }
 
 class Progress extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     var circles = [];
     var i = 1;
@@ -263,6 +246,18 @@ class Registration extends Component {
       </div>
     );
   }
+}
+
+Registration.propTypes = {
+  currentUser: PropTypes.string.isRequired,
+  tutorialsList: PropTypes.array.isRequired,
+  tutorialsById: PropTypes.object.isRequired,
+  currentTutorial: PropTypes.number.isRequired,
+  isButtonActive: PropTypes.bool.isRequired,
+  incrementStep: PropTypes.func.isRequired,
+  decrementStep: PropTypes.func.isRequired,
+  mount: PropTypes.func.isRequired,
+  onButtonClick: PropTypes.func.isRequired
 }
 
 export default Registration;

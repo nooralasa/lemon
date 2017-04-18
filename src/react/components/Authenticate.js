@@ -44,7 +44,7 @@ class Authenticate extends Component {
             main='/build/announcements'
             items={[['Announcements','/build/announcements'], ['Courses','/build/courses'], ['Activities','/build/activities'], ['Community','/build/community']]} 
             renderProfile={true} 
-            handleProfileClick= {this.props.handleProfileClick}/>
+            handleProfileClick={this.props.handleProfileClick}/>
         
           <div style={{padding: '50px 0'}}>
             <Title>{this.props.title}</Title>

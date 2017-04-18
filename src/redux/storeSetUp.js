@@ -2,49 +2,49 @@
 // This module exports a function thay initializes the redux store. //
 // ---------------------------------------------------------------- //
 
-//Importing actions that update the database and persist 
-import {
-	fetchAnnouncements,
-	addAnnouncement, 
-	updateAnnouncement, 
-	deleteAnnouncement} from './actions/announcementsActions.js';
-import {
-	currentScholar,
-	addScholarCourse,
-	fetchScholars,
-	fetchScholarCourses,
-	addScholar,
-	updateScholar,
-	deleteScholar} from './actions/communityActions.js';
-import {
-	enrollInCourse,
-	fetchCourses,
-	fetchCourseUsers,
-	addCourse,
-	updateCourse,
-	deleteCourse} from './actions/coursesActions.js';
+// //Importing actions that update the database and persist 
+// import {
+// 	fetchAnnouncements,
+// 	addAnnouncement, 
+// 	updateAnnouncement, 
+// 	deleteAnnouncement} from './actions/announcementsActions.js';
+// import {
+// 	currentScholar,
+// 	addScholarCourse,
+// 	fetchScholars,
+// 	fetchScholarCourses,
+// 	addScholar,
+// 	updateScholar,
+// 	deleteScholar} from './actions/communityActions.js';
+// import {
+// 	enrollInCourse,
+// 	fetchCourses,
+// 	fetchCourseUsers,
+// 	addCourse,
+// 	updateCourse,
+// 	deleteCourse} from './actions/coursesActions.js';
 
-//Importing actions that do not update the database and will only update the store locally
-import {
-	fetchAnnouncementsSuccess,
-	addAnnouncementSuccess, 
-	updateAnnouncementSuccess, 
-	deleteAnnouncementSuccess} from './actions/announcementsActions.js';
-import {
-	currentScholarSuccess,
-	addScholarCourseSuccess,
-	fetchScholarsSuccess,
-	fetchScholarCoursesSuccess,
-	addScholarSuccess,
-	updateScholarSuccess,
-	deleteScholarSuccess} from './actions/communityActions.js';
-import {
-	enrollInCourseSuccess,
-	fetchCoursesSuccess,
-	fetchCourseUsersSuccess,
-	addCourseSuccess,
-	updateCourseSuccess,
-	deleteCourseSuccess} from './actions/coursesActions.js';
+// //Importing actions that do not update the database and will only update the store locally
+// import {
+// 	fetchAnnouncementsSuccess,
+// 	addAnnouncementSuccess, 
+// 	updateAnnouncementSuccess, 
+// 	deleteAnnouncementSuccess} from './actions/announcementsActions.js';
+// import {
+// 	currentScholarSuccess,
+// 	addScholarCourseSuccess,
+// 	fetchScholarsSuccess,
+// 	fetchScholarCoursesSuccess,
+// 	addScholarSuccess,
+// 	updateScholarSuccess,
+// 	deleteScholarSuccess} from './actions/communityActions.js';
+// import {
+// 	enrollInCourseSuccess,
+// 	fetchCoursesSuccess,
+// 	fetchCourseUsersSuccess,
+// 	addCourseSuccess,
+// 	updateCourseSuccess,
+// 	deleteCourseSuccess} from './actions/coursesActions.js';
 
 
 

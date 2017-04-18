@@ -25,7 +25,7 @@ class Navbar extends Component {
           (() => {
             if (this.props.renderProfile) {
               return (
-                <rbs.NavDropdown eventKey={4} title={<i className="fa fa-user" ariaHidden="true"/>} id="basic-nav-dropdown">
+                <rbs.NavDropdown eventKey={4} title={<i className="fa fa-user" />} id="basic-nav-dropdown">
                   <rbs.MenuItem 
                     onClick={() => {
                       browserHistory.push("/build/community");
