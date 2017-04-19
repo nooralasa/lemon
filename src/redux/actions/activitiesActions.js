@@ -523,7 +523,7 @@ export function addSubmission(activity_id, title, image, gitlab_link, gdoc_link,
  * @param description the new text description of the activity
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function updateSubmission(id, activity_id, title, description, user_id, gitlab_link, gdoc_link, image) {
+export function updateSubmission(id, activity_id, title, image, gitlab_link, gdoc_link, description, user_id) {
 	return dispatch => {
 		dispatch(updateSubmissionRequest());
 

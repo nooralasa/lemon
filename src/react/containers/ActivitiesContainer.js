@@ -17,7 +17,7 @@ import ActivitiesPage from '../pages/ActivitiesPage';
 
 //Redux actions for fetching data from the database and changing ui state
 import {fetchActivity, displayFetchedActivities, fetchActivityForm, updateSubmissionFormData, updateActivityFormData, updateActivityFormDataList, addActivityFormDataListEntry, fetchSubmission, fetchSubmissionForm} from '../../redux/actions/activitiesUIActions';
-import {fetchActivities, addActivity, deleteActivity, updateActivity, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions, addSubmission} from '../../redux/actions/activitiesActions';
+import {fetchActivities, addActivity, deleteActivity, updateActivity, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions, addSubmission, updateSubmission, deleteSubmission} from '../../redux/actions/activitiesActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
 import {fetchCourses} from '../../redux/actions/coursesActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
@@ -154,39 +154,67 @@ const mapDispatchToProps = (dispatch) => {
         }
       }
     },
-    handleEditFormSubmission: (id, user_id) => {
-      return (values) => {
-        dispatch(updateActivity(id, values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
+    handleEditFormSubmission: (id, user_id, isSubmissionFormViewable, currentVisibleSubmission) => {
+      if (isSubmissionFormViewable) {
+        return (values) => {
+          dispatch(updateSubmission(currentVisibleSubmission, id, values[0], values[1], values[2], values[3], values[4], user_id));
+        }
+      } else {
+        return (values) => {
+          dispatch(updateActivity(id, values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
+        }
       }
     },
-    handleDeleteButtonClick: (id) => {
-      return () => {
-        dispatch(deleteActivity(id));
-        dispatch(fetchActivities());
-        dispatch(displayFetchedActivities());
+    handleDeleteButtonClick: (id, currentVisibleSubmission) => {
+      if (currentVisibleSubmission) {
+        return () => {
+          dispatch(deleteSubmission(currentVisibleSubmission));
+          dispatch(fetchSubmissions());
+          dispatch(fetchActivity(id));
+          dispatch(fetchActivitySubmissions(id));
+        }
+      } else {
+        return () => {
+          dispatch(deleteActivity(id));
+          dispatch(fetchActivities());
+          dispatch(displayFetchedActivities());
+        }
       }
     },
-    handleEditButtonClick: (activitiesById, requirementsById, objectivesById, currentVisibleActivity) => {
-      let objectiveDescriptions = Immutable.List();
-      let requirementDescriptions = Immutable.List();
-      if (currentVisibleActivity) {
-        activitiesById[currentVisibleActivity]['body_params']['requirementsList'].forEach(function (requirement) {
-          requirementDescriptions = requirementDescriptions.push(requirementsById[requirement].body_params.description);
-        });
-        activitiesById[currentVisibleActivity]['body_params']['objectivesList'].forEach(function (objective) {
-          objectiveDescriptions = objectiveDescriptions.push(objectivesById[objective].body_params.description);
-        });
-      }
-      return () => {
+    handleEditButtonClick: (activitiesById, requirementsById, objectivesById, currentVisibleActivity, currentVisibleSubmission, submissionsById) => {
+      if (currentVisibleSubmission) {
+        return () => {
+          if (currentVisibleSubmission) {
+            dispatch(updateSubmissionFormData(0, 'textBoxes', submissionsById[currentVisibleSubmission]['body_params']['title'], submissionsById[currentVisibleSubmission]['body_params']['title']));
+            dispatch(updateSubmissionFormData(1, 'textBoxes', submissionsById[currentVisibleSubmission]['body_params']['img'], submissionsById[currentVisibleSubmission]['body_params']['img']));
+            dispatch(updateSubmissionFormData(2, 'textBoxes', submissionsById[currentVisibleSubmission]['body_params']['gdoc_link'], submissionsById[currentVisibleSubmission]['body_params']['gdoc_link']));
+            dispatch(updateSubmissionFormData(3, 'textBoxes', submissionsById[currentVisibleSubmission]['body_params']['gitlab_link'], submissionsById[currentVisibleSubmission]['body_params']['gitlab_link']));
+            dispatch(updateSubmissionFormData(0, 'textAreaBoxes', submissionsById[currentVisibleSubmission]['body_params']['description'], submissionsById[currentVisibleSubmission]['body_params']['description']));
+            dispatch(fetchSubmissionForm(currentVisibleActivity, currentVisibleSubmission));
+          }
+        }
+      } else {
+        let objectiveDescriptions = Immutable.List();
+        let requirementDescriptions = Immutable.List();
         if (currentVisibleActivity) {
-          dispatch(updateActivityFormData(0, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['title'], activitiesById[currentVisibleActivity]['body_params']['title']));
-          dispatch(updateActivityFormData(1, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['chat_link'], activitiesById[currentVisibleActivity]['body_params']['chat_link'].substring(26)));
-          dispatch(updateActivityFormData(2, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['img'], activitiesById[currentVisibleActivity]['body_params']['img']));  
-          dispatch(updateActivityFormData(0, 'select', activitiesById[currentVisibleActivity]['body_params']['course_id'], activitiesById[currentVisibleActivity]['body_params']['course_id']));
-          dispatch(updateActivityFormData(0, 'textAreaBoxes', activitiesById[currentVisibleActivity]['body_params']['description'], activitiesById[currentVisibleActivity]['body_params']['description']));
-          dispatch(updateActivityFormData(0, 'lists', requirementDescriptions, requirementDescriptions));
-          dispatch(updateActivityFormData(1, 'lists', objectiveDescriptions, objectiveDescriptions));
-          dispatch(fetchActivityForm(currentVisibleActivity));
+          activitiesById[currentVisibleActivity]['body_params']['requirementsList'].forEach(function (requirement) {
+            requirementDescriptions = requirementDescriptions.push(requirementsById[requirement].body_params.description);
+          });
+          activitiesById[currentVisibleActivity]['body_params']['objectivesList'].forEach(function (objective) {
+            objectiveDescriptions = objectiveDescriptions.push(objectivesById[objective].body_params.description);
+          });
+        }
+        return () => {
+          if (currentVisibleActivity) {
+            dispatch(updateActivityFormData(0, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['title'], activitiesById[currentVisibleActivity]['body_params']['title']));
+            dispatch(updateActivityFormData(1, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['chat_link'], activitiesById[currentVisibleActivity]['body_params']['chat_link'].substring(26)));
+            dispatch(updateActivityFormData(2, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['img'], activitiesById[currentVisibleActivity]['body_params']['img']));  
+            dispatch(updateActivityFormData(0, 'select', activitiesById[currentVisibleActivity]['body_params']['course_id'], activitiesById[currentVisibleActivity]['body_params']['course_id']));
+            dispatch(updateActivityFormData(0, 'textAreaBoxes', activitiesById[currentVisibleActivity]['body_params']['description'], activitiesById[currentVisibleActivity]['body_params']['description']));
+            dispatch(updateActivityFormData(0, 'lists', requirementDescriptions, requirementDescriptions));
+            dispatch(updateActivityFormData(1, 'lists', objectiveDescriptions, objectiveDescriptions));
+            dispatch(fetchActivityForm(currentVisibleActivity));
+          }
         }
       }
     },
@@ -237,12 +265,12 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleAddButtonClick: dispatchProps.handleAddButtonClick(stateProps.isActivitiesListViewable, stateProps.currentVisibleActivity),
     handleFormUpdates: dispatchProps.handleFormUpdates(stateProps.isSubmissionFormViewable),
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser, stateProps.isSubmissionFormViewable, stateProps.currentVisibleActivity),
-    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleActivity, stateProps.currentUser),
+    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleActivity, stateProps.currentUser, stateProps.isSubmissionFormViewable, stateProps.currentVisibleSubmission),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick(stateProps.currentVisibleActivity),
-    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleActivity),
-    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.activitiesById, stateProps.requirementsById, stateProps.objectivesById, stateProps.currentVisibleActivity),
+    handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleActivity, stateProps.currentVisibleSubmission),
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.activitiesById, stateProps.requirementsById, stateProps.objectivesById, stateProps.currentVisibleActivity, stateProps.currentVisibleSubmission, stateProps.submissionsById),
     handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
     handleAddFormListEntry: dispatchProps.handleAddFormListEntry
   }
