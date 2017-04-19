@@ -272,7 +272,7 @@ export function addActivity(title, room, image, description, course_id, requirem
  * @param description the new text description of the activity
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function updateActivity(id, title, room, image, description, course_id, expert_id) {
+export function updateActivity(id, title, room, image, description, course_id, requirementsList, objectivesList, expert_id) {
 	return dispatch => {
 		dispatch(updateActivityRequest());
 
@@ -282,6 +282,8 @@ export function updateActivity(id, title, room, image, description, course_id, e
 			image: image,
 			expert_id: expert_id,
 			course_id: course_id,
+			requirementsList: requirementsList,
+			objectivesList: objectivesList,
 			chat_link: 'https://gitter.im/ML-LIME/'+room
 		})
 		.then(res => {

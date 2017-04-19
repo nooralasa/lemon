@@ -42,12 +42,24 @@ function renderTextAreas(textareas, handleChange) {
   );
 } 
 
-function renderSelect(coursesList, coursesById, handleChange) {
-  const options = coursesList.map((id, index) => 
-    <option value={id} >
-      {coursesById[id].body_params.title}
-    </option>
-  );
+function renderSelect(defaultvalue, coursesList, coursesById, handleChange) {
+  const options = coursesList.map((id, index) => {
+    if (defaultvalue===id) {
+      return (
+        <option value={id} selected>
+          {coursesById[id].body_params.title}
+        </option>
+      );
+    } else {
+      console.log('not selected');
+      return (
+        <option value={id} >
+          {coursesById[id].body_params.title}
+        </option>
+      );
+    }
+    
+  });
   return (
     <rbs.FormGroup controlId="formControlsSelect" onChange={() => {
         handleChange(0, 'select', document.getElementById("formControlsSelect").value);
@@ -60,7 +72,7 @@ function renderSelect(coursesList, coursesById, handleChange) {
   );
 }
 
-function renderAddList(listIndex, label, placeholder, handleChange, currentListId, handleAddFormListEntry) {
+function renderAddList(listIndex, label, placeholder, defaultvalue, handleChange, currentListId, handleAddFormListEntry) {
   const textInput = (placeholder, id) => {
     let input = document.createElement('input');
     input.type="text";
@@ -68,15 +80,29 @@ function renderAddList(listIndex, label, placeholder, handleChange, currentListI
     input.id = listIndex+':'+id;
     input.placeholder=placeholder;
     input.onkeyup=(e) => {
-      console.log(e.target.value);
       handleChange(listIndex, id, e.target.value);
     };
     document.getElementById("formList"+listIndex).insertBefore(input, document.getElementById("addBtn"+listIndex));
     document.getElementById("formList"+listIndex).insertBefore(document.createElement("br"), document.getElementById("addBtn"+listIndex));
   };
+
+  const defaultInputs = defaultvalue.map((description, index) => 
+    <div>
+      <rbs.FormControl 
+        type="text" 
+        defaultValue={description} 
+        id={listIndex+':'+index}
+        onChange={(e) => {
+          handleChange(listIndex, index, e.target.value);
+        }}/>
+      <br/>
+    </div>
+  );
+
   return (
     <rbs.FormGroup id={"formList"+listIndex} controlId="formControlsList">
       <rbs.ControlLabel>{label}</rbs.ControlLabel>
+      { defaultInputs }
       <rbs.Button bsStyle="link" id={"addBtn"+listIndex} style={{float: 'right', fontSize: '.7em'}} onClick={() => {
         textInput(placeholder, currentListId);
         currentListId +=1;
@@ -87,7 +113,7 @@ function renderAddList(listIndex, label, placeholder, handleChange, currentListI
 
 function renderLists(formData, handleChange, handleAddFormListEntry) {
   const listInputs = formData.map((list, index) => 
-    renderAddList(index, list.label, list.placeholder, handleChange, list.value.length, handleAddFormListEntry)
+    renderAddList(index, list.label, list.placeholder, list.defaultvalue, handleChange, list.value.length, handleAddFormListEntry)
   );
   return (
     <div>{listInputs}</div>
@@ -101,7 +127,6 @@ function renderSubmitButton(formData, handleSubmit, message, otherScholar) {
       Object.keys(formData).forEach((boxes) => {
         formData[boxes].forEach((box) => values.push(box.value));
       });
-      console.log('values ', values);
       handleSubmit(values, otherScholar);
     }}>
       {message}
@@ -183,7 +208,7 @@ export function renderActivityForm(formData, handleFormUpdates, currentVisible, 
   return (
     <form>
       { renderTexts(formData.textBoxes, handleFormUpdates) }
-      { renderSelect(coursesList, coursesById, handleFormUpdates) }
+      { renderSelect(formData.select[0].defaultvalue, coursesList, coursesById, handleFormUpdates) }
       { renderLists(formData.lists, handleFormUpdates, handleAddFormListEntry) }
       { renderTextAreas(formData.textAreaBoxes, handleFormUpdates) }
       { renderSubmitButton(formData, handleSubmit, 'Submit') }

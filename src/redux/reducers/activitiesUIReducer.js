@@ -64,13 +64,13 @@ const initialActivitesUIState = Immutable.fromJS({
 				label: 'Requirements',
 				placeholder: 'a requirement for submissions',
 				value: [],
-				defaultvalue: ''
+				defaultvalue: []
 			},
 			{
 				label: 'Learning Objectives',
 				placeholder: 'a learning objective for the activity',
 				value: [],
-				defaultvalue: ''
+				defaultvalue: []
 			}
 		]
 	}

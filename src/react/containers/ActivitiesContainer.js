@@ -114,8 +114,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(updateActivityFormData(2, 'textBoxes', '',''));
       dispatch(updateActivityFormData(0, 'textAreaBoxes', '',''));
       dispatch(updateActivityFormData(0, 'select', '1',''));
-      dispatch(updateActivityFormData(0, 'lists', Immutable.List(),''));
-      dispatch(updateActivityFormData(1, 'lists', Immutable.List(),''));
+      dispatch(updateActivityFormData(0, 'lists', Immutable.List(), Immutable.List()));
+      dispatch(updateActivityFormData(1, 'lists', Immutable.List(), Immutable.List()));
       dispatch(fetchActivityForm());
     },
     handleAddFormListEntry: (listIndex) => {
@@ -135,9 +135,9 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(addActivity(values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
       }
     },
-    handleEditFormSubmission: (id) => {
+    handleEditFormSubmission: (id, user_id) => {
       return (values) => {
-        dispatch(updateActivity(id, values[0], values[1], values[2], values[3], values[4], values[5]));
+        dispatch(updateActivity(id, values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
       }
     },
     handleDeleteButtonClick: (id) => {
@@ -147,13 +147,27 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(displayFetchedActivities());
       }
     },
-    handleEditButtonClick: (activitiesById, currentVisibleActivity) => {
+    handleEditButtonClick: (activitiesById, requirementsById, objectivesById, currentVisibleActivity) => {
+      console.log('handleEditButtonClick');
+      let objectiveDescriptions = Immutable.List();
+      let requirementDescriptions = Immutable.List();
+      if (currentVisibleActivity) {
+        activitiesById[currentVisibleActivity]['body_params']['requirementsList'].forEach(function (requirement) {
+          requirementDescriptions = requirementDescriptions.push(requirementsById[requirement].body_params.description);
+        });
+        activitiesById[currentVisibleActivity]['body_params']['objectivesList'].forEach(function (objective) {
+          objectiveDescriptions = objectiveDescriptions.push(objectivesById[objective].body_params.description);
+        });
+      }
       return () => {
         if (currentVisibleActivity) {
           dispatch(updateActivityFormData(0, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['title'], activitiesById[currentVisibleActivity]['body_params']['title']));
-          dispatch(updateActivityFormData(1, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['chat_link'], activitiesById[currentVisibleActivity]['body_params']['chat_link']));
-          dispatch(updateActivityFormData(2, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['source'], activitiesById[currentVisibleActivity]['body_params']['source']));  
+          dispatch(updateActivityFormData(1, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['chat_link'], activitiesById[currentVisibleActivity]['body_params']['chat_link'].substring(26)));
+          dispatch(updateActivityFormData(2, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['img'], activitiesById[currentVisibleActivity]['body_params']['img']));  
+          dispatch(updateActivityFormData(0, 'select', activitiesById[currentVisibleActivity]['body_params']['course_id'], activitiesById[currentVisibleActivity]['body_params']['course_id']));
           dispatch(updateActivityFormData(0, 'textAreaBoxes', activitiesById[currentVisibleActivity]['body_params']['description'], activitiesById[currentVisibleActivity]['body_params']['description']));
+          dispatch(updateActivityFormData(0, 'lists', requirementDescriptions, requirementDescriptions));
+          dispatch(updateActivityFormData(1, 'lists', objectiveDescriptions, objectiveDescriptions));
           dispatch(fetchActivityForm(currentVisibleActivity));
         }
       }
@@ -203,12 +217,12 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser),
-    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleActivity),
+    handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleActivity, stateProps.currentUser),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick(stateProps.currentVisibleActivity),
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleActivity),
-    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.activitiesById, stateProps.currentVisibleActivity),
+    handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.activitiesById, stateProps.requirementsById, stateProps.objectivesById, stateProps.currentVisibleActivity),
     handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
     handleAddFormListEntry: dispatchProps.handleAddFormListEntry
   }
