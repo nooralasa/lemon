@@ -236,16 +236,18 @@ export function fetchActivitySubmissions(id) {
  * @param description text description of the activity
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function addActivity(title, example, image, room, expert_id, description) {
+export function addActivity(title, room, image, description, course_id, requirementsList, objectivesList, expert_id) {
 	return dispatch => {
 		dispatch(addActivityRequest());
 
 		return axios.post('/api/v1/activities', {
 			title: title,
-			example: example,
 			description: description,
 			image: image,
 			expert_id: expert_id,
+			course_id: course_id,
+			requirementsList: requirementsList,
+			objectivesList: objectivesList,
 			chat_link: 'https://gitter.im/ML-LIME/'+room
 		})
 		.then(res => {
@@ -270,16 +272,16 @@ export function addActivity(title, example, image, room, expert_id, description)
  * @param description the new text description of the activity
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function updateActivity(id, title, example, image, room, expert_id, description) {
+export function updateActivity(id, title, room, image, description, course_id, expert_id) {
 	return dispatch => {
 		dispatch(updateActivityRequest());
 
 		return axios.put(`/api/v1/activities/${id}`, {
 			title: title,
-			example: example,
 			description: description,
 			image: image,
 			expert_id: expert_id,
+			course_id: course_id,
 			chat_link: 'https://gitter.im/ML-LIME/'+room
 		})
 		.then(res => {
@@ -584,7 +586,6 @@ export function fetchActivitiesSuccess(data) {
 				body_params: Immutable.Map({
 					title: item.title,
 					description: item.description,
-					example: item.example,
 					chat_link: item.chat_link,
 					img: item.image,
 					timestamp: item.timestamp,
@@ -799,7 +800,6 @@ export function addActivitySuccess(data) {
 		body_params: Immutable.Map({
 			title: data.title,
 			description: data.description,
-			example: data.example,
 			chat_link: data.chat_link,
 			img: data.image,
 			timestamp: data.timestamp,
@@ -813,7 +813,7 @@ export function addActivitySuccess(data) {
 
 	return {
 		type: ADD_ACTIVITY_SUCCESS,
-		payload: request
+		payload: request.toJSON()
 	};
 }
 
@@ -830,7 +830,6 @@ export function updateActivitySuccess(data) {
 		body_params: Immutable.Map({
 			title: data.title,
 			description: data.description,
-			example: data.example,
 			chat_link: data.chat_link,
 			img: data.image,
 			timestamp: data.timestamp,
@@ -844,7 +843,7 @@ export function updateActivitySuccess(data) {
 
 	return {
 		type: UPDATE_ACTIVITY_SUCCESS,
-		payload: request
+		payload: request.toJSON()
 	};
 }
 

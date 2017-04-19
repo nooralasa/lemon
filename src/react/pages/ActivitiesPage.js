@@ -18,7 +18,7 @@ import ItemsPanel from '../components/ItemsPanel';
 import Authenticate from '../components/Authenticate';
 import {renderActivityPanel, renderSubmissionPanel} from '../components/renderModulePanel';
 import {renderListGroupItems, renderActivitiesListBody} from '../components/renderModuleList';
-import {renderModuleForm} from '../components/renderForm';
+import {renderActivityForm} from '../components/renderForm';
 
 /** 
  * The Activities Page Componenet
@@ -29,6 +29,7 @@ class Activities extends Component {
     super(props);
     this.renderListItems = this.renderListItems.bind(this);
     this.renderItemPanel = this.renderItemPanel.bind(this);
+    this.renderItemForm = this.renderItemForm.bind(this);
   }
 
   /**
@@ -43,7 +44,7 @@ class Activities extends Component {
   }
 
   renderItemForm() {
-    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
+    return renderActivityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.coursesList, this.props.coursesById, this.props.handleAddFormListEntry);
   }
 
   /**
@@ -74,7 +75,6 @@ class Activities extends Component {
    * actions to set up the state for rendering the activities page
    **/
   componentDidMount() {
-    console.log('ComponenetDidMount');
     this.props.mount(this.props.isActivitiesListViewable, this.props.currentVisibleActivity);
   }
 

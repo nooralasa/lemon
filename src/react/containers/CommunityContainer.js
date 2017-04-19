@@ -102,8 +102,8 @@ const mapDispatchToProps = (dispatch) => {
       }
     },
     handleEditFormSubmission: (id) => {
-      return (values = null) => {
-        if (values) {
+      return (values, otherScholar) => {
+        if (!otherScholar) {
           dispatch(updateScholar(id, null, values[0], values[1], values[2], values[3], values[4], values[5]));
         } else {
           dispatch(updateScholar(id, 'admin'));

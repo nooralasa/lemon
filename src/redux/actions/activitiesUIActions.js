@@ -8,6 +8,8 @@ export const FETCH_ACTIVITY = 'FETCH_ACTIVITY';
 export const FETCH_ACTIVITY_FORM = 'FETCH_ACTIVITY_FORM';
 export const UPDATE_ACTIVITY_FORM_DATA = 'UPDATE_ACTIVITY_FORM_DATA';
 export const FETCH_SUBMISSION = 'FETCH_SUBMISSION';
+export const UPDATE_ACTIVITY_FORM_DATA_LIST = 'UPDATE_ACTIVITY_FORM_DATA_LIST';
+export const ADD_ACTIVITY_FORM_DATA_LIST_ENTRY = 'ADD_ACTIVITY_FORM_DATA_LIST_ENTRY';
 
 /**
  * display the activites list
@@ -73,6 +75,26 @@ export function updateActivityFormData(index, type, value, defaultvalue) {
 			type: type,
 			value: value,
 			defaultvalue: defaultvalue
+		}
+	};
+}
+
+export function addActivityFormDataListEntry(listIndex) {
+	return {
+		type: ADD_ACTIVITY_FORM_DATA_LIST_ENTRY,
+		payload: {
+			listIndex: listIndex
+		}
+	};
+}
+
+export function updateActivityFormDataList(listIndex, index, value) {
+	return {
+		type: UPDATE_ACTIVITY_FORM_DATA_LIST,
+		payload: {
+			index: index,
+			listIndex: listIndex,
+			value: value
 		}
 	};
 }

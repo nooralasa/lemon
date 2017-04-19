@@ -10,11 +10,13 @@
  **/
 import { connect } from 'react-redux';
 
+import * as Immutable from 'immutable';
+
 //Activities Page Presentational Component
 import ActivitiesPage from '../pages/ActivitiesPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchActivity, displayFetchedActivities, fetchActivityForm, updateActivityFormData, fetchSubmission} from '../../redux/actions/activitiesUIActions';
+import {fetchActivity, displayFetchedActivities, fetchActivityForm, updateActivityFormData, updateActivityFormDataList, addActivityFormDataListEntry, fetchSubmission} from '../../redux/actions/activitiesUIActions';
 import {fetchActivities, addActivity, deleteActivity, updateActivity, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions} from '../../redux/actions/activitiesActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
 import {fetchCourses} from '../../redux/actions/coursesActions';
@@ -36,6 +38,7 @@ const mapStateToProps = (state) => {
     activitiesList: state.activities.get('activitiesList').toArray(),
     activitiesById: state.activities.get('activitiesById').toJSON(),
     communityById: state.community.get('communityById').toJSON(),
+    coursesList: state.courses.get('coursesList').toArray(),
     coursesById: state.courses.get('coursesById').toJSON(),
     requirementsById: state.activities.get('requirementsById').toJSON(),
     objectivesById: state.activities.get('objectivesById').toJSON(),
@@ -84,14 +87,21 @@ const mapDispatchToProps = (dispatch) => {
       } 
     },
     handleSubmissionButton1Click: (activity_id) => {
-      console.log('Hellos Im submiting');
       dispatch(fetchActivity(activity_id));
     },
     handleListClick: (id) => {
-      dispatch(fetchActivity(id));
-      dispatch(fetchActivityObjectives(id));
-      dispatch(fetchActivityRequirements(id));
-      dispatch(fetchActivitySubmissions(id)); 
+      dispatch(fetchActivities());
+      dispatch(fetchRequirements());
+      dispatch(fetchObjectives());
+      dispatch(fetchSubmissions());
+      dispatch(fetchScholars());
+      dispatch(fetchCourses());
+      if (id) {
+        dispatch(fetchActivity(id));
+        dispatch(fetchActivityObjectives(id));
+        dispatch(fetchActivityRequirements(id));
+        dispatch(fetchActivitySubmissions(id)); 
+      }
     },
     handlePanelClick: () => {
       dispatch(fetchActivities());
@@ -102,16 +112,28 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(updateActivityFormData(0, 'textBoxes', '',''));
       dispatch(updateActivityFormData(1, 'textBoxes', '',''));
       dispatch(updateActivityFormData(2, 'textBoxes', '',''));
-      dispatch(updateActivityFormData(3, 'textBoxes', '',''));
-      dispatch(updateActivityFormData(4, 'textBoxes', '',''));
       dispatch(updateActivityFormData(0, 'textAreaBoxes', '',''));
+      dispatch(updateActivityFormData(0, 'select', '1',''));
+      dispatch(updateActivityFormData(0, 'lists', Immutable.List(),''));
+      dispatch(updateActivityFormData(1, 'lists', Immutable.List(),''));
       dispatch(fetchActivityForm());
     },
-    handleFormUpdates: (index, type, value) => {
-      dispatch(updateActivityFormData(index, type, value, ''));
+    handleAddFormListEntry: (listIndex) => {
+      dispatch(addActivityFormDataListEntry(listIndex));
     },
-    handleAddFormSubmission: (values) => {
-      dispatch(addActivity(values[0], values[1], values[2], values[3], values[4], values[5]));
+    handleFormUpdates: (index, type, value) => {
+      if (typeof type === 'number') {
+        console.log('Im a number');
+        dispatch(updateActivityFormDataList(index, type, value));
+      } else {
+        console.log('Im a NAN');
+        dispatch(updateActivityFormData(index, type, value, ''));
+      }
+    },
+    handleAddFormSubmission: (user_id) => { 
+      return (values) => {
+        dispatch(addActivity(values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
+      }
     },
     handleEditFormSubmission: (id) => {
       return (values) => {
@@ -131,8 +153,6 @@ const mapDispatchToProps = (dispatch) => {
           dispatch(updateActivityFormData(0, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['title'], activitiesById[currentVisibleActivity]['body_params']['title']));
           dispatch(updateActivityFormData(1, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['chat_link'], activitiesById[currentVisibleActivity]['body_params']['chat_link']));
           dispatch(updateActivityFormData(2, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['source'], activitiesById[currentVisibleActivity]['body_params']['source']));  
-          dispatch(updateActivityFormData(3, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['link'], activitiesById[currentVisibleActivity]['body_params']['link']));
-          dispatch(updateActivityFormData(4, 'textBoxes', activitiesById[currentVisibleActivity]['body_params']['img'], activitiesById[currentVisibleActivity]['body_params']['img']));
           dispatch(updateActivityFormData(0, 'textAreaBoxes', activitiesById[currentVisibleActivity]['body_params']['description'], activitiesById[currentVisibleActivity]['body_params']['description']));
           dispatch(fetchActivityForm(currentVisibleActivity));
         }
@@ -167,6 +187,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     activitiesList: stateProps.activitiesList,
     activitiesById: stateProps.activitiesById,
     communityById: stateProps.communityById,
+    coursesList: stateProps.coursesList,
     coursesById: stateProps.coursesById,
     objectivesById: stateProps.objectivesById,
     requirementsById: stateProps.requirementsById,
@@ -181,14 +202,15 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleButtonClick: dispatchProps.handleButtonClick(stateProps.currentUser),
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,
-    handleAddFormSubmission: dispatchProps.handleAddFormSubmission,
+    handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleActivity),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick(stateProps.currentVisibleActivity),
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleActivity),
     handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.activitiesById, stateProps.currentVisibleActivity),
-    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser)
+    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
+    handleAddFormListEntry: dispatchProps.handleAddFormListEntry
   }
 }
 

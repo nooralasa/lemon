@@ -17,7 +17,7 @@ class ItemControls extends Component {
     } else {
       return (
         <div>
-          <rbs.Button bsStyle="link" onClick={this.handleUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
+          <rbs.Button bsStyle="link" onClick={this.props.onUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
         </div>
       );
     }
@@ -25,7 +25,10 @@ class ItemControls extends Component {
 }
 
 ItemControls.propTypes = {
-  onUserClick: PropTypes.func.isRequired
+  onUserClick: PropTypes.func.isRequired,
+  isItemControlsVisible: PropTypes.bool.isRequired,
+  onDeleteBtnClick: PropTypes.func.isRequired,
+  onEditBtnClick: PropTypes.func.isRequired
 }
 
 class ItemPanel extends Component {
