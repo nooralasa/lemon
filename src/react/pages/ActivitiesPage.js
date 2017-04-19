@@ -120,9 +120,9 @@ class Activities extends Component {
         <ItemsPanel 
           logic={{
             isListViewable: this.props.isActivitiesListViewable,
-            isFormViewable: this.props.userRole==='admin' && this.props.isFormViewable,
+            isFormViewable: (this.props.userRole==='admin' && this.props.isFormViewable) || this.props.isSubmissionFormViewable,
             isAddControlsVisible: this.props.userRole==='admin',
-            isItemControlsVisible: this.props.userRole==='admin'
+            isItemControlsVisible: this.props.userRole==='admin' || (this.props.currentVisibleSubmission!=null && this.props.currentUser==this.props.submissionsById[this.props.currentVisibleSubmission].body_params.user_id)
           }}
           render={{
             renderListItems: this.renderListItems,

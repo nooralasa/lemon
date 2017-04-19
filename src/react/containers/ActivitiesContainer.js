@@ -169,9 +169,9 @@ const mapDispatchToProps = (dispatch) => {
       if (currentVisibleSubmission) {
         return () => {
           dispatch(deleteSubmission(currentVisibleSubmission));
-          dispatch(fetchSubmissions());
-          dispatch(fetchActivity(id));
-          dispatch(fetchActivitySubmissions(id));
+          dispatch(fetchActivities());
+          dispatch(fetchCourses());
+          dispatch(displayFetchedActivities());
         }
       } else {
         return () => {
