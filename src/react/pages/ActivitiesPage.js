@@ -18,7 +18,7 @@ import ItemsPanel from '../components/ItemsPanel';
 import Authenticate from '../components/Authenticate';
 import {renderActivityPanel, renderSubmissionPanel} from '../components/renderModulePanel';
 import {renderListGroupItems, renderActivitiesListBody} from '../components/renderModuleList';
-import {renderActivityForm} from '../components/renderForm';
+import {renderActivityForm, renderSubmissionForm} from '../components/renderForm';
 
 /** 
  * The Activities Page Componenet
@@ -44,7 +44,11 @@ class Activities extends Component {
   }
 
   renderItemForm() {
-    return renderActivityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.coursesList, this.props.coursesById, this.props.handleAddFormListEntry);
+    if (this.props.isSubmissionFormViewable) {
+      return renderSubmissionForm(this.props.submissionFormData, this.props.handleFormUpdates, this.props.currentVisibleSubmission, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
+    } else {
+      return renderActivityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.coursesList, this.props.coursesById, this.props.handleAddFormListEntry);
+    }
   }
 
   /**
@@ -65,7 +69,7 @@ class Activities extends Component {
     if (this.props.currentVisibleSubmission) {
       return renderSubmissionPanel(this.props.submissionsById[this.props.currentVisibleSubmission], this.props.handleSubmissionButton1Click, activity.body_params.title, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById[this.props.submissionsById[this.props.currentVisibleSubmission].body_params.user_id].body_params);
     } else {
-      return renderActivityPanel(activity, this.props.handleButtonClick, this.props.coursesById[activity.body_params.course_id].body_params.title, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById[activity.body_params.expert_id].body_params.title, this.props.handleThumbnailClick);
+      return renderActivityPanel(activity, this.props.handleAddButtonClick, this.props.coursesById[activity.body_params.course_id].body_params.title, this.props.objectivesById, this.props.requirementsById, this.props.submissionsById, this.props.communityById[activity.body_params.expert_id].body_params.title, this.props.handleThumbnailClick);
     }
   }
 

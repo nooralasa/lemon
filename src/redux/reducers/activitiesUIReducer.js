@@ -7,9 +7,11 @@ import {
 	DISPLAY_FETCHED_ACTIVITIES, 
 	FETCH_ACTIVITY,
 	FETCH_ACTIVITY_FORM,
+	FETCH_SUBMISSION_FORM,
 	UPDATE_ACTIVITY_FORM_DATA,
 	UPDATE_ACTIVITY_FORM_DATA_LIST,
 	ADD_ACTIVITY_FORM_DATA_LIST_ENTRY,
+	UPDATE_SUBMISSION_FORM_DATA,
 	FETCH_SUBMISSION
 } from '../actions/activitiesUIActions.js'
 
@@ -22,6 +24,7 @@ const initialActivitesUIState = Immutable.fromJS({
 	currentVisibleActivity: null,
 	currentVisibleSubmission: null,
 	isFormViewable: false,
+	isSubmissionFormViewable: false,
 	formData: {
 		textBoxes: [
 			{
@@ -73,6 +76,42 @@ const initialActivitesUIState = Immutable.fromJS({
 				defaultvalue: []
 			}
 		]
+	},
+	submissionFormData: {
+		textBoxes: [
+			{
+				label: 'Submission Title',
+				placeholder: 'Submission title.',
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: 'Submission Image URL',
+				placeholder: 'url to thumbnail image to be rendered',
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: 'Google Doc Link',
+				placeholder: "Link to your google doc documentation. make sure that the link is viewable.",
+				value: '',
+				defaultvalue: ''
+			},
+			{
+				label: 'Gitlab Link',
+				placeholder: "Link to your code if applicable.",
+				value: '',
+				defaultvalue: ''
+			}
+		],
+		textAreaBoxes: [
+			{
+				label: 'Submission Description',
+				placeholder: 'A couple of sentences describing your submission and any special instructions.',
+				value: '',
+				defaultvalue: ''
+			}
+		]
 	}
 });
 
@@ -89,6 +128,7 @@ function activitesUI(state = initialActivitesUIState, action) {
 		case DISPLAY_FETCHED_ACTIVITIES:
 			state = state.set('isActivitiesListViewable', true);
 			state = state.set('isFormViewable', false);
+			state = state.set('isSubmissionFormViewable', false);
 			state = state.set('currentVisibleActivity', null);
 			state = state.set('currentVisibleSubmission', null);
 			return state
@@ -96,6 +136,7 @@ function activitesUI(state = initialActivitesUIState, action) {
 		case FETCH_ACTIVITY:
 			state = state.set('isActivitiesListViewable', false);
 			state = state.set('isFormViewable', false);
+			state = state.set('isSubmissionFormViewable', false);
 			state = state.set('currentVisibleActivity', action.payload.id);
 			state = state.set('currentVisibleSubmission', null);
 			return state
@@ -103,6 +144,7 @@ function activitesUI(state = initialActivitesUIState, action) {
 		case FETCH_SUBMISSION:
 			state = state.set('isActivitiesListViewable', false);
 			state = state.set('isFormViewable', false);
+			state = state.set('isSubmissionFormViewable', false);
 			state = state.set('currentVisibleActivity', action.payload.activity_id);
 			state = state.set('currentVisibleSubmission', action.payload.id);
 			return state
@@ -110,8 +152,17 @@ function activitesUI(state = initialActivitesUIState, action) {
 		case FETCH_ACTIVITY_FORM:
 			state = state.set('isActivitiesListViewable', false);
 			state = state.set('isFormViewable', true);
+			state = state.set('isSubmissionFormViewable', false);
 			state = state.set('currentVisibleActivity', action.payload.id);
 			state = state.set('currentVisibleSubmission', null);
+			return state
+
+		case FETCH_SUBMISSION_FORM:
+			state = state.set('isActivitiesListViewable', false);
+			state = state.set('isFormViewable', true);
+			state = state.set('isSubmissionFormViewable', true);
+			state = state.set('currentVisibleActivity', action.payload.activity_id);
+			state = state.set('currentVisibleSubmission', action.payload.id);
 			return state
 
 		case UPDATE_ACTIVITY_FORM_DATA:
@@ -119,15 +170,17 @@ function activitesUI(state = initialActivitesUIState, action) {
 			state = state.updateIn(['formData', action.payload.type, action.payload.index, 'defaultvalue'], defaultvalue => action.payload.defaultvalue);			
 			return state
 
+		case UPDATE_SUBMISSION_FORM_DATA:
+			state = state.updateIn(['submissionFormData', action.payload.type, action.payload.index, 'value'], value => action.payload.value);
+			state = state.updateIn(['submissionFormData', action.payload.type, action.payload.index, 'defaultvalue'], defaultvalue => action.payload.defaultvalue);			
+			return state
+
 		case UPDATE_ACTIVITY_FORM_DATA_LIST:
-			console.log('get ',  typeof state.getIn(['formData', 'lists', action.payload.listIndex, 'value']));
-			console.log('get ',  state.getIn(['formData', 'lists', action.payload.listIndex, 'value', action.payload.index]));
 			state = state.updateIn(['formData', 'lists', action.payload.listIndex, 'value', action.payload.index], value => action.payload.value);
 			return state
 
 
 		case ADD_ACTIVITY_FORM_DATA_LIST_ENTRY:
-			console.log('ADD_ACTIVITY_FORM_DATA_LIST_ENTRY');
 			state = state.updateIn(['formData', 'lists', action.payload.listIndex, 'value'], value => value.push(''));
 			return state
 

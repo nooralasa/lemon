@@ -24,7 +24,10 @@ function moduleTitle(body_params, course) {
 
 function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2) {
   function handleBtn1Click() {
-    if (handleBtn1 && id1) {
+    console.log('handleBtn1Click');
+    console.log('handleBtn1 && id1 ', (handleBtn1!=null && id1!=null));
+    if (handleBtn1!=null && id1!=null) {
+      console.log('handleBtn1');
       handleBtn1(id1);
     }
     if (body_params['link']) {
@@ -35,7 +38,7 @@ function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleB
     }
   }
   function handleBtn2Click() {
-    if (handleBtn2 && id2) {
+    if (handleBtn2!=null && id2!=null) {
       handleBtn2(id2);
     }
     if (body_params['chat_link']) {
@@ -166,9 +169,10 @@ export function renderCommunityPanel(scholar, coursesById, onThumbnailClick) {
 }
 
 export function renderActivityPanel(activity, handleBtn1, course, objectivesById, requirementsById, submissionsById, user, onThumbnailClick) {
+  console.log('renderActivityPanel');
   return (
     <div>
-      {renderTitleAndControls(activity['body_params'], course, 'Add Submission', 'Gitter Chat', handleBtn1)}
+      {renderTitleAndControls(activity['body_params'], course, 'Add Submission', 'Gitter Chat', handleBtn1, '')}
       {nextModule(moduleDescription(activity['body_params'], 'Activity Overview'))}
       {nextModule(moduleChecklist('Learning Objectives', activity.body_params.objectivesList, objectivesById))}
       {nextModule(moduleChecklist('Requirements', activity.body_params.requirementsList, requirementsById))}

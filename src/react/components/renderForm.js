@@ -51,7 +51,6 @@ function renderSelect(defaultvalue, coursesList, coursesById, handleChange) {
         </option>
       );
     } else {
-      console.log('not selected');
       return (
         <option value={id} >
           {coursesById[id].body_params.title}
@@ -210,6 +209,30 @@ export function renderActivityForm(formData, handleFormUpdates, currentVisible, 
       { renderTexts(formData.textBoxes, handleFormUpdates) }
       { renderSelect(formData.select[0].defaultvalue, coursesList, coursesById, handleFormUpdates) }
       { renderLists(formData.lists, handleFormUpdates, handleAddFormListEntry) }
+      { renderTextAreas(formData.textAreaBoxes, handleFormUpdates) }
+      { renderSubmitButton(formData, handleSubmit, 'Submit') }
+    </form>
+  );
+}
+
+export function renderSubmissionForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick) {
+  const handleSubmit = (() => {
+    if (currentVisible) {
+      return (values) => {
+        handleEditFormSubmission(values);
+        handlePanelClick();
+      }
+    } else {
+      return (values) => {
+        handleAddFormSubmission(values);
+        handlePanelClick();
+      }
+    }
+  })();
+
+  return (
+    <form>
+      { renderTexts(formData.textBoxes, handleFormUpdates) }
       { renderTextAreas(formData.textAreaBoxes, handleFormUpdates) }
       { renderSubmitButton(formData, handleSubmit, 'Submit') }
     </form>

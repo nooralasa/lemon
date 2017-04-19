@@ -6,10 +6,12 @@
 export const DISPLAY_FETCHED_ACTIVITIES = 'DISPLAY_FETCHED_ACTIVITIES';
 export const FETCH_ACTIVITY = 'FETCH_ACTIVITY';
 export const FETCH_ACTIVITY_FORM = 'FETCH_ACTIVITY_FORM';
+export const FETCH_SUBMISSION_FORM = 'FETCH_SUBMISSION_FORM';
 export const UPDATE_ACTIVITY_FORM_DATA = 'UPDATE_ACTIVITY_FORM_DATA';
 export const FETCH_SUBMISSION = 'FETCH_SUBMISSION';
 export const UPDATE_ACTIVITY_FORM_DATA_LIST = 'UPDATE_ACTIVITY_FORM_DATA_LIST';
 export const ADD_ACTIVITY_FORM_DATA_LIST_ENTRY = 'ADD_ACTIVITY_FORM_DATA_LIST_ENTRY';
+export const UPDATE_SUBMISSION_FORM_DATA = 'UPDATE_SUBMISSION_FORM_DATA';
 
 /**
  * display the activites list
@@ -67,9 +69,33 @@ export function fetchActivityForm(id = null) {
 	};
 }
 
+export function fetchSubmissionForm(activity_id, id = null) {
+	const request = {
+		id: id,
+		activity_id: activity_id
+	};
+
+	return {
+		type: FETCH_SUBMISSION_FORM,
+		payload: request
+	};
+}
+
 export function updateActivityFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_ACTIVITY_FORM_DATA,
+		payload: {
+			index: index,
+			type: type,
+			value: value,
+			defaultvalue: defaultvalue
+		}
+	};
+}
+
+export function updateSubmissionFormData(index, type, value, defaultvalue) {
+	return {
+		type: UPDATE_SUBMISSION_FORM_DATA,
 		payload: {
 			index: index,
 			type: type,

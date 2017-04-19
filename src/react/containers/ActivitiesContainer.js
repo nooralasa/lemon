@@ -16,8 +16,8 @@ import * as Immutable from 'immutable';
 import ActivitiesPage from '../pages/ActivitiesPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchActivity, displayFetchedActivities, fetchActivityForm, updateActivityFormData, updateActivityFormDataList, addActivityFormDataListEntry, fetchSubmission} from '../../redux/actions/activitiesUIActions';
-import {fetchActivities, addActivity, deleteActivity, updateActivity, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions} from '../../redux/actions/activitiesActions';
+import {fetchActivity, displayFetchedActivities, fetchActivityForm, updateSubmissionFormData, updateActivityFormData, updateActivityFormDataList, addActivityFormDataListEntry, fetchSubmission, fetchSubmissionForm} from '../../redux/actions/activitiesUIActions';
+import {fetchActivities, addActivity, deleteActivity, updateActivity, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions, addSubmission} from '../../redux/actions/activitiesActions';
 import {fetchScholars, currentScholar} from '../../redux/actions/communityActions';
 import {fetchCourses} from '../../redux/actions/coursesActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
@@ -44,10 +44,12 @@ const mapStateToProps = (state) => {
     objectivesById: state.activities.get('objectivesById').toJSON(),
     submissionsById: state.activities.get('submissionsById').toJSON(),
     formData: state.activitiesUI.get('formData').toJSON(),
+    submissionFormData: state.activitiesUI.get('submissionFormData').toJSON(),
     currentUser: state.community.get('currentlyLoggedIn'),
     userRole: state.community.get('role'),
     isActivitiesListViewable: state.activitiesUI.get('isActivitiesListViewable'),
     isFormViewable: state.activitiesUI.get('isFormViewable'),
+    isSubmissionFormViewable: state.activitiesUI.get('isSubmissionFormViewable'),
     currentVisibleActivity: state.activitiesUI.get('currentVisibleActivity'),
     currentVisibleSubmission: state.activitiesUI.get('currentVisibleSubmission')
   }
@@ -108,31 +110,48 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchCourses());
       dispatch(displayFetchedActivities());
     },
-    handleAddButtonClick: () => {
-      dispatch(updateActivityFormData(0, 'textBoxes', '',''));
-      dispatch(updateActivityFormData(1, 'textBoxes', '',''));
-      dispatch(updateActivityFormData(2, 'textBoxes', '',''));
-      dispatch(updateActivityFormData(0, 'textAreaBoxes', '',''));
-      dispatch(updateActivityFormData(0, 'select', '1',''));
-      dispatch(updateActivityFormData(0, 'lists', Immutable.List(), Immutable.List()));
-      dispatch(updateActivityFormData(1, 'lists', Immutable.List(), Immutable.List()));
-      dispatch(fetchActivityForm());
+    handleAddButtonClick: (isActivitiesListViewable, currentVisibleActivity) => {
+      return () => {
+        console.log('handleAddButtonClick');
+        if (isActivitiesListViewable) {
+          dispatch(updateActivityFormData(0, 'textBoxes', '',''));
+          dispatch(updateActivityFormData(1, 'textBoxes', '',''));
+          dispatch(updateActivityFormData(2, 'textBoxes', '',''));
+          dispatch(updateActivityFormData(0, 'textAreaBoxes', '',''));
+          dispatch(updateActivityFormData(0, 'select', '1',''));
+          dispatch(updateActivityFormData(0, 'lists', Immutable.List(), Immutable.List()));
+          dispatch(updateActivityFormData(1, 'lists', Immutable.List(), Immutable.List()));
+          dispatch(fetchActivityForm());
+        } else {
+          dispatch(fetchSubmissionForm(currentVisibleActivity));
+        }
+      }
     },
     handleAddFormListEntry: (listIndex) => {
       dispatch(addActivityFormDataListEntry(listIndex));
     },
-    handleFormUpdates: (index, type, value) => {
-      if (typeof type === 'number') {
-        console.log('Im a number');
-        dispatch(updateActivityFormDataList(index, type, value));
-      } else {
-        console.log('Im a NAN');
-        dispatch(updateActivityFormData(index, type, value, ''));
+    handleFormUpdates: (isSubmissionFormViewable) => { 
+      return (index, type, value) => {
+        if (isSubmissionFormViewable) {
+          dispatch(updateSubmissionFormData(index, type, value, ''));
+        } else {
+          if (typeof type === 'number') {
+            dispatch(updateActivityFormDataList(index, type, value));
+          } else {
+            dispatch(updateActivityFormData(index, type, value, ''));
+          }
+        }
       }
     },
-    handleAddFormSubmission: (user_id) => { 
-      return (values) => {
-        dispatch(addActivity(values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
+    handleAddFormSubmission: (user_id, isSubmissionFormViewable, currentVisibleActivity) => { 
+      if (isSubmissionFormViewable) {
+        return (values) => {
+          dispatch(addSubmission(currentVisibleActivity, values[0], values[1], values[2], values[3], values[4], user_id));
+        }
+      } else {
+        return (values) => {
+          dispatch(addActivity(values[0], values[1], values[2], values[3], values[4], values[5], values[6], user_id));
+        }
       }
     },
     handleEditFormSubmission: (id, user_id) => {
@@ -148,7 +167,6 @@ const mapDispatchToProps = (dispatch) => {
       }
     },
     handleEditButtonClick: (activitiesById, requirementsById, objectivesById, currentVisibleActivity) => {
-      console.log('handleEditButtonClick');
       let objectiveDescriptions = Immutable.List();
       let requirementDescriptions = Immutable.List();
       if (currentVisibleActivity) {
@@ -207,16 +225,18 @@ const mergeProps = (stateProps, dispatchProps) => {
     requirementsById: stateProps.requirementsById,
     submissionsById: stateProps.submissionsById,
     formData: stateProps.formData,
+    submissionFormData: stateProps.submissionFormData,
     isActivitiesListViewable: stateProps.isActivitiesListViewable,
     isFormViewable: stateProps.isFormViewable,
+    isSubmissionFormViewable: stateProps.isSubmissionFormViewable,
     currentVisibleActivity: stateProps.currentVisibleActivity,
     currentVisibleSubmission: stateProps.currentVisibleSubmission,
     mount: dispatchProps.mount,
     handleSubmissionButton1Click: dispatchProps.handleSubmissionButton1Click,
     handleButtonClick: dispatchProps.handleButtonClick(stateProps.currentUser),
-    handleAddButtonClick: dispatchProps.handleAddButtonClick,
-    handleFormUpdates: dispatchProps.handleFormUpdates,
-    handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser),
+    handleAddButtonClick: dispatchProps.handleAddButtonClick(stateProps.isActivitiesListViewable, stateProps.currentVisibleActivity),
+    handleFormUpdates: dispatchProps.handleFormUpdates(stateProps.isSubmissionFormViewable),
+    handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser, stateProps.isSubmissionFormViewable, stateProps.currentVisibleActivity),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleActivity, stateProps.currentUser),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
