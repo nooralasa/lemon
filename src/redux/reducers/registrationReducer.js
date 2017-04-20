@@ -41,7 +41,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ['Next, update your profile. Upload a profile picture, add your name and a public email, specify your university or company under "organization," and type a short bio so we know who you are!'],
 	    button: 'Customize my profile!',
 	    a:'https://gitlab.com/profile',
-	    img: '/styles/img/img.png'
+	    img: ''
 	  },
 
 	  4: {
@@ -57,7 +57,7 @@ const initialRegistrationState = Immutable.fromJS({
 	  5: {
 	    id: 5,
 	    heading: null,
-	    body: ["Hooray! You're logged in.", "Do you have a personal portfolio? Well, we will create one for you on Gitlab. This may take a minute."],
+	    body: ["Hooray! You're logged in.", "We want to know more about you and your projects. We will help you get started by creating a personal portfolio.","Create your own personal portfolio on gitlab. The page may take a few minutes to reload, don't worry things are happening in the backend."],
 	    button: 'Create my portfolio!',
 	    a: '',
 	    img: ''
@@ -84,7 +84,7 @@ const initialRegistrationState = Immutable.fromJS({
 	  8: {
 	    id: 8,
 	    heading: null,
-	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging. You'll always be able to access it through the URL below."],
+	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging.", "You'll always be able to access it through the URL below. Go to Gitter and say Hello World!"],
 	    button: 'Take me to Gitter!',
 	    a: 'https://gitter.im/ML-LIME',
 	    img: ''
