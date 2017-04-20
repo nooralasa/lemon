@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
           case 6:
           case 8:
             window.open(a);
-            window.location.replace('/build/register/'+(id+1));
+            //window.location.replace('/build/register/'+(id+1));
             return
 
           case 1:
