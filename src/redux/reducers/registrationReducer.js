@@ -57,7 +57,7 @@ const initialRegistrationState = Immutable.fromJS({
 	  5: {
 	    id: 5,
 	    heading: null,
-	    body: ["Hooray! You're logged in.", "We want to know more about you and your projects. We will help you get started by creating a personal portfolio.","Create your own personal portfolio on gitlab. The page may take a few minutes to reload, don't worry things are happening in the backend."],
+	    body: ["Hooray! You're logged in. ", "We want to know more about you and your projects. We will help you get started by creating a personal portfolio.","Create your own personal portfolio on gitlab. The page may take a few minutes to reload, don't worry things are happening in the backend."],
 	    button: 'Create my portfolio!',
 	    a: '',
 	    img: ''
