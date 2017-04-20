@@ -135,7 +135,7 @@ function renderSubmitButton(formData, handleSubmit, message, otherScholar) {
 
 export function renderCommunityForm(formData, handleFormUpdates, currentVisibleScholar, currentUser, handleEditFormSubmission, handlePanelClick) {
   const handleSubmit = (values) => {
-    handleEditFormSubmission(values);
+    handleEditFormSubmission(values, currentVisibleScholar!==currentUser);
     handlePanelClick();
   };
 
