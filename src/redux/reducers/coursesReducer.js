@@ -19,6 +19,9 @@ import {
 	FETCH_COURSE_USERS_REQUEST, 
 	FETCH_COURSE_USERS_SUCCESS, 
 	FETCH_COURSE_USERS_FAILURE,
+	FETCH_COURSE_ACTIVITIES_REQUEST, 
+	FETCH_COURSE_ACTIVITIES_SUCCESS, 
+	FETCH_COURSE_ACTIVITIES_FAILURE,
 	ENROLL_IN_COURSE_REQUEST,
 	ENROLL_IN_COURSE_FAILURE,
 	ENROLL_IN_COURSE_SUCCESS
@@ -68,6 +71,12 @@ function courses(state = initialCoursesState, action) {
 			state = state.updateIn(['coursesById', action.payload.courseId, 'body_params', 'list'], list => action.payload.list);
 			return state
 
+		case FETCH_COURSE_ACTIVITIES_SUCCESS:
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
+			state = state.updateIn(['coursesById', action.payload.courseId, 'body_params', 'activitiesList'], activitiesList => action.payload.activitiesList);
+			return state
+
 		case ADD_COURSE_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
 			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
@@ -91,6 +100,7 @@ function courses(state = initialCoursesState, action) {
 		case ENROLL_IN_COURSE_REQUEST:
 		case FETCH_COURSES_REQUEST:
 		case FETCH_COURSE_USERS_REQUEST:
+		case FETCH_COURSE_ACTIVITIES_REQUEST:
 		case ADD_COURSE_REQUEST:
 		case UPDATE_COURSE_REQUEST:
 		case DELETE_COURSE_REQUEST:
@@ -101,6 +111,7 @@ function courses(state = initialCoursesState, action) {
 		case ENROLL_IN_COURSE_FAILURE:
 		case FETCH_COURSES_FAILURE:
 		case FETCH_COURSE_USERS_FAILURE:
+		case FETCH_COURSE_ACTIVITIES_FAILURE:
 		case ADD_COURSE_FAILURE:
 		case UPDATE_COURSE_FAILURE:
 		case DELETE_COURSE_FAILURE:

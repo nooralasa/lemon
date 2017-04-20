@@ -15,7 +15,9 @@ import CoursesPage from '../pages/CoursesPage';
 
 //Redux actions for fetching data from the database and changing ui state
 import {fetchCourse, displayFetchedCourses, fetchCourseForm, updateCourseFormData} from '../../redux/actions/coursesUIActions';
-import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse, deleteCourse, updateCourse} from '../../redux/actions/coursesActions';
+import {fetchActivities, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions} from '../../redux/actions/activitiesActions';
+import {fetchActivity} from '../../redux/actions/activitiesUIActions';
+import {fetchCourses, fetchCourseUsers, fetchCourseActivities, enrollInCourse, addCourse, deleteCourse, updateCourse} from '../../redux/actions/coursesActions';
 import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
@@ -35,6 +37,7 @@ const mapStateToProps = (state) => {
   	coursesList: state.courses.get('coursesList').toArray(),
     coursesById: state.courses.get('coursesById').toJSON(),
   	communityById: state.community.get('communityById').toJSON(),
+    activitiesById: state.activities.get('activitiesById').toJSON(),
     formData: state.coursesUI.get('formData').toJSON(),
     currentUser: state.community.get('currentlyLoggedIn'),
     userRole: state.community.get('role'),
@@ -61,9 +64,11 @@ const mapDispatchToProps = (dispatch) => {
     mount: (isCoursesListViewable, currentVisibleCourse) => {
       dispatch(fetchCourses());
       dispatch(fetchScholars());
+      dispatch(fetchActivities());
       if (!isCoursesListViewable && currentVisibleCourse) {
         dispatch(fetchCourse(currentVisibleCourse));
         dispatch(fetchCourseUsers(currentVisibleCourse));
+        dispatch(fetchCourseActivities(currentVisibleCourse));
       }
       dispatch(currentScholar((res) => {return res}));
     },
@@ -75,6 +80,7 @@ const mapDispatchToProps = (dispatch) => {
     handleListClick: (id) => {
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
+      dispatch(fetchCourseActivities(id));
     },
     handlePanelClick: () => {
     	dispatch(fetchCourses());
@@ -124,6 +130,20 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchScholar(id));
       dispatch(fetchScholarCourses(id));
     },
+    handleActivitiesThumbnailClick: (id) => {
+      dispatch(fetchActivities());
+      dispatch(fetchRequirements());
+      dispatch(fetchObjectives());
+      dispatch(fetchSubmissions());
+      dispatch(fetchScholars());
+      dispatch(fetchCourses());
+      if (id) {
+        dispatch(fetchActivity(id));
+        dispatch(fetchActivityObjectives(id));
+        dispatch(fetchActivityRequirements(id));
+        dispatch(fetchActivitySubmissions(id)); 
+      }
+    },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
@@ -147,6 +167,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     userRole: stateProps.userRole,
     coursesList: stateProps.coursesList,
     coursesById: stateProps.coursesById,
+    activitiesById: stateProps.activitiesById,
     communityById: stateProps.communityById,
     formData: stateProps.formData,
     isCoursesListViewable: stateProps.isCoursesListViewable,
@@ -161,6 +182,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
+    handleActivitiesThumbnailClick: dispatchProps.handleActivitiesThumbnailClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleCourse),
     handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.coursesById, stateProps.currentVisibleCourse),
     handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser)

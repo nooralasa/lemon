@@ -57,7 +57,7 @@ class Courses extends Component {
    * @return a div containing all the contents of the course
    **/
   renderItemPanel() {
-    return renderCoursePanel(this.props.coursesById[this.props.currentVisibleCourse], this.props.communityById, this.props.handleThumbnailClick, this.props.handleButtonClick);
+    return renderCoursePanel(this.props.coursesById[this.props.currentVisibleCourse], this.props.communityById, this.props.handleThumbnailClick, this.props.handleButtonClick, this.props.activitiesById, this.props.handleActivitiesThumbnailClick);
   }
 
   renderItemForm() {

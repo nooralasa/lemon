@@ -14,7 +14,9 @@ import { connect } from 'react-redux';
 import CommunityPage from '../pages/CommunityPage';
 
 //Redux actions for fetching data from the database and changing ui state
-import {fetchScholars, fetchScholarCourses, currentScholar, deleteScholar, updateScholar} from '../../redux/actions/communityActions';
+import {fetchScholars, fetchScholarCourses, fetchScholarSubmissions, currentScholar, deleteScholar, updateScholar} from '../../redux/actions/communityActions';
+import {fetchSubmission} from '../../redux/actions/activitiesUIActions';
+import {fetchActivities, fetchSubmissions} from '../../redux/actions/activitiesActions';
 import {fetchCourses, fetchCourseUsers} from '../../redux/actions/coursesActions';
 import {fetchScholar, displayFetchedScholars, fetchScholarForm, updateScholarFormData} from '../../redux/actions/communityUIActions';
 import {fetchCourse} from '../../redux/actions/coursesUIActions';
@@ -36,6 +38,7 @@ const mapStateToProps = (state) => {
     userRole: state.community.get('role'),
     communityList: state.community.get('communityList').toArray(),
     communityById: state.community.get('communityById').toJSON(),
+    submissionsById: state.activities.get('submissionsById').toJSON(),
     coursesById: state.courses.get('coursesById').toJSON(),
     formData: state.communityUI.get('formData').toJSON(),
     isFormViewable: state.communityUI.get('isFormViewable'),
@@ -60,14 +63,18 @@ const mapDispatchToProps = (dispatch) => {
     mount: (isCommunityListViewable, currentVisibleScholar) => {
       dispatch(fetchScholars());
       dispatch(fetchCourses());
+      dispatch(fetchSubmissions());
+      dispatch(fetchActivities());
       if (!isCommunityListViewable && currentVisibleScholar) {
         dispatch(fetchScholarCourses(currentVisibleScholar));
+        dispatch(fetchScholarSubmissions(currentVisibleScholar));
       }
       dispatch(currentScholar((res) => {return res}));
     },
     handleListClick: (id) => {
       dispatch(fetchScholar(id));
       dispatch(fetchScholarCourses(id));
+      dispatch(fetchScholarSubmissions(id));
     },
     handlePanelClick: () => {
       dispatch(fetchScholars());
@@ -114,6 +121,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
     },
+    handleSubmissionsThumbnailClick: (submissionsById) => {
+      return (id) => {
+        dispatch(fetchSubmission(submissionsById[id].body_params.activity_id, id));
+      }
+    },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
@@ -139,6 +151,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     isFormViewable: stateProps.isFormViewable,
     communityList: stateProps.communityList,
     communityById: stateProps.communityById,
+    submissionsById: stateProps.submissionsById,
     coursesById: stateProps.coursesById,
     isCommunityListViewable: stateProps.isCommunityListViewable,
     currentVisibleScholar: stateProps.currentVisibleScholar,
@@ -147,6 +160,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     handlePanelClick: dispatchProps.handlePanelClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar, stateProps.currentUser),
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
+    handleSubmissionsThumbnailClick: dispatchProps.handleSubmissionsThumbnailClick(stateProps.submissionsById),
     handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.communityById, stateProps.currentUser, stateProps.currentVisibleScholar),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleScholar),
     handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),

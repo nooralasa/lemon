@@ -20,6 +20,10 @@ export const FETCH_SCHOLAR_COURSES_REQUEST = 'FETCH_SCHOLAR_COURSES_REQUEST';
 export const FETCH_SCHOLAR_COURSES_FAILURE = 'FETCH_SCHOLAR_COURSES_FAILURE';
 export const FETCH_SCHOLAR_COURSES_SUCCESS = 'FETCH_SCHOLAR_COURSES_SUCCESS';
 
+export const FETCH_SCHOLAR_SUBMISSIONS_REQUEST = 'FETCH_SCHOLAR_SUBMISSIONS_REQUEST';
+export const FETCH_SCHOLAR_SUBMISSIONS_FAILURE = 'FETCH_SCHOLAR_SUBMISSIONS_FAILURE';
+export const FETCH_SCHOLAR_SUBMISSIONS_SUCCESS = 'FETCH_SCHOLAR_SUBMISSIONS_SUCCESS';
+
 export const ADD_SCHOLAR_REQUEST = 'ADD_SCHOLAR_REQUEST';
 export const ADD_SCHOLAR_FAILURE = 'ADD_SCHOLAR_FAILURE';
 export const ADD_SCHOLAR_SUCCESS = 'ADD_SCHOLAR_SUCCESS';
@@ -121,6 +125,27 @@ export function fetchScholarCourses(id) {
 				dispatch(fetchScholarCoursesSuccess(res.data, id));	
 			} else if (err) {
 				dispatch(fetchScholarCoursesFailure(err));
+			} 
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to get all the courses that the scholar  
+ * is enrolled in from the database 
+ * @param id the id of the scholar whose list of courses we want to retrieve 
+ * @return a function that would dispatch pure actions and make the API call
+ **/
+export function fetchScholarSubmissions(id) {
+	return dispatch => {
+		dispatch(fetchScholarSubmissionsRequest());
+
+		return axios.get('/api/v1/users/submissions/'+id)
+		.then((res, err) => {
+			if (res) {
+				dispatch(fetchScholarSubmissionsSuccess(res.data, id));	
+			} else if (err) {
+				dispatch(fetchScholarSubmissionsFailure(err));
 			} 
 		});
 	}	
@@ -289,7 +314,8 @@ export function fetchScholarsSuccess(data) {
 					link: item.portfolio,
 					chat_link: item.chat_link,
 					img: item.image,
-					list: [],
+					list: Immutable.List(),
+					submissionsList: Immutable.List(),
 					role: 'scholar',
 					description: item.about
 				}
@@ -334,6 +360,32 @@ export function fetchScholarCoursesSuccess(data, id) {
 }
 
 /**
+ * indicates that the API call for getting the scholar's enrolled courses succeeded
+ * @param data a list of course ids as returned by the API call
+ * @param id the id of the user who's enrolled in these courses
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload.userId the user id
+ * @return object.payload.list the list of course ids
+ **/
+export function fetchScholarSubmissionsSuccess(data, id) {
+	let list = Immutable.List();
+	console.log('data ', data);
+	data.forEach(function(item) {
+		list = list.push(item.id);
+	});
+
+	const request = {
+		userId: id,
+		submissionsList: list
+	};
+
+	return {
+		type: FETCH_SCHOLAR_SUBMISSIONS_SUCCESS,
+		payload: request
+	};
+}
+
+/**
  * indicates that the API call for adding a scholar succeeded
  * @param data the added scholar as returned by the API
  * @return object.type the action type to be passed to the reducer
@@ -350,6 +402,7 @@ export function addScholarSuccess(data) {
 			img: data.image,
 			role: 'scholar',
 			list: [],
+			submissionsList: [],
 			description: data.about
 		}
 	};
@@ -376,6 +429,7 @@ export function updateScholarSuccess(data) {
 			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
+			submissionsList: [],
 			role: 'scholar',
 			description: data.about
 		}
@@ -515,6 +569,33 @@ function fetchScholarCoursesFailure(error) {
 
 	return {
 		type: FETCH_SCHOLAR_COURSES_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call to  get all courses that a scholar is enrolled
+ * in from the database has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function fetchScholarSubmissionsRequest() {
+
+	return {
+		type: FETCH_SCHOLAR_SUBMISSIONS_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call to get the enrolled courses of a scholar  
+ * has failed
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function fetchScholarSubmissionsFailure(error) {
+
+	return {
+		type: FETCH_SCHOLAR_SUBMISSIONS_FAILURE,
 		payload: {error: error}
 	};
 }

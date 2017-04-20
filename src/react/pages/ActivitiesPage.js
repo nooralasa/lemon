@@ -79,7 +79,7 @@ class Activities extends Component {
    * actions to set up the state for rendering the activities page
    **/
   componentDidMount() {
-    this.props.mount(this.props.isActivitiesListViewable, this.props.currentVisibleActivity);
+    this.props.mount(this.props.isActivitiesListViewable, this.props.currentVisibleActivity, this.props.currentVisibleSubmission);
   }
 
   /**
@@ -122,7 +122,7 @@ class Activities extends Component {
             isListViewable: this.props.isActivitiesListViewable,
             isFormViewable: (this.props.userRole==='admin' && this.props.isFormViewable) || this.props.isSubmissionFormViewable,
             isAddControlsVisible: this.props.userRole==='admin',
-            isItemControlsVisible: this.props.userRole==='admin' || (this.props.currentVisibleSubmission!=null && this.props.currentUser==this.props.submissionsById[this.props.currentVisibleSubmission].body_params.user_id)
+            isItemControlsVisible: this.props.userRole==='admin' || (this.props.currentVisibleSubmission!=null && this.props.currentUser===this.props.submissionsById[this.props.currentVisibleSubmission].body_params.user_id)
           }}
           render={{
             renderListItems: this.renderListItems,

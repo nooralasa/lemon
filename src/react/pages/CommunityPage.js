@@ -63,7 +63,7 @@ class Community extends Component {
    * @return a div containing all the contents of the scholar
    **/
   renderItemPanel() {
-    return renderCommunityPanel(this.props.communityById[this.props.currentVisibleScholar], this.props.coursesById, this.props.handleThumbnailClick);
+    return renderCommunityPanel(this.props.communityById[this.props.currentVisibleScholar], this.props.coursesById, this.props.handleThumbnailClick, this.props.submissionsById, this.props.handleSubmissionsThumbnailClick);
   }
 
   /**

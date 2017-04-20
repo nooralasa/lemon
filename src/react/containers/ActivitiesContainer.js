@@ -69,20 +69,22 @@ const mapStateToProps = (state) => {
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
-    mount: (isActivitiesListViewable, currentVisibleActivity) => {
-      dispatch(fetchActivities());
-      dispatch(fetchRequirements());
-      dispatch(fetchObjectives());
-      dispatch(fetchSubmissions());
-      dispatch(fetchScholars());
-      dispatch(fetchCourses());
-      if (!isActivitiesListViewable && currentVisibleActivity) {
-        dispatch(fetchActivity(currentVisibleActivity));
-        dispatch(fetchActivityObjectives(currentVisibleActivity));
-        dispatch(fetchActivityRequirements(currentVisibleActivity));
-        dispatch(fetchActivitySubmissions(currentVisibleActivity)); 
+    mount: (isActivitiesListViewable, currentVisibleActivity, currentVisibleSubmission) => {
+      if (currentVisibleSubmission===null) {
+        dispatch(fetchActivities());
+        dispatch(fetchRequirements());
+        dispatch(fetchObjectives());
+        dispatch(fetchSubmissions());
+        dispatch(fetchScholars());
+        dispatch(fetchCourses());
+        if (!isActivitiesListViewable && currentVisibleActivity) {
+          dispatch(fetchActivity(currentVisibleActivity));
+          dispatch(fetchActivityObjectives(currentVisibleActivity));
+          dispatch(fetchActivityRequirements(currentVisibleActivity));
+          dispatch(fetchActivitySubmissions(currentVisibleActivity)); 
+        }
+        dispatch(currentScholar((res) => {return res}));
       }
-      dispatch(currentScholar((res) => {return res}));
     },
     handleButtonClick: (user_id) => {
       return (activity_id) => {

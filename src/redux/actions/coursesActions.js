@@ -16,6 +16,10 @@ export const FETCH_COURSE_USERS_REQUEST = 'FETCH_COURSE_USERS_REQUEST';
 export const FETCH_COURSE_USERS_FAILURE = 'FETCH_COURSE_USERS_FAILURE';
 export const FETCH_COURSE_USERS_SUCCESS = 'FETCH_COURSE_USERS_SUCCESS';
 
+export const FETCH_COURSE_ACTIVITIES_REQUEST = 'FETCH_COURSE_ACTIVITIES_REQUEST';
+export const FETCH_COURSE_ACTIVITIES_FAILURE = 'FETCH_COURSE_ACTIVITIES_FAILURE';
+export const FETCH_COURSE_ACTIVITIES_SUCCESS = 'FETCH_COURSE_ACTIVITIES_SUCCESS';
+
 export const ADD_COURSE_REQUEST = 'ADD_COURSE_REQUEST';
 export const ADD_COURSE_FAILURE = 'ADD_COURSE_FAILURE';
 export const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
@@ -96,6 +100,26 @@ export function fetchCourseUsers(id) {
 		})
 		.catch(err => {
 			dispatch(fetchCourseUsersFailure(err));	
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to get all the scholars who are 
+ * associated with the specified course from the database
+ * @param id the id of the course
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function fetchCourseActivities(id) {
+	return dispatch => {
+		dispatch(fetchCourseActivitiesRequest());
+
+		return axios.get('/api/v1/courses/activities/'+id)
+		.then(res => {
+			dispatch(fetchCourseActivitiesSuccess(res.data, id));		
+		})
+		.catch(err => {
+			dispatch(fetchCourseActivitiesFailure(err));	
 		});
 	}	
 }
@@ -226,6 +250,7 @@ export function fetchCoursesSuccess(data) {
 					chat_link: item.chat_link,
 					img: item.image,
 					list: Immutable.List(),
+					activitiesList: Immutable.List(),
 					description: item.description
 				})
 			}));
@@ -269,6 +294,31 @@ export function fetchCourseUsersSuccess(data, id) {
 }
 
 /**
+ * indicates that the API call for getting all users associated with a course succeeded
+ * @param data a list of ids of all users associated with a course
+ * @param id the id of the course  
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload.courseId the id of the course in question
+ * @return object.payload.list a list of enrolled scholar ids
+ **/
+export function fetchCourseActivitiesSuccess(data, id) {
+	let activitiesList = Immutable.List();
+	data.forEach(function(item) {
+		activitiesList = activitiesList.push(item.id);
+	});
+
+	const request = {
+		courseId: id,
+		activitiesList: activitiesList
+	};
+
+	return {
+		type: FETCH_COURSE_ACTIVITIES_SUCCESS,
+		payload: request
+	};
+}
+
+/**
  * indicates that the API call for adding a course to the database succeeded
  * @param data a course object as returned by the database
  * @return object.type the action type to be passed to the reducer
@@ -284,6 +334,7 @@ export function addCourseSuccess(data) {
 			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
+			activitiesList: [],
 			description: data.description
 		}
 	};
@@ -310,6 +361,7 @@ export function updateCourseSuccess(data) {
 			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
+			activitiesList: [],
 			description: data.description
 		}
 	};
@@ -410,6 +462,31 @@ function fetchCourseUsersFailure(error) {
 
 	return {
 		type: FETCH_COURSE_USERS_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
+ * indicates that an API call for retrieving all enrolled scholars has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function fetchCourseActivitiesRequest() {
+
+	return {
+		type: FETCH_COURSE_ACTIVITIES_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call for retrieving all enrolled scholars failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function fetchCourseActivitiesFailure(error) {
+
+	return {
+		type: FETCH_COURSE_ACTIVITIES_FAILURE,
 		payload: {error: error}
 	};
 }

@@ -148,22 +148,24 @@ export function renderAnnouncementPanel(announcement, user) {
   );
 }
 
-export function renderCoursePanel(course, communityById, onThumbnailClick, handleBtn1) {
+export function renderCoursePanel(course, communityById, onThumbnailClick, handleBtn1, activitiesById, onActivitiesThumbnailClick) {
   return (
     <div>
       {renderTitleAndControls(course['body_params'], null, 'Enroll Now', 'Course Channel', handleBtn1, course['id'])}
       {nextModule(moduleDescription(course['body_params'], 'Course Description'))}
       {nextModule(<ThumbnailsList list={course['body_params']['list']} items={communityById} header={'Enrolled Scholars'} onUserClick={onThumbnailClick} url={'/build/community'}/>)}
+      {nextModule(<ThumbnailsList list={course['body_params']['activitiesList']} items={activitiesById} header='Activities' onUserClick={onActivitiesThumbnailClick} url={'/build/activities'} />)}
     </div>
   );
 }
 
-export function renderCommunityPanel(scholar, coursesById, onThumbnailClick) {
+export function renderCommunityPanel(scholar, coursesById, onThumbnailClick, submissionsById, onSubmissionsThumbnailClick) {
   return (
     <div>
       {renderTitleAndControls(scholar['body_params'], null, 'Personal Portfolio', 'Direct Message')}
       {nextModule(moduleDescription(scholar['body_params'], 'About Scholar'))}
       {nextModule(<ThumbnailsList list={scholar['body_params']['list']} items={coursesById} header={'Enrolled Courses'} onUserClick={onThumbnailClick} url={'/build/courses'}/>)}
+      {nextModule(<ThumbnailsList list={scholar['body_params']['submissionsList']} items={submissionsById} header='Activity Submissions' onUserClick={onSubmissionsThumbnailClick} url={'/build/activities'} />)}
     </div>
   );
 }

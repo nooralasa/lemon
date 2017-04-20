@@ -22,6 +22,9 @@ import {
 	FETCH_SCHOLAR_COURSES_REQUEST, 
 	FETCH_SCHOLAR_COURSES_SUCCESS, 
 	FETCH_SCHOLAR_COURSES_FAILURE,
+	FETCH_SCHOLAR_SUBMISSIONS_REQUEST, 
+	FETCH_SCHOLAR_SUBMISSIONS_SUCCESS, 
+	FETCH_SCHOLAR_SUBMISSIONS_FAILURE,
 	CURRENT_SCHOLAR_REQUEST, 
 	CURRENT_SCHOLAR_SUCCESS, 
 	CURRENT_SCHOLAR_FAILURE
@@ -72,9 +75,13 @@ function community(state = initialCommunityState, action) {
 		case FETCH_SCHOLAR_COURSES_SUCCESS:
 			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
 			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
-			let mutableState = state.toJS();
-			mutableState['communityById'][action.payload.userId]['body_params']['list'] = action.payload.list;
-			state = Immutable.fromJS(mutableState);
+			state = state.updateIn(['communityById', action.payload.userId, 'body_params', 'list'], list => action.payload.list);
+			return state
+
+		case FETCH_SCHOLAR_SUBMISSIONS_SUCCESS:
+			state = state.updateIn(['networkStatus','isRequesting'], isRequesting => false);
+			state = state.updateIn(['networkStatus','responses'], responses => responses.push(action));
+			state = state.updateIn(['communityById', action.payload.userId, 'body_params', 'submissionsList'], submissionsList => action.payload.submissionsList);
 			return state
 
 		case ADD_SCHOLAR_COURSE_SUCCESS:
@@ -108,6 +115,7 @@ function community(state = initialCommunityState, action) {
 		case CURRENT_SCHOLAR_REQUEST:
 		case FETCH_SCHOLARS_REQUEST:
 		case FETCH_SCHOLAR_COURSES_REQUEST:
+		case FETCH_SCHOLAR_SUBMISSIONS_REQUEST:
 		case ADD_SCHOLAR_COURSE_REQUEST:
 		case ADD_SCHOLAR_REQUEST:
 		case UPDATE_SCHOLAR_REQUEST:
@@ -119,6 +127,7 @@ function community(state = initialCommunityState, action) {
 		case CURRENT_SCHOLAR_FAILURE:
 		case FETCH_SCHOLARS_FAILURE:
 		case FETCH_SCHOLAR_COURSES_FAILURE:
+		case FETCH_SCHOLAR_SUBMISSIONS_FAILURE:
 		case ADD_SCHOLAR_COURSE_FAILURE:
 		case ADD_SCHOLAR_FAILURE:
 		case UPDATE_SCHOLAR_FAILURE:
