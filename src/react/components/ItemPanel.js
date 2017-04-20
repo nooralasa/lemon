@@ -1,6 +1,44 @@
 import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
+const Modal = React.createClass({
+  getInitialState() {
+    return { showModal: false };
+  },
+
+  close() {
+    this.setState({ showModal: false });
+  },
+
+  open() {
+    this.setState({ showModal: true });
+  },
+
+  render() {
+    return (
+      <div>
+        
+        <rbs.Button bsStyle="link" onClick={this.props.onEditBtnClick}><i className="fa fa-edit fa-fw" /></rbs.Button>
+        <rbs.Button bsStyle="link" onClick={this.open}><i className="fa fa-trash fa-fw" /></rbs.Button>
+        
+
+        <rbs.Modal show={this.state.showModal} onHide={this.close}>
+          <rbs.Modal.Header closeButton>
+            <rbs.Modal.Title>Confirm Deletion</rbs.Modal.Title>
+          </rbs.Modal.Header>
+          <rbs.Modal.Body>
+            <p>Are you sure you want to proceed with deletion?</p>
+          </rbs.Modal.Body>
+          <rbs.Modal.Footer>
+            <rbs.Button bsStyle="danger" onClick={this.props.onDeleteBtnClick}>Delete</rbs.Button>
+            <rbs.Button onClick={this.close}>Close</rbs.Button>
+          </rbs.Modal.Footer>
+        </rbs.Modal>
+      </div>
+    );
+  }
+});
+
 class ItemControls extends Component {
 
   render() {
@@ -9,8 +47,7 @@ class ItemControls extends Component {
         <div>
           <rbs.Button bsStyle="link" onClick={this.props.onUserClick}><i className="fa fa-arrow-left fa-fw" /> <span>Full List</span></rbs.Button>
           <rbs.ButtonGroup style={{float: 'right'}}>
-            <rbs.Button bsStyle="link" onClick={this.props.onEditBtnClick}><i className="fa fa-edit fa-fw" /></rbs.Button>
-            <rbs.Button bsStyle="link" onClick={this.props.onDeleteBtnClick}><i className="fa fa-trash fa-fw" /></rbs.Button>
+            <Modal onEditBtnClick={this.props.onEditBtnClick} onDeleteBtnClick={this.props.onDeleteBtnClick} /> 
           </rbs.ButtonGroup>
         </div>
       );

@@ -57,11 +57,20 @@ function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleB
   );
 }
 
-function moduleDescription(body_params, header) {
+function dangerousModuleDescription(body_params, header) {
   return (
     <div>
       <p style={{textAlign: 'left'}}>{header}</p>
       <p style={{fontWeight: 'normal'}} dangerouslySetInnerHTML={{__html: body_params['description']}}/>
+    </div>
+  );
+}
+
+function moduleDescription(body_params, header) {
+  return (
+    <div>
+      <p style={{textAlign: 'left'}}>{header}</p>
+      <p style={{fontWeight: 'normal'}}>{body_params['description']}</p>
     </div>
   );
 }
@@ -152,7 +161,7 @@ export function renderCoursePanel(course, communityById, onThumbnailClick, handl
   return (
     <div>
       {renderTitleAndControls(course['body_params'], null, 'Enroll Now', 'Course Channel', handleBtn1, course['id'])}
-      {nextModule(moduleDescription(course['body_params'], 'Course Description'))}
+      {nextModule(dangerousModuleDescription(course['body_params'], 'Course Description'))}
       {nextModule(<ThumbnailsList list={course['body_params']['list']} items={communityById} header={'Enrolled Scholars'} onUserClick={onThumbnailClick} url={'/build/community'}/>)}
       {nextModule(<ThumbnailsList list={course['body_params']['activitiesList']} items={activitiesById} header='Activities' onUserClick={onActivitiesThumbnailClick} url={'/build/activities'} />)}
     </div>
@@ -175,7 +184,7 @@ export function renderActivityPanel(activity, handleBtn1, course, objectivesById
   return (
     <div>
       {renderTitleAndControls(activity['body_params'], course, 'Add Submission', 'Gitter Chat', handleBtn1, '')}
-      {nextModule(moduleDescription(activity['body_params'], 'Activity Overview'))}
+      {nextModule(dangerousModuleDescription(activity['body_params'], 'Activity Overview'))}
       {nextModule(moduleChecklist('Learning Objectives', activity.body_params.objectivesList, objectivesById))}
       {nextModule(moduleChecklist('Requirements', activity.body_params.requirementsList, requirementsById))}
       {nextModule(<ThumbnailsList list={activity['body_params']['submissionsList']} items={submissionsById} header='Submissions' onUserClick={onThumbnailClick} />)}

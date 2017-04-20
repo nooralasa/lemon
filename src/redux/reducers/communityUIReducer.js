@@ -53,7 +53,7 @@ const initialCommunityUIState = Immutable.fromJS({
 		textAreaBoxes: [
 			{
 				label: "Scholar's Bio",
-				placeholder: 'A few paragraphs describing you. You may use HTML tags for rendering purposes.',
+				placeholder: 'A couple of sentences describing you.',
 				value: '',
 				defaultvalue: ''
 			}
