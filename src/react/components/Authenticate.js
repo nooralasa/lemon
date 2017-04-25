@@ -37,6 +37,9 @@ import Footer from '../components/Footer';
 
 class Authenticate extends Component {
   render() {
+    if (this.props.currentlyLoggedIn===null) {
+      return null;
+    }
   	if (this.props.currentlyLoggedIn) {
       return (
         <div>
