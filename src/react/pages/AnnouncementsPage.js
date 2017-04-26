@@ -63,7 +63,7 @@ class Announcements extends Component {
   }
 
   renderItemForm() {
-    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleAnnouncement, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
+    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleAnnouncement, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.handleListClick);
   }
 
 

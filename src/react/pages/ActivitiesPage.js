@@ -45,9 +45,9 @@ class Activities extends Component {
 
   renderItemForm() {
     if (this.props.isSubmissionFormViewable) {
-      return renderSubmissionForm(this.props.submissionFormData, this.props.handleFormUpdates, this.props.currentVisibleSubmission, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
+      return renderSubmissionForm(this.props.submissionFormData, this.props.handleFormUpdates, this.props.currentVisibleSubmission, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.handleListClick, this.props.currentVisibleActivity);
     } else {
-      return renderActivityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.coursesList, this.props.coursesById, this.props.handleAddFormListEntry);
+      return renderActivityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleActivity, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.handleListClick, this.props.coursesList, this.props.coursesById, this.props.handleAddFormListEntry);
     }
   }
 

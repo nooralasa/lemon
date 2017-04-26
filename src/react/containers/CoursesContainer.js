@@ -9,6 +9,7 @@
  *                 component as props
  **/
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 //Courses Page Presentational Component
 import CoursesPage from '../pages/CoursesPage';
@@ -100,10 +101,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
       dispatch(fetchCourseActivities(id));
+      browserHistory.push('/build/courses/'+id);
     },
     handlePanelClick: () => {
     	dispatch(fetchCourses());
       dispatch(displayFetchedCourses());
+      browserHistory.push('/build/courses/');
     },
     handleAddButtonClick: () => {
       dispatch(updateCourseFormData(0, 'textBoxes', '',''));
@@ -130,6 +133,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(deleteCourse(id));
         dispatch(fetchCourses());
         dispatch(displayFetchedCourses());
+        browserHistory.push('/build/courses/');
       }
     },
     handleEditButtonClick: (coursesById, currentVisibleCourse) => {
@@ -149,6 +153,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchScholar(''+id));
       dispatch(fetchScholarCourses(''+id));
       dispatch(fetchScholarSubmissions(''+id));
+      browserHistory.push('/build/community/'+id);
     },
     handleActivitiesThumbnailClick: (id) => {
       dispatch(fetchActivities());
@@ -163,10 +168,12 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(fetchActivityRequirements(id));
         dispatch(fetchActivitySubmissions(id)); 
       }
+      browserHistory.push('/build/activities/'+id);
     },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
+        browserHistory.push('/build/community/'+id);
       }
     },
     authenticate: (cb) => {

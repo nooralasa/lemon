@@ -9,6 +9,7 @@
  *                 component as props
  **/
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 //Announcements Page Presentational Component
 import AnnouncementsPage from '../pages/AnnouncementsPage';
@@ -19,7 +20,6 @@ import {fetchScholars, currentScholar} from '../../redux/actions/communityAction
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 import {fetchAnnouncement, displayFetchedAnnouncements, fetchAnnouncementForm, updateAnnouncementFormData} from '../../redux/actions/announcementsUIActions';
 
-const FIRST_ANNOUNCEMENT_ID = 1;
 /**
  * a function declaration to be called  by React-Redux 
  * here we specify what parts of the application state to share with the 
@@ -78,10 +78,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleListClick: (id) => {
       dispatch(fetchAnnouncement(id));
+      browserHistory.push('/build/announcements/'+id);
     },
     handlePanelClick: () => {
       dispatch(fetchAnnouncements());
       dispatch(displayFetchedAnnouncements());
+      browserHistory.push('/build/announcements/');
     },
     handleAddButtonClick: () => {
       dispatch(updateAnnouncementFormData(0, 'textBoxes', '',''));
@@ -115,11 +117,13 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(deleteAnnouncement(id));
         dispatch(fetchAnnouncements());
         dispatch(displayFetchedAnnouncements());
+        browserHistory.push('/build/announcements/');
       }
     },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
+        browserHistory.push('/build/community/'+id);
       }
     },
     authenticate: (cb) => {

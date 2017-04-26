@@ -114,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleSubmissionButton1Click: (activity_id) => {
       dispatch(fetchActivity(activity_id));
+      browserHistory.push('/build/activities/'+activity_id);
     },
     handleListClick: (id) => {
       dispatch(fetchActivities());
@@ -128,11 +129,13 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(fetchActivityRequirements(id));
         dispatch(fetchActivitySubmissions(id)); 
       }
+      browserHistory.push('/build/activities/'+id);
     },
     handlePanelClick: () => {
       dispatch(fetchActivities());
       dispatch(fetchCourses());
       dispatch(displayFetchedActivities());
+      browserHistory.push('/build/activities/');
     },
     handleAddButtonClick: (isActivitiesListViewable, currentVisibleActivity) => {
       return () => {
@@ -193,15 +196,15 @@ const mapDispatchToProps = (dispatch) => {
       if (currentVisibleSubmission) {
         return () => {
           dispatch(deleteSubmission(currentVisibleSubmission));
-          dispatch(fetchActivities());
-          dispatch(fetchCourses());
-          dispatch(displayFetchedActivities());
+          dispatch(fetchActivity(id));
+          browserHistory.push('/build/activities/');
         }
       } else {
         return () => {
           dispatch(deleteActivity(id));
           dispatch(fetchActivities());
           dispatch(displayFetchedActivities());
+          browserHistory.push('/build/activities/');
         }
       }
     },
@@ -245,11 +248,13 @@ const mapDispatchToProps = (dispatch) => {
     handleThumbnailClick: (activity_id) => {
       return (id) => {
         dispatch(fetchSubmission(activity_id, id));
+        browserHistory.push('/build/activities/'+activity_id+'/submissions/'+id);
       }
     },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
+        browserHistory.push('/build/community/'+id);
       }
     },
     authenticate: (cb) => {

@@ -30,7 +30,7 @@ const Modal = React.createClass({
             <p>Are you sure you want to proceed with deletion?</p>
           </rbs.Modal.Body>
           <rbs.Modal.Footer>
-            <rbs.Button bsStyle="danger" onClick={this.props.onDeleteBtnClick}>Delete</rbs.Button>
+            <rbs.Button bsStyle="danger" onClick={() => { this.props.onDeleteBtnClick(); this.close();}}>Delete</rbs.Button>
             <rbs.Button onClick={this.close}>Close</rbs.Button>
           </rbs.Modal.Footer>
         </rbs.Modal>

@@ -61,7 +61,7 @@ class Courses extends Component {
   }
 
   renderItemForm() {
-    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleCourse, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
+    return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleCourse, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.handleListClick);
   }
 
   /**

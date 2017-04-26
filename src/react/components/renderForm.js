@@ -133,10 +133,10 @@ function renderSubmitButton(formData, handleSubmit, message, otherScholar) {
   );
 } 
 
-export function renderCommunityForm(formData, handleFormUpdates, currentVisibleScholar, currentUser, handleEditFormSubmission, handlePanelClick) {
+export function renderCommunityForm(formData, handleFormUpdates, currentVisibleScholar, currentUser, handleEditFormSubmission, handlePanelClick, handleListClick) {
   const handleSubmit = (values) => {
     handleEditFormSubmission(values, currentVisibleScholar!==currentUser);
-    handlePanelClick();
+    handleListClick(currentVisibleScholar);
   };
 
   const message = (() => {
@@ -165,12 +165,12 @@ export function renderCommunityForm(formData, handleFormUpdates, currentVisibleS
   );
 }
 
-export function renderModuleForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick) {
+export function renderModuleForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick, handleListClick) {
   const handleSubmit = (() => {
     if (currentVisible) {
       return (values) => {
         handleEditFormSubmission(values);
-        handlePanelClick();
+        handleListClick(currentVisible);
       }
     } else {
       return (values) => {
@@ -189,12 +189,12 @@ export function renderModuleForm(formData, handleFormUpdates, currentVisible, ha
   );
 }
 
-export function renderActivityForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick, coursesList, coursesById, handleAddFormListEntry) {
+export function renderActivityForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick, handleListClick, coursesList, coursesById, handleAddFormListEntry) {
   const handleSubmit = (() => {
     if (currentVisible) {
       return (values) => {
         handleEditFormSubmission(values);
-        handlePanelClick();
+        handleListClick(currentVisible);
       }
     } else {
       return (values) => {
@@ -215,12 +215,12 @@ export function renderActivityForm(formData, handleFormUpdates, currentVisible, 
   );
 }
 
-export function renderSubmissionForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick) {
+export function renderSubmissionForm(formData, handleFormUpdates, currentVisible, handleEditFormSubmission, handleAddFormSubmission, handlePanelClick, handleListClick, currentVisibleActivity) {
   const handleSubmit = (() => {
     if (currentVisible) {
       return (values) => {
         handleEditFormSubmission(values);
-        handlePanelClick();
+        handleListClick(currentVisibleActivity);
       }
     } else {
       return (values) => {

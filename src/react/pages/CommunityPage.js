@@ -45,7 +45,7 @@ class Community extends Component {
   }
 
   renderItemForm() {
-    return renderCommunityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleScholar, this.props.currentUser, this.props.handleEditFormSubmission, this.props.handlePanelClick);
+    return renderCommunityForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleScholar, this.props.currentUser, this.props.handleEditFormSubmission, this.props.handlePanelClick, this.props.handleListClick);
   }
 
   /**

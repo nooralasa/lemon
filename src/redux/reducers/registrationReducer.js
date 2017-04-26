@@ -95,7 +95,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    heading: "You're all set!",
 	    body: ["You're now all set up and ready to start learning. Click the button to complete registration!"],
 	    button: 'End this tutorial!',
-	    a: '/build/announcements',
+	    a: '/build/announcements/1',
 	    img: ''
 	  }
 	},

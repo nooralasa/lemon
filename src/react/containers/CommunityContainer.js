@@ -9,6 +9,7 @@
  *                 component as props
  **/
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 //Community Page Presentational Component
 import CommunityPage from '../pages/CommunityPage';
@@ -96,10 +97,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchScholar(id));
       dispatch(fetchScholarCourses(id));
       dispatch(fetchScholarSubmissions(id));
+      browserHistory.push('/build/community/'+id);
     },
     handlePanelClick: () => {
       dispatch(fetchScholars());
       dispatch(displayFetchedScholars());
+      browserHistory.push('/build/community/');
     },
     handleFormUpdates: (index, type, value) => {
       dispatch(updateScholarFormData(index, type, value, ''));
@@ -111,6 +114,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(displayFetchedScholars());
         if (id===currentUser) {
           window.location.replace('/logout');
+        } else {
+          browserHistory.push('/build/community/');
         }
       }
     },
@@ -145,15 +150,18 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchActivities());
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
+      browserHistory.push('/build/courses/'+id);
     },
     handleSubmissionsThumbnailClick: (submissionsById) => {
       return (id) => {
         dispatch(fetchSubmission(submissionsById[id].body_params.activity_id, id));
+        browserHistory.push('/build/activities/'+submissionsById[id].body_params.activity_id+'/submissions/'+id);
       }
     },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
+        browserHistory.push('/build/community/'+id);
       }
     },
     authenticate: (cb) => {
