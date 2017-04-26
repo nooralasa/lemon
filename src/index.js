@@ -89,9 +89,14 @@ ReactDOM.render(
 		<Router history={browserHistory}>
 			<Route path="/build" component={LandingPage} />
 		  <Route path="/build/announcements" component={AnnouncementsContainer} />
+		  <Route path="/build/announcements/:id" component={AnnouncementsContainer} />
 		  <Route path="/build/courses" component={CoursesContainer} />
+		  <Route path="/build/courses/:id" component={CoursesContainer} />
 		  <Route path="/build/community" component={CommunityContainer} />
+		  <Route path="/build/community/:id" component={CommunityContainer} />
 		  <Route path="/build/activities" component={ActivitiesContainer} />
+		  <Route path="/build/activities/:id" component={ActivitiesContainer} />
+		  <Route path="/build/activities/:id/submissions/:submission_id" component={ActivitiesContainer} />
 		  <Route path="/build/register/:id" component={RegistrationContainer} />
 		  <Route path="/build/404" component={NotFoundPage} />
 		</Router>

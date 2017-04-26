@@ -135,6 +135,9 @@ const mapDispatchToProps = (dispatch) => {
       return () => {
         dispatch(fetchScholar(id));
       }
+    },
+    authenticate: (cb) => {
+      dispatch(currentScholar(cb));
     }
   }
 }
@@ -169,7 +172,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.communityById, stateProps.currentUser, stateProps.currentVisibleScholar),
     handleEditFormSubmission: dispatchProps.handleEditFormSubmission(stateProps.currentVisibleScholar),
     handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
-    handleFormUpdates: dispatchProps.handleFormUpdates
+    handleFormUpdates: dispatchProps.handleFormUpdates,
+    authenticate: dispatchProps.authenticate
   }
 }
 

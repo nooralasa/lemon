@@ -102,9 +102,9 @@ class Announcements extends Component {
   render() {
     return (
       <Authenticate 
-        currentlyLoggedIn={this.props.currentUser}
         title={'Announcements'}
-        handleProfileClick={this.props.handleProfileClick}>
+        handleProfileClick={this.props.handleProfileClick}
+        authenticate={this.props.authenticate}>
 
         <ItemsPanel 
           logic={{

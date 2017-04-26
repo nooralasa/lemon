@@ -259,11 +259,12 @@ export function deleteScholar(id) {
  **/
 export function currentScholarSuccess(data, cb) {
 	const request = {
+		authenticated: data.authenticated,
 		user_id: data.user_id,
 		role: data.role
 	};
 
-	cb('success');
+	cb(null, request);
 
 	return {
 		type: CURRENT_SCHOLAR_SUCCESS,
@@ -483,7 +484,7 @@ function currentScholarFailure(error, cb) {
 	console.log('current scholar failure action creator');
 	console.log(error);
 
-	cb('error');
+	cb(error, null);
 	
 	return {
 		type: CURRENT_SCHOLAR_FAILURE,
@@ -681,5 +682,3 @@ function deleteScholarFailure(error) {
 		payload: {error: error}
 	};
 }
-
-

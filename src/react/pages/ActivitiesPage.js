@@ -113,9 +113,9 @@ class Activities extends Component {
   render() {
     return (
       <Authenticate 
-        currentlyLoggedIn={this.props.currentUser}
         title={'Activities'}
-        handleProfileClick={this.props.handleProfileClick}>
+        handleProfileClick={this.props.handleProfileClick}
+        authenticate={this.props.authenticate}>
 
         <ItemsPanel 
           logic={{

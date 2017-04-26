@@ -105,9 +105,9 @@ class Community extends Component {
   render() {
     return (
       <Authenticate 
-        currentlyLoggedIn={this.props.currentUser}
         title={'Community'}
-        handleProfileClick={this.props.handleProfileClick}>
+        handleProfileClick={this.props.handleProfileClick}
+        authenticate={this.props.authenticate}>
 
           <ItemsPanel 
             logic={{

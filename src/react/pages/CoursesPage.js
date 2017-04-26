@@ -104,9 +104,9 @@ class Courses extends Component {
   render() {
     return (
       <Authenticate 
-        currentlyLoggedIn={this.props.currentUser}
         title={'Courses'}
-        handleProfileClick={this.props.handleProfileClick}>
+        handleProfileClick={this.props.handleProfileClick}
+        authenticate={this.props.authenticate}>
 
         <ItemsPanel
           logic={{
