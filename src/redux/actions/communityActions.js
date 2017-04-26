@@ -401,8 +401,8 @@ export function addScholarSuccess(data) {
 			chat_link: data.chat_link,
 			img: data.image,
 			role: 'scholar',
-			list: [],
-			submissionsList: [],
+			list: Immutable.List(),
+			submissionsList: Immutable.List(),
 			description: data.about
 		}
 	};
@@ -428,8 +428,8 @@ export function updateScholarSuccess(data) {
 			link: data.portfolio,
 			chat_link: data.chat_link,
 			img: data.image,
-			list: [],
-			submissionsList: [],
+			list: Immutable.List(),
+			submissionsList: Immutable.List(),
 			role: 'scholar',
 			description: data.about
 		}

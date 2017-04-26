@@ -18,7 +18,7 @@ import {fetchCourse, displayFetchedCourses, fetchCourseForm, updateCourseFormDat
 import {fetchActivities, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions} from '../../redux/actions/activitiesActions';
 import {fetchActivity} from '../../redux/actions/activitiesUIActions';
 import {fetchCourses, fetchCourseUsers, fetchCourseActivities, enrollInCourse, addCourse, deleteCourse, updateCourse} from '../../redux/actions/coursesActions';
-import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
+import {fetchScholars, fetchScholarCourses, fetchScholarSubmissions, currentScholar} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
 /**
@@ -127,8 +127,9 @@ const mapDispatchToProps = (dispatch) => {
       }
     },
     handleThumbnailClick: (id) => {
-      dispatch(fetchScholar(id));
-      dispatch(fetchScholarCourses(id));
+      dispatch(fetchScholar(''+id));
+      dispatch(fetchScholarCourses(''+id));
+      dispatch(fetchScholarSubmissions(''+id));
     },
     handleActivitiesThumbnailClick: (id) => {
       dispatch(fetchActivities());

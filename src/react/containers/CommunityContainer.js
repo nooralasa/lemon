@@ -66,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchSubmissions());
       dispatch(fetchActivities());
       if (!isCommunityListViewable && currentVisibleScholar) {
+        dispatch(fetchCourse(currentVisibleScholar));
         dispatch(fetchScholarCourses(currentVisibleScholar));
         dispatch(fetchScholarSubmissions(currentVisibleScholar));
       }
@@ -118,6 +119,10 @@ const mapDispatchToProps = (dispatch) => {
       }
     },
     handleThumbnailClick: (id) => {
+      dispatch(fetchScholars());
+      dispatch(fetchCourses());
+      dispatch(fetchSubmissions());
+      dispatch(fetchActivities());
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
     },
