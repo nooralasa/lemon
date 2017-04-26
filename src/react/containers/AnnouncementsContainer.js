@@ -56,10 +56,25 @@ const mapStateToProps = (state) => {
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
-    mount: () => {
-      dispatch(currentScholar((res) => {return res}));
-      dispatch(fetchAnnouncements(() => {dispatch(fetchAnnouncement(FIRST_ANNOUNCEMENT_ID));}));
-      dispatch(fetchScholars());
+    mount: (router) => { 
+      if (router.params.id) {
+        return () => {
+          dispatch(currentScholar((res) => {return res}));
+          dispatch(fetchAnnouncements());
+          dispatch(fetchScholars());
+          if (router.params.id) {
+            dispatch(fetchAnnouncement(parseInt(router.params.id, 10)));
+          } else {
+            dispatch(displayFetchedAnnouncements());
+          }
+        }
+      } else {
+        return () => {
+          dispatch(currentScholar((res) => {return res}));
+          dispatch(fetchAnnouncements());
+          dispatch(fetchScholars());
+        }
+      }
     },
     handleListClick: (id) => {
       dispatch(fetchAnnouncement(id));
@@ -122,7 +137,7 @@ const mapDispatchToProps = (dispatch) => {
  * @param dispatchProps all the functions defined above to dispatch events
  * @return the mixture of these two props to be passed into the presentation component
  **/
-const mergeProps = (stateProps, dispatchProps) => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     currentUser: stateProps.currentUser,
     userRole: stateProps.userRole,
@@ -133,7 +148,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     currentVisibleAnnouncement: stateProps.currentVisibleAnnouncement,
     isFormViewable: stateProps.isFormViewable,
     formData: stateProps.formData,
-    mount: dispatchProps.mount,
+    mount: dispatchProps.mount(ownProps.router),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleAddButtonClick: dispatchProps.handleAddButtonClick,

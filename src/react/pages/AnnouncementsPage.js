@@ -58,6 +58,7 @@ class Announcements extends Component {
    **/
   renderItemPanel() {
     const announcement = this.props.announcementsById[this.props.currentVisibleAnnouncement];
+    console.log('announcement ', announcement);
     return renderAnnouncementPanel(announcement, this.props.communityById[announcement['body_params']['user']]['body_params']);
   }
 
@@ -65,14 +66,7 @@ class Announcements extends Component {
     return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleAnnouncement, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick);
   }
 
-  /**
-   * a function declaration that is called  by React just before this component 
-   * is rendered; here we call the mount function which dispatches relevant Redux
-   * actions to set up the state for rendering the announcements page
-   **/
-  componentDidMount() {
-    this.props.mount();
-  }
+
 
   /**
    * a function declaration that is called  by React to render this component   
@@ -104,7 +98,8 @@ class Announcements extends Component {
       <Authenticate 
         title={'Announcements'}
         handleProfileClick={this.props.handleProfileClick}
-        authenticate={this.props.authenticate}>
+        authenticate={this.props.authenticate}
+        mount={this.props.mount}>
 
         <ItemsPanel 
           logic={{

@@ -67,15 +67,6 @@ class Community extends Component {
   }
 
   /**
-   * a function declaration that is called  by React just before this component 
-   * is rendered; here we call the mount function which dispatches relevant Redux
-   * actions to set up the state for rendering the community page
-   **/
-  componentDidMount() {
-    this.props.mount(this.props.isCommunityListViewable, this.props.currentVisibleScholar);
-  }
-
-  /**
    * a function declaration that is called  by React to render this component   
    * @component Navbar the navbar to be customized for logged in users
    *  @prop items a list of lists. Each list contains the name of each item on
@@ -107,7 +98,8 @@ class Community extends Component {
       <Authenticate 
         title={'Community'}
         handleProfileClick={this.props.handleProfileClick}
-        authenticate={this.props.authenticate}>
+        authenticate={this.props.authenticate}
+        mount={() => {this.props.mount(this.props.isCommunityListViewable, this.props.currentVisibleScholar);}}>
 
           <ItemsPanel 
             logic={{

@@ -65,15 +65,6 @@ class Courses extends Component {
   }
 
   /**
-   * a function declaration that is called by React just before this component 
-   * is rendered; here we call the mount function which dispatches relevant Redux
-   * actions to set up the state for rendering the courses page
-   **/
-  componentDidMount() {
-    this.props.mount(this.props.isCoursesListViewable, this.props.currentVisibleCourse);
-  }
-
-  /**
    * a function declaration that is called  by React to render this component   
    * @component Navbar the navbar to be customized for logged in users
    *  @prop items a list of lists. Each list contains the name of each item on
@@ -106,7 +97,8 @@ class Courses extends Component {
       <Authenticate 
         title={'Courses'}
         handleProfileClick={this.props.handleProfileClick}
-        authenticate={this.props.authenticate}>
+        authenticate={this.props.authenticate}
+        mount={() => {this.props.mount(this.props.isCoursesListViewable, this.props.currentVisibleCourse);}}>
 
         <ItemsPanel
           logic={{

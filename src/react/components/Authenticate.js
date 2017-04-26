@@ -53,6 +53,7 @@ class Authenticate extends Component {
     this.props.authenticate((error, res) => {
       if (res.authenticated) {
         this.setState({current: "authenticated"});
+        this.props.mount();
       } else {
         this.setState({current: "landing"});
       }

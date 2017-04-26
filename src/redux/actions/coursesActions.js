@@ -68,14 +68,15 @@ export function enrollInCourse(user_id, course_id) {
  * an impure action creator that makes an API call to get all courses from the database
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function fetchCourses() {
+export function fetchCourses(cb) {
 	return dispatch => {
 		dispatch(fetchCoursesRequest());
 
 		return axios.get('/api/v1/courses')
 		.then(res => {
 			console.log('fetching courses success!');
-			dispatch(fetchCoursesSuccess(res.data));		
+			dispatch(fetchCoursesSuccess(res.data));	
+			cb();	
 		})
 		.catch(err => {
 			console.log('fetching courses failure!');
@@ -91,6 +92,7 @@ export function fetchCourses() {
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchCourseUsers(id) {
+	console.log('I ran fetchCourseUsers');
 	return dispatch => {
 		dispatch(fetchCourseUsersRequest());
 

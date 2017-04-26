@@ -60,17 +60,37 @@ const mapStateToProps = (state) => {
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
-    mount: (isCommunityListViewable, currentVisibleScholar) => {
-      dispatch(fetchScholars());
-      dispatch(fetchCourses());
-      dispatch(fetchSubmissions());
-      dispatch(fetchActivities());
-      if (!isCommunityListViewable && currentVisibleScholar) {
-        dispatch(fetchCourse(currentVisibleScholar));
-        dispatch(fetchScholarCourses(currentVisibleScholar));
-        dispatch(fetchScholarSubmissions(currentVisibleScholar));
+    mount: (router) => {
+      if (router.params.id) { 
+        return () => {
+          dispatch(fetchCourses());
+          dispatch(fetchSubmissions());
+          dispatch(fetchActivities());
+          dispatch(fetchScholars(() => {
+            if (router.params.id) {
+              dispatch(fetchScholar(router.params.id));
+              dispatch(fetchScholarCourses(router.params.id));
+              dispatch(fetchScholarSubmissions(router.params.id));
+            } else {
+              dispatch(displayFetchedScholars());
+            }
+          }));
+        }
+      } else {
+        return (isCommunityListViewable, currentVisibleScholar) => {
+          console.log('Mount');
+          dispatch(fetchScholars());
+          dispatch(fetchCourses());
+          dispatch(fetchSubmissions());
+          dispatch(fetchActivities());
+          if (!isCommunityListViewable && currentVisibleScholar) {
+            dispatch(fetchCourse(currentVisibleScholar));
+            dispatch(fetchScholarCourses(currentVisibleScholar));
+            dispatch(fetchScholarSubmissions(currentVisibleScholar));
+          }
+          dispatch(currentScholar((res) => {return res}));
+        }
       }
-      dispatch(currentScholar((res) => {return res}));
     },
     handleListClick: (id) => {
       dispatch(fetchScholar(id));
@@ -151,7 +171,7 @@ const mapDispatchToProps = (dispatch) => {
  * @param dispatchProps all the functions defined above to dispatch events
  * @return the mixture of these two props to be passed into the presentation component
  **/
-const mergeProps = (stateProps, dispatchProps) => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     currentUser: stateProps.currentUser,
     userRole: stateProps.userRole,
@@ -163,7 +183,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     coursesById: stateProps.coursesById,
     isCommunityListViewable: stateProps.isCommunityListViewable,
     currentVisibleScholar: stateProps.currentVisibleScholar,
-    mount: dispatchProps.mount,
+    mount: dispatchProps.mount(ownProps.router),
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleScholar, stateProps.currentUser),

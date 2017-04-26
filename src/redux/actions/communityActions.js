@@ -94,7 +94,7 @@ export function addScholarCourse(user_id, course_id) {
  * an impure action creator that makes an API call to get all scholars from the database  
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function fetchScholars() {
+export function fetchScholars(cb) {
 	return dispatch => {
 		dispatch(fetchScholarsRequest());
 
@@ -102,6 +102,7 @@ export function fetchScholars() {
 		.then((res, err) => {
 			if (res) {
 				dispatch(fetchScholarsSuccess(res.data));
+				cb();
 			} else if (err) {
 				dispatch(fetchScholarsFailure(err));	
 			} 

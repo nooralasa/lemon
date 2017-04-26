@@ -61,16 +61,35 @@ const mapStateToProps = (state) => {
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
-    mount: (isCoursesListViewable, currentVisibleCourse) => {
-      dispatch(fetchCourses());
-      dispatch(fetchScholars());
-      dispatch(fetchActivities());
-      if (!isCoursesListViewable && currentVisibleCourse) {
-        dispatch(fetchCourse(currentVisibleCourse));
-        dispatch(fetchCourseUsers(currentVisibleCourse));
-        dispatch(fetchCourseActivities(currentVisibleCourse));
+    mount: (router) => {
+      if (router.params.id) { 
+        return () => {
+          dispatch(fetchScholars());
+          dispatch(fetchActivities());
+          dispatch(fetchCourses(() => {
+            if (router.params.id) {
+              dispatch(fetchCourseUsers(parseInt(router.params.id, 10)));
+              dispatch(fetchCourseActivities(parseInt(router.params.id, 10)));
+              dispatch(fetchCourse(parseInt(router.params.id, 10)));
+            } else {
+              dispatch(displayFetchedCourses());
+            }
+          }));
+          
+        }
+      } else {
+        return (isCoursesListViewable, currentVisibleCourse) => {
+          dispatch(fetchCourses());
+          dispatch(fetchScholars());
+          dispatch(fetchActivities());
+          if (!isCoursesListViewable && currentVisibleCourse) {
+            dispatch(fetchCourse(currentVisibleCourse));
+            dispatch(fetchCourseUsers(currentVisibleCourse));
+            dispatch(fetchCourseActivities(currentVisibleCourse));
+          }
+          dispatch(currentScholar((res) => {return res}));
+        }
       }
-      dispatch(currentScholar((res) => {return res}));
     },
     handleButtonClick: (user_id) => {
       return (course_id) => {
@@ -165,7 +184,7 @@ const mapDispatchToProps = (dispatch) => {
  * @param dispatchProps all the functions defined above to dispatch events
  * @return the mixture of these two props to be passed into the presentation component
  **/
-const mergeProps = (stateProps, dispatchProps) => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     currentUser: stateProps.currentUser,
     userRole: stateProps.userRole,
@@ -177,7 +196,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     isCoursesListViewable: stateProps.isCoursesListViewable,
     isFormViewable: stateProps.isFormViewable,
     currentVisibleCourse: stateProps.currentVisibleCourse,
-    mount: dispatchProps.mount,
+    mount: dispatchProps.mount(ownProps.router),
     handleButtonClick: dispatchProps.handleButtonClick(stateProps.currentUser),
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,

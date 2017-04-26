@@ -9,6 +9,7 @@
  *                 component as props
  **/
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import * as Immutable from 'immutable';
 
@@ -69,26 +70,47 @@ const mapStateToProps = (state) => {
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
-    mount: (isActivitiesListViewable, currentVisibleActivity, currentVisibleSubmission) => {
-      if (currentVisibleSubmission===null) {
-        dispatch(fetchActivities());
-        dispatch(fetchRequirements());
-        dispatch(fetchObjectives());
-        dispatch(fetchSubmissions());
-        dispatch(fetchScholars());
-        dispatch(fetchCourses());
-        if (!isActivitiesListViewable && currentVisibleActivity) {
-          dispatch(fetchActivity(currentVisibleActivity));
-          dispatch(fetchActivityObjectives(currentVisibleActivity));
-          dispatch(fetchActivityRequirements(currentVisibleActivity));
-          dispatch(fetchActivitySubmissions(currentVisibleActivity)); 
+    mount: (router) => {
+      if (router.params.id) {
+        return () => {
+          dispatch(fetchActivities());
+          dispatch(fetchRequirements());
+          dispatch(fetchObjectives());
+          dispatch(fetchSubmissions());
+          dispatch(fetchScholars());
+          dispatch(fetchCourses());
+          dispatch(currentScholar((res) => {return res}));
+          if (router.params.id) {
+            dispatch(fetchActivity(parseInt(router.params.id, 10)));
+            dispatch(fetchActivityObjectives(parseInt(router.params.id, 10)));
+            dispatch(fetchActivityRequirements(parseInt(router.params.id, 10)));
+            dispatch(fetchActivitySubmissions(parseInt(router.params.id, 10))); 
+            if (router.params.submission_id) {
+              dispatch(fetchSubmission(parseInt(router.params.id, 10), parseInt(router.params.submission_id, 10)));
+            }
+          } else {
+            dispatch(displayFetchedActivities());
+          }
         }
-        dispatch(currentScholar((res) => {return res}));
+      } else {
+        return (isActivitiesListViewable, currentVisibleActivity, currentVisibleSubmission) => {
+          if (currentVisibleSubmission===null) {
+            dispatch(fetchActivities());
+            dispatch(fetchRequirements());
+            dispatch(fetchObjectives());
+            dispatch(fetchSubmissions());
+            dispatch(fetchScholars());
+            dispatch(fetchCourses());
+            if (!isActivitiesListViewable && currentVisibleActivity) {
+              dispatch(fetchActivity(currentVisibleActivity));
+              dispatch(fetchActivityObjectives(currentVisibleActivity));
+              dispatch(fetchActivityRequirements(currentVisibleActivity));
+              dispatch(fetchActivitySubmissions(currentVisibleActivity)); 
+            }
+            dispatch(currentScholar((res) => {return res}));
+          }
+        }
       }
-    },
-    handleButtonClick: (user_id) => {
-      return (activity_id) => {
-      } 
     },
     handleSubmissionButton1Click: (activity_id) => {
       dispatch(fetchActivity(activity_id));
@@ -245,7 +267,7 @@ const mapDispatchToProps = (dispatch) => {
  * @param dispatchProps all the functions defined above to dispatch events
  * @return the mixture of these two props to be passed into the presentation component
  **/
-const mergeProps = (stateProps, dispatchProps) => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     currentUser: stateProps.currentUser,
     userRole: stateProps.userRole,
@@ -264,9 +286,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     isSubmissionFormViewable: stateProps.isSubmissionFormViewable,
     currentVisibleActivity: stateProps.currentVisibleActivity,
     currentVisibleSubmission: stateProps.currentVisibleSubmission,
-    mount: dispatchProps.mount,
+    mount: dispatchProps.mount(ownProps.router),
     handleSubmissionButton1Click: dispatchProps.handleSubmissionButton1Click,
-    handleButtonClick: dispatchProps.handleButtonClick(stateProps.currentUser),
     handleAddButtonClick: dispatchProps.handleAddButtonClick(stateProps.isActivitiesListViewable, stateProps.currentVisibleActivity),
     handleFormUpdates: dispatchProps.handleFormUpdates(stateProps.isSubmissionFormViewable),
     handleAddFormSubmission: dispatchProps.handleAddFormSubmission(stateProps.currentUser, stateProps.isSubmissionFormViewable, stateProps.currentVisibleActivity),
