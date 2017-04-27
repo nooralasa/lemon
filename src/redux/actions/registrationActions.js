@@ -9,6 +9,7 @@ import axios from 'axios';
 export const INCREMENT_CURRENT_TUTORIAL = 'INCREMENT_CURRENT_TUTORIAL';
 export const DECREMENT_CURRENT_TUTORIAL = 'DECREMENT_CURRENT_TUTORIAL';
 export const SET_CURRENT_TUTORIAL = 'SET_CURRENT_TUTORIAL';
+export const EDIT_TUTORIAL = 'EDIT_TUTORIAL';
 
 export const FORK_PORTFOLIO_REQUEST = 'FORK_PORTFOLIO_REQUEST';
 export const FORK_PORTFOLIO_FAILURE = 'FORK_PORTFOLIO_FAILURE';
@@ -49,6 +50,25 @@ export function setCurrentTutorial(id) {
 }
 
 /**
+ * display the announcements list
+ * @return object.type the action type to be passed to the reducer
+ **/
+export function editTutorial(id, body, button, a) {
+
+	return {
+		type: EDIT_TUTORIAL,
+		payload: {
+			id: id,
+			heading: null,
+			body: body,
+			button: button,
+			a: a,
+			img: ''
+		}
+	};
+}
+
+/**
  * an impure action creator that makes an API call to get the announcements from 
  * the database 
  * @return a function that would dispatch Pure action creators and make the API call
@@ -61,12 +81,10 @@ export function forkPortfolio(id, cb = null) {
 		.then((res, err) => {
 			if (res) {
 				dispatch(forkPortfolioSuccess(res.data));
+				cb(res.data.username);
 			} else if (err) {
 				dispatch(forkPortfolioFailure(err));
 			} 
-			if (cb) {
-				cb();
-			}
 		});
 	}	
 }
@@ -112,4 +130,5 @@ export function forkPortfolioSuccess(data) {
 		payload: data
 	};
 }
+
 

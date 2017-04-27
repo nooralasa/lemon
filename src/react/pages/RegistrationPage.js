@@ -49,6 +49,7 @@ class Flexbox extends Component {
       button.push(<ButtonLink 
         currentStep={this.props.currentStep}
         allSteps={this.props.tutorial}
+        username={this.props.username}
         handleButtonClick={this.handleButtonClick}
         onButtonActive={this.handleButtonActive}
       />);
@@ -111,7 +112,7 @@ class ButtonLink extends Component {
   render() {
     return (
       <div>
-        <rbs.Button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}}
+        <rbs.Button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a, this.props.username)}}
           style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}
           >
           <a style={{color:'white', textDecoration:'none'}}
@@ -263,6 +264,7 @@ class Registration extends Component {
               <Flexbox 
                 tutorial={this.props.tutorialsById} 
                 currentStep={this.props.currentTutorial}
+                username={this.props.username}
                 isButtonActive={this.props.isButtonActive}
                 incrementStep={this.props.incrementStep}
                 decrementStep={this.props.decrementStep}

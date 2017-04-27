@@ -7,6 +7,7 @@ import {
 	INCREMENT_CURRENT_TUTORIAL, 
 	DECREMENT_CURRENT_TUTORIAL,
 	SET_CURRENT_TUTORIAL,
+	EDIT_TUTORIAL,
 	FORK_PORTFOLIO_SUCCESS} from '../actions/registrationActions.js';
 
 //importing Immutable to create an immutable state 
@@ -84,7 +85,7 @@ const initialRegistrationState = Immutable.fromJS({
 	  8: {
 	    id: 8,
 	    heading: null,
-	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging.", "You'll always be able to access it through the URL below. Go to Gitter and say Hello World!"],
+	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging. ", "You'll always be able to access it through the URL below. Go to Gitter and say Hello World!"],
 	    button: 'Take me to Gitter!',
 	    a: 'https://gitter.im/ML-LIME',
 	    img: ''
@@ -128,6 +129,14 @@ function registration(state = initialRegistrationState, action) {
 
 		case FORK_PORTFOLIO_SUCCESS:
 			state = state.update('username', username => action.payload.username);
+			return state
+
+		case EDIT_TUTORIAL:
+			console.log('state beore ', state.get('tutorialsById').toJSON());
+			console.log('state beore before ', state.getIn(['tutorialsById', 6]));
+			console.log('state beore before ', state.getIn(['tutorialsById', '6']));
+			state = state.updateIn(['tutorialsById', action.payload.id], tutorial => action.payload);
+			console.log('state after ', state.get('tutorialsById').toJSON());
 			return state
 
 		default: 

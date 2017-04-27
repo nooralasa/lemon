@@ -196,7 +196,8 @@ const mapDispatchToProps = (dispatch) => {
       if (currentVisibleSubmission) {
         return () => {
           dispatch(deleteSubmission(currentVisibleSubmission));
-          dispatch(fetchActivity(id));
+          dispatch(fetchActivities());
+          dispatch(displayFetchedActivities());
           browserHistory.push('/build/activities/');
         }
       } else {

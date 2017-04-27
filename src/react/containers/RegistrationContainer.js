@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 import RegistrationPage from '../pages/RegistrationPage';
+import { browserHistory } from 'react-router';
 
 import {
   incrementCurrentTutotial, 
   decrementCurrentTutotial,
   setCurrentTutorial,
-  forkPortfolio} from '../../redux/actions/registrationActions';
+  forkPortfolio,
+  editTutorial} from '../../redux/actions/registrationActions';
 import {
   currentScholar,
   fetchScholars} from '../../redux/actions/communityActions';
@@ -18,6 +20,7 @@ const mapStateToProps = (state) => {
     tutorialsById: state.registration.get('tutorialsById').toJSON(),
     currentTutorial: state.registration.get('currentTutorial'),
     isButtonActive: state.registration.get('isButtonActive'),
+    username: state.registration.get('username')
   }
 }
 
@@ -57,8 +60,11 @@ const mapDispatchToProps = (dispatch) => {
             return
 
           case 5:
-            dispatch(forkPortfolio(user_id, function() {
-              window.location.replace('/build/register/6');
+            dispatch(forkPortfolio(user_id, function(username) {
+              console.log('username ', username);
+              dispatch(editTutorial('6', ['Success! You now have a repository for your personal LIME portfolio called lime-portfolio. Your personal portfolio will be viewable in roughly 15 minutes at '+username+'.gitlab.io/lime-portfolio. You can customize it and make it your own by editing the repo.'], 'Customize my portfolio!', 'https://gitlab.com/'+username+'/lime-portfolio'));
+              dispatch(incrementCurrentTutotial());
+              browserHistory.push('/build/register/6');
             }));
             return
 
@@ -82,13 +88,14 @@ const mapDispatchToProps = (dispatch) => {
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     currentUser: stateProps.currentUser,
+    username: stateProps.username,
     tutorialsList: stateProps.tutorialsList,
     tutorialsById: stateProps.tutorialsById,
     currentTutorial: stateProps.currentTutorial,
     isButtonActive: stateProps.isButtonActive,
     incrementStep: dispatchProps.incrementStep,
     decrementStep: dispatchProps.decrementStep,
-    mount: dispatchProps.mount(ownProps.routeParams.id),
+    mount: dispatchProps.mount(ownProps.routeParams.id, stateProps.username),
     onButtonClick: dispatchProps.onButtonClick(stateProps.currentUser)
   }
 }
