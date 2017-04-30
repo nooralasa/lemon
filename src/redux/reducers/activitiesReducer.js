@@ -83,10 +83,9 @@ const initialActivitiesState = Immutable.fromJS({
 
 /**
  * Reducer for activity data
- * This reducer handles adding, updating, deleting and fetching activities as well as
- * enrolling scholars into activities and getting the activity's list of enrolled scholars
+ * This reducer handles adding, updating, deleting and fetching activities and submissions 
  * @param state the current state of the app
- *							set to initialactivitiesState when the app is first started
+ *							set to initialActivitiesState when the app is first started
  * @param action the dispatched action
  **/
 function activities(state = initialActivitiesState, action) {

@@ -1,6 +1,6 @@
-// ---------------------------------------- //
+// ------------------------------------------ //
 // This is the reducer for activity ui state. //
-// ---------------------------------------- //
+// ------------------------------------------ //
 
 //importing relevant action types
 import {
@@ -117,9 +117,10 @@ const initialActivitesUIState = Immutable.fromJS({
 
 /**
  * Reducer for activity ui state
- * This reducer handles rendering the activites list or a specific activity 
+ * This reducer handles rendering the activites list or a specific activity or submission
+ * as well as displaying the editing or adding new activity or submission forms 
  * @param state the current state of the app
- *							set to initialactivitesUIState when the app is first started
+ *							set to initialActivitesUIState when the app is first started
  * @param action the dispatched action
  **/
 function activitesUI(state = initialActivitesUIState, action) {

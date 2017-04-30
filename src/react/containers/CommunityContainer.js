@@ -4,9 +4,10 @@
 // -------------------------------------------------------------------- //
 
 /** 
- * React-Redux Imports
+ * React-Redux and React-Router Imports
  * @import connect a function that passes the state down to the specified 
  *                 component as props
+ * @import browserHistory the urls that will be rendered in the browser
  **/
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -27,11 +28,17 @@ import {fetchCourse} from '../../redux/actions/coursesUIActions';
  * here we specify what parts of the application state to share with the 
  * Community Page
  * @param state the application state as passed in by Redux
+ * @return object.currentUser the id of the user as saved in the browser sessions
+ * @return object.userRole the role of the currently logged in user (admin or scholar)
  * @return object.communityList the list of scholar ids
  * @return object.communityById an object mapping scholar ids to scholar data
+ * @return object.submissionsById an object mapping submission ids to submission data
  * @return object.coursesById an object mapping course ids to course data
  * @return object.isCommunityListViewable boolean indicating that the list view is on
  * @return object.currentVisibleScholar the id of the scholar to be rendered 
+ * @return object.isFormViewable boolean indicating that the form is in view for editing or 
+ *                               adding a scholar
+ * @return object.formData an object of data to fill the form and track updates
  **/
 const mapStateToProps = (state) => {
   return {
@@ -58,6 +65,14 @@ const mapStateToProps = (state) => {
  * @return object.handlePanelClick prepares the ui state for rendering the community list
  * @return object.handleThumbnailClick prepares the ui state for rendering the clicked course
  *                                     in the enrolled courses thumbnails list
+ * @return object.handleSubmissionThumbnailClick prepares the ui state for rendering the clicked 
+ *                                               submission in the submissions thumbnails list
+ * @return object.handleFormUpdates keeps track of any changes to form data
+ * @return object.handleEditFormSubmission updates a scholar in the database 
+ * @return object.handleEditButtonClick prepares the ui state for editing a scholar
+ * @return object.handleDeleteButtonClick prepares the ui state for deleting a scholar
+ * @return object.handleProfileClick renders the profile of the logged in user
+ * @return object.authenticate fetches the session data of who's currently logged in from db
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -174,9 +189,9 @@ const mapDispatchToProps = (dispatch) => {
  * a function declaration to be called  by React-Redux 
  * this function can be used to use the state data fetched by mapStateToProps
  * with the defined functions in mapDispatchToProps
- * we use this to pass the currently logged in user to the handleButtonClick function
  * @param stateProps all the props taken directly from the state
  * @param dispatchProps all the functions defined above to dispatch events
+ * @param ownProps all the props passed into the container from parent elements (router)
  * @return the mixture of these two props to be passed into the presentation component
  **/
 const mergeProps = (stateProps, dispatchProps, ownProps) => {

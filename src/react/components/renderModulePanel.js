@@ -1,8 +1,21 @@
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import rbs the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ **/
 import React from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
+// ---React Components--- //
 import ThumbnailsList from './ThumbnailsList';
 
+/**
+ * a function for rendering the title, subtitle and thumbnail image of a module
+ * @param body_params the content of the item
+ * @param course the subtitle course if it is not in body_params
+ * @return the thumbnail title for the module
+ **/
 function moduleTitle(body_params, course) {
   let source = body_params['source'];
   if (course) {
@@ -22,6 +35,19 @@ function moduleTitle(body_params, course) {
   );
 }
 
+/**
+ * a function for rendering the module controls. The two buttons to the right of the module title
+ * @param body_params the content of the item
+ * @param btn1 a string showing the text on the first button
+ * @param btn2 a string showing the text on the second button
+ * @param handleBtn1 the even handler for clicking the first button
+ * @param id1 the id to be passed into handleBtn1
+ * @param link1 a link that btn1 links to if no handler is passed
+ * @param handleBtn2 the even handler for clicking the second button
+ * @param id2 the id to be passed into handleBtn2
+ * @param link2 a link that btn2 links to if no handler is passed
+ * @return the controls for the current module
+ **/
 function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleBtn2, id2, link2) {
   function handleBtn1Click() {
     console.log('handleBtn1Click');
@@ -57,6 +83,14 @@ function moduleControls(body_params, btn1, btn2, handleBtn1, id1, link1, handleB
   );
 }
 
+/**
+ * a function for rendering the module description
+ * this function renders html directly so it is dengerous for XSS
+ * the function is only called as an effect to admin actions
+ * @param body_params the content of the item
+ * @param header a string indicating the header of the description
+ * @return the description module for an item
+ **/
 function dangerousModuleDescription(body_params, header) {
   return (
     <div>
@@ -66,6 +100,12 @@ function dangerousModuleDescription(body_params, header) {
   );
 }
 
+/**
+ * a function for rendering the module description. HTML is not rendered directly.
+ * @param body_params the content of the item
+ * @param header a string indicating the header of the description
+ * @return the description module for an item
+ **/
 function moduleDescription(body_params, header) {
   return (
     <div>
@@ -75,6 +115,13 @@ function moduleDescription(body_params, header) {
   );
 }
 
+/**
+ * a function for rendering a checklist of items
+ * @param header a string indicating the header of the description
+ * @param itemIds an array of item ids
+ * @param items an object mapping item ids to items
+ * @return a checklist of items to be rendered in the module
+ **/
 function moduleChecklist(header, itemIds, items) {
   const checklistItems = itemIds.map((itemId) => {
     let fadded = false;
@@ -104,6 +151,12 @@ function moduleChecklist(header, itemIds, items) {
   );
 }
 
+/**
+ * a function for rendering the timestamp and author of a module
+ * @param timestamp the timestamp in which the item is rendered
+ * @param user a string of the name of the user who created the content of the module
+ * @return a div with the timestamp and author name
+ **/
 function moduleAuthor(timestamp, user) {
   return (
     <div>
@@ -113,6 +166,12 @@ function moduleAuthor(timestamp, user) {
   );
 }
 
+/**
+ * a function for rendering a module link
+ * @param label a string of the label of the link
+ * @param link a url to link to
+ * @return a link module for submissions
+ **/
 function moduleLink(label, link) {
   return (
     <div>
@@ -122,6 +181,11 @@ function moduleLink(label, link) {
   );
 }
 
+/**
+ * a generic function that adds a spacer line between each module
+ * @param module React module content to be rendered 
+ * @return a div with the module content
+ **/
 function nextModule(module) {
   return (
     <div className="row" style={{marginTop:25}}>
@@ -133,6 +197,20 @@ function nextModule(module) {
   );
 }
 
+/**
+ * a function combining the moduleTitle and moduleControls into one module
+ * @param body_params the content of the item
+ * @param subtitle the subtitle to be rendered in the title if it is not in body_params
+ * @param btn1 a string showing the text on the first button
+ * @param btn2 a string showing the text on the second button
+ * @param handleBtn1 the even handler for clicking the first button
+ * @param id1 the id to be passed into handleBtn1
+ * @param link1 a link that btn1 links to if no handler is passed
+ * @param handleBtn2 the even handler for clicking the second button
+ * @param id2 the id to be passed into handleBtn2
+ * @param link2 a link that btn2 links to if no handler is passed
+ * @return a div with the module title and controls
+ **/
 function renderTitleAndControls(body_params, subtitle, btn1, btn2, handleBtn1, id1, link2, link1, handleBtn2, id2) {
   return (
     <div className="row">
@@ -146,6 +224,12 @@ function renderTitleAndControls(body_params, subtitle, btn1, btn2, handleBtn1, i
   );
 }
 
+/**
+ * a function for rendering the announcement panel 
+ * @param announcement an object with the announcement data
+ * @param user a string with the name of the user posting the announcement
+ * @return all the content to go into the announcement panel
+ **/
 export function renderAnnouncementPanel(announcement, user) {
   return (
     <div>
@@ -157,6 +241,16 @@ export function renderAnnouncementPanel(announcement, user) {
   );
 }
 
+/**
+ * a function for rendering the course panel 
+ * @param course an object with the course data
+ * @param communityById an object mapping scholar ids to scholars
+ * @param onThumbnailClick a function handling clicks on the enrolled scholars thumbnails list
+ * @param handleBtn1 handler for the enroll scholar button
+ * @param activitiesById an object mapping activity ids to activities
+ * @param onActivitiesThumbnailClick a function handling clicks on the activities thumbnails list
+ * @return all the content to go into the course panel
+ **/
 export function renderCoursePanel(course, communityById, onThumbnailClick, handleBtn1, activitiesById, onActivitiesThumbnailClick) {
   return (
     <div>
@@ -168,6 +262,15 @@ export function renderCoursePanel(course, communityById, onThumbnailClick, handl
   );
 }
 
+/**
+ * a function for rendering the scholar panel 
+ * @param scholar an object with the scholar data
+ * @param coursesById an object mapping course ids to courses
+ * @param onThumbnailClick a function handling clicks on the enrolled courses thumbnails list
+ * @param submissionsById an object mapping submission ids to submissions
+ * @param onSubmissionsThumbnailClick a function handling clicks on the submissions thumbnails list
+ * @return all the content to go into the scholar panel
+ **/
 export function renderCommunityPanel(scholar, coursesById, onThumbnailClick, submissionsById, onSubmissionsThumbnailClick) {
   return (
     <div>
@@ -179,6 +282,17 @@ export function renderCommunityPanel(scholar, coursesById, onThumbnailClick, sub
   );
 }
 
+/**
+ * a function for rendering the activity panel 
+ * @param activity an object with the activity data
+ * @param course a string of the name of the course that the activity belongs to
+ * @param objectivesById an object mapping objective ids to objectives
+ * @param requirementsById an object mapping requirement ids to requirements
+ * @param submissionsById an object mapping submission ids to submissions
+ * @param user a string with the name of the user posting the activity
+ * @param onThumbnailClick a function handling clicks on the submissions thumbnails list
+ * @return all the content to go into the activity panel
+ **/
 export function renderActivityPanel(activity, handleBtn1, course, objectivesById, requirementsById, submissionsById, user, onThumbnailClick) {
   console.log('renderActivityPanel');
   return (
@@ -193,6 +307,17 @@ export function renderActivityPanel(activity, handleBtn1, course, objectivesById
   );
 }
 
+/**
+ * a function for rendering the submission panel 
+ * @param submission an object with the submission data
+ * @param handleBtn1 handler for the view activity button
+ * @param activity a string of the name of the activity that the submission belongs to
+ * @param objectivesById an object mapping objective ids to objectives
+ * @param requirementsById an object mapping requirement ids to requirements
+ * @param submissionsById an object mapping submission ids to submissions
+ * @param user a string with the name of the user posting the submission
+ * @return all the content to go into the submission panel
+ **/
 export function renderSubmissionPanel(submission, handleBtn1, activity, objectivesById, requirementsById, submissionsById, user) {
   return (
     <div>

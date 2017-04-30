@@ -1,6 +1,6 @@
-// ---------------------------------------------- //
-// This is the reducer for announcement ui state. //
-// ---------------------------------------------- //
+// ------------------------------------------- //
+// This is the reducer for registration state. //
+// ------------------------------------------- //
 
 //importing relevant action types
 import {
@@ -106,10 +106,10 @@ const initialRegistrationState = Immutable.fromJS({
 });
 
 /**
- * Reducer for announcements ui state
- * This reducer handles rendering the announcements list or a specific announcement 
+ * Reducer for registration state
+ * This reducer handles rendering the tutorials  
  * @param state the current state of the app
- *							set to initialAnnouncementsUIState when the app is first run
+ *							set to initialRegistrationState when the app is first run
  * @param action the dispatched action
  **/
 function registration(state = initialRegistrationState, action) {

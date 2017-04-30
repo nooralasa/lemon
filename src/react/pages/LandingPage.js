@@ -1,6 +1,6 @@
 // ----------------------------------------------------- //
 // The Landing Page                                      //
-// The React Component to be endered with the /login uri //
+// The React Component to be endered with the /build uri //
 // ----------------------------------------------------- //
 
 /** 
@@ -10,17 +10,23 @@
  * @import PropTypes an object with validators to typecheck the based props
  * @import rbs the react-bootstrap module with predefined react components 
  *             with bootstrap styling
- * @import browserHistory the react-bootstrap module with predefined react components 
- *             with bootstrap styling
  **/
 import React, { Component } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
+// ---React Components--- //
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+/** 
+ * The HeaderInstance Componenet
+ * This component renders the header of the landing page with the title and registration button
+ **/
 class HeaderInstance extends Component {
-
+  /**
+   * a function declaration that is called  by React to render this component 
+   * @return the landing header instance
+   **/
   render() {
     return (  
       <div className="intro-header">
@@ -41,7 +47,15 @@ class HeaderInstance extends Component {
   }
 }
 
+/** 
+ * The About Instance Componenet
+ * This component renders the about section with a description of LIME
+ **/
 class AboutInstance extends Component {
+  /**
+   * a function declaration that is called  by React to render this component 
+   * @return the landing about instance 
+   **/
   render() {
     return (  
       <div className="content-section-a">
@@ -64,7 +78,15 @@ class AboutInstance extends Component {
   }
 }
 
+/** 
+ * The Landing Page Componenet
+ * This component renders the entire page when the /build uri is fetched
+ **/
 class Landing extends Component {
+  /**
+   * a function declaration that is called  by React to render this component 
+   * @return the landing page
+   **/
   render() {
     return (
       <div className="landing">

@@ -36,7 +36,7 @@ export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
 export const DELETE_COURSE_FAILURE = 'DELETE_COURSE_FAILURE';
 export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
 
-// ---impure action creator creators making asynchonous API calls--- //
+// ---impure action creators making asynchonous API calls--- //
 
 /**
  * an impure action creator that makes an API call to associate a scholar and a course
@@ -66,6 +66,7 @@ export function enrollInCourse(user_id, course_id) {
 
 /**
  * an impure action creator that makes an API call to get all courses from the database
+ * @param cb a functional callback to be called after the API call returns 
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchCourses(cb) {
@@ -107,8 +108,8 @@ export function fetchCourseUsers(id) {
 }
 
 /**
- * an impure action creator that makes an API call to get all the scholars who are 
- * associated with the specified course from the database
+ * an impure action creator that makes an API call to get all the activities associated 
+ * with the specified course from the database
  * @param id the id of the course
  * @return a function that would dispatch Pure action creators and make the API call
  **/
@@ -296,12 +297,12 @@ export function fetchCourseUsersSuccess(data, id) {
 }
 
 /**
- * indicates that the API call for getting all users associated with a course succeeded
- * @param data a list of ids of all users associated with a course
+ * indicates that the API call for getting all activities associated with a course succeeded
+ * @param data a list of ids of all activities associated with a course
  * @param id the id of the course  
  * @return object.type the action type to be passed to the reducer
  * @return object.payload.courseId the id of the course in question
- * @return object.payload.list a list of enrolled scholar ids
+ * @return object.payload.activitiesList a list of activity ids
  **/
 export function fetchCourseActivitiesSuccess(data, id) {
 	let activitiesList = Immutable.List();
@@ -469,7 +470,7 @@ function fetchCourseUsersFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all enrolled scholars has been initiated
+ * indicates that an API call for retrieving course activities has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchCourseActivitiesRequest() {
@@ -480,7 +481,7 @@ function fetchCourseActivitiesRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all enrolled scholars failed 
+ * indicates that an API call for retrieving course activities failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -522,6 +523,7 @@ function addCourseFailure(error) {
  * indicates that an API call for updating a course has been initiated
  * @param id the course id to be updated
  * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the updated course
  **/
 function updateCourseRequest(id) {
 
@@ -549,6 +551,7 @@ function updateCourseFailure(error) {
  * indicates that an API call for deleting a course has been initiated
  * @param id the course id to be deleted
  * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the deleted course
  **/
 function deleteCourseRequest(id) {
 

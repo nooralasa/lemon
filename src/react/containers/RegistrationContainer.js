@@ -1,7 +1,21 @@
+// ----------------------------------------------------------------------- //
+// The Registration Container                                              //
+// This Container Component links the Redux store to the Registration Page //
+// ----------------------------------------------------------------------- //
+
+/** 
+ * React-Redux and React-Router Imports
+ * @import connect a function that passes the state down to the specified 
+ *                 component as props
+ * @import browserHistory the urls that will be rendered in the browser
+ **/
 import { connect } from 'react-redux';
-import RegistrationPage from '../pages/RegistrationPage';
 import { browserHistory } from 'react-router';
 
+//Registration Page Presentational Component
+import RegistrationPage from '../pages/RegistrationPage';
+
+//Redux actions for fetching data from the redux store and changing ui state
 import {
   incrementCurrentTutotial, 
   decrementCurrentTutotial,
@@ -12,7 +26,17 @@ import {
   currentScholar,
   fetchScholars} from '../../redux/actions/communityActions';
 
-
+/**
+ * a function declaration to be called by React-Redux 
+ * here we specify what parts of the application state to share with the Registration Page
+ * @param state the application state as passed in by Redux
+ * @return object.tutorialsList the list of tutorial ids
+ * @return object.tutorialsById an object mapping tutorial ids to tutorial data
+ * @return object.currentTutorial the id of the tutorial to be rendered
+ * @return object.isButtonActive boolean indicating whether the user can moves on to the next tutorial
+ * @return object.currentUser the id of the user as saved in the browser sessions
+ * @return object.username the gitlan username of the user going through registration
+ **/
 const mapStateToProps = (state) => {
   return {
     currentUser: state.community.get('currentlyLoggedIn'),
@@ -24,6 +48,16 @@ const mapStateToProps = (state) => {
   }
 }
 
+/**
+ * a function declaration to be called  by React-Redux 
+ * here we define functions to be passed to the Registration Page as props
+ * these functions dispatch Redux actions to update the application state
+ * @param dispatch a function that can dispatch actions to the Redux store
+ * @return object.mount fetches data from the redux store before rendering
+ * @return object.incrementStep increments the current visible tutorial
+ * @return object.decrementStep decrements the current visible tutorial
+ * @return object.onButtonClick handles the button click in each tutorial
+ **/
 const mapDispatchToProps = (dispatch) => {
   return {
     mount: (id) => {
@@ -80,9 +114,9 @@ const mapDispatchToProps = (dispatch) => {
  * a function declaration to be called  by React-Redux 
  * this function can be used to use the state data fetched by mapStateToProps
  * with the defined functions in mapDispatchToProps
- * we use this to pass the currently logged in user to the handleButtonClick function
  * @param stateProps all the props taken directly from the state
  * @param dispatchProps all the functions defined above to dispatch events
+ * @param ownProps all the props passed into the container from parent elements (router)
  * @return the mixture of these two props to be passed into the presentation component
  **/
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
@@ -100,6 +134,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   }
 }
 
+/**
+ * Here we use the react-redux connect function to define a React Component with the 
+ * state defined in the function declarations above. This Container Componenet passes
+ * the entire state to RegistrationPage as props
+ **/
 const RegistrationContainer = connect(
   mapStateToProps,
   mapDispatchToProps,

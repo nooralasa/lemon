@@ -1,5 +1,6 @@
 // ---------------------------------------------------------------- //
 // This module exports a function thay initializes the redux store. //
+// To be used for testing without a database or a server						//
 // ---------------------------------------------------------------- //
 
 // //Importing actions that update the database and persist 

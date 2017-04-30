@@ -2,7 +2,7 @@
   "name": "lemon",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://lemon.surge.sh",
+  "homepage": "http://lime.media.mit.edu",
   "proxy": "http://127.0.0.1:3001/",
   "devDependencies": {
     "gh-pages": "^0.12.0",

@@ -37,6 +37,13 @@ export function fetchAnnouncement(id) {
 	};
 }
 
+/**
+ * display the specified announcement's editing form or adding form
+ * @param id the id of the announcement to be edited, null for adding 
+ * 				a new announcement 
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the announcement to be displayed
+ **/
 export function fetchAnnouncementForm(id = null) {
 	const request = {
 		id: id
@@ -48,13 +55,15 @@ export function fetchAnnouncementForm(id = null) {
 	};
 }
 
-export function fetchAnnouncementFormData() {
-
-	return {
-		type: FETCH_ANNOUNCEMENT_FORM_DATA
-	};
-}
-
+/**
+ * update the formData in the announcement's ui state
+ * @param index the index in the list within formData to be updated
+ * @param type the type of box and key to array in formData that will be edited
+ * @param value the new value
+ * @param defaultvalue the new default value
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload all the passed in params
+ **/
 export function updateAnnouncementFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_ANNOUNCEMENT_FORM_DATA,

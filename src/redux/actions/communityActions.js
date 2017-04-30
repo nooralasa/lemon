@@ -40,11 +40,12 @@ export const DELETE_SCHOLAR_REQUEST = 'DELTE_SCHOLAR_REQUEST';
 export const DELETE_SCHOLAR_FAILURE = 'DELTE_SCHOLAR_FAILURE';
 export const DELETE_SCHOLAR_SUCCESS = 'DELTE_SCHOLAR_SUCCESS';
 
-// ---impure action creator creators making asynchonous API calls--- //
+// ---impure action creators making asynchonous API calls--- //
 
 /**
  * an impure action creator that makes an API call to get the currently logged in  
  * user from the database 
+ * @param cb a functional callback to be called after the API call returns
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function currentScholar(cb) {
@@ -69,7 +70,7 @@ export function currentScholar(cb) {
  * an impure action creator that makes an API call to add a course to the scholar's  
  * enrolled courses in the database 
  * @param user_id the id of the user enrolling in the course
- * Qparam course_id the id of the course that the user is enrolling in
+ * @param course_id the id of the course that the user is enrolling in
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function addScholarCourse(user_id, course_id) {
@@ -91,7 +92,8 @@ export function addScholarCourse(user_id, course_id) {
 }
 
 /**
- * an impure action creator that makes an API call to get all scholars from the database  
+ * an impure action creator that makes an API call to get all scholars from the database 
+ * @param cb a functional callback to be called after the API call returns 
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function fetchScholars(cb) {
@@ -132,9 +134,8 @@ export function fetchScholarCourses(id) {
 }
 
 /**
- * an impure action creator that makes an API call to get all the courses that the scholar  
- * is enrolled in from the database 
- * @param id the id of the scholar whose list of courses we want to retrieve 
+ * an impure action creator that makes an API call to get all of the scholar's submissions  
+ * @param id the id of the scholar whose list of submissions we want to retrieve 
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function fetchScholarSubmissions(id) {
@@ -157,6 +158,7 @@ export function fetchScholarSubmissions(id) {
  * @param title the scholar's name
  * @param source the scholar's affiliation
  * @param link the scholar's personal portfolio
+ * @param chat_link the scholar's gitter url
  * @param img the scholar's image url
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
@@ -190,10 +192,12 @@ export function addScholar(title, source, link, chat_link, img, description) {
 /**
  * an impure action creator that makes an API call to updare a  specified scholar 
  * in the database 
- * @param id the id of the user to be updared 
+ * @param id the id of the user to be updared
+ * @param role the scholar's role 
  * @param title the scholar's name
  * @param source the scholar's affiliation
  * @param link the scholar's personal portfolio
+ * @param chat_link the scholar's gitter url
  * @param img the scholar's image url
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
@@ -255,6 +259,7 @@ export function deleteScholar(id) {
 /**
  * indicates that the API call for getting the currently logged in user succeeded
  * @param data an object containing the id of the currently logged in user
+ * @param cb a functional callback to be called after the API call returns
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the id of the currently logged in user
  **/
@@ -362,12 +367,12 @@ export function fetchScholarCoursesSuccess(data, id) {
 }
 
 /**
- * indicates that the API call for getting the scholar's enrolled courses succeeded
- * @param data a list of course ids as returned by the API call
+ * indicates that the API call for getting the scholar's submissions succeeded
+ * @param data a list of submission ids as returned by the API call
  * @param id the id of the user who's enrolled in these courses
  * @return object.type the action type to be passed to the reducer
  * @return object.payload.userId the user id
- * @return object.payload.list the list of course ids
+ * @return object.payload.submissionsList the list of submission ids
  **/
 export function fetchScholarSubmissionsSuccess(data, id) {
 	let list = Immutable.List();
@@ -478,6 +483,7 @@ function currentScholarRequest() {
  * indicates that an API call to get the currently logged in scholar 
  * from session data failed
  * @param error the error returned by the API call
+ * @param cb a functional callback to be called after the API call returns
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
  **/
@@ -576,8 +582,7 @@ function fetchScholarCoursesFailure(error) {
 }
 
 /**
- * indicates that an API call to  get all courses that a scholar is enrolled
- * in from the database has been initiated
+ * indicates that an API call to  get all submissions that a scholar submitted
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchScholarSubmissionsRequest() {
@@ -588,8 +593,7 @@ function fetchScholarSubmissionsRequest() {
 }
 
 /**
- * indicates that an API call to get the enrolled courses of a scholar  
- * has failed
+ * indicates that an API call to get the scholar submissions failed
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network

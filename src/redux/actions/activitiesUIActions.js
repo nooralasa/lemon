@@ -1,6 +1,6 @@
-// ------------------------------------------------------------------ //
+// -------------------------------------------------------------------- //
 // These are the action declarations that update the activity ui state. //
-// ------------------------------------------------------------------ //
+// -------------------------------------------------------------------- //
 
 // ---Action Types--- //
 export const DISPLAY_FETCHED_ACTIVITIES = 'DISPLAY_FETCHED_ACTIVITIES';
@@ -41,10 +41,11 @@ export function fetchActivity(id) {
 }
 
 /**
- * display the specified activity
- * @param id the id of the activity to be displayed 
+ * display the specified submission
+ * @param activity_id the id of the activity the submission is associated with 
+ * @param id the id of the submission to be displayed 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the id of the activity to be displayed
+ * @return object.payload the id of the submission to be displayed and its activity
  **/
 export function fetchSubmission(activity_id, id) {
 	const request = {
@@ -58,6 +59,12 @@ export function fetchSubmission(activity_id, id) {
 	};
 }
 
+/**
+ * display the specified activity form
+ * @param id the id of the activity to be edited or added if null 
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the activity to be edited 
+ **/
 export function fetchActivityForm(id = null) {
 	const request = {
 		id: id
@@ -69,6 +76,13 @@ export function fetchActivityForm(id = null) {
 	};
 }
 
+/**
+ * display the specified submission form
+ * @param activity_id the id of the activity that the submission belongs to 
+ * @param id the id of the submission to be edited or added if null 
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the submission to be edited and its activity
+ **/
 export function fetchSubmissionForm(activity_id, id = null) {
 	const request = {
 		id: id,
@@ -81,6 +95,15 @@ export function fetchSubmissionForm(activity_id, id = null) {
 	};
 }
 
+/**
+ * update the formData in the activities ui state
+ * @param index the index in the list within formData to be updated
+ * @param type the type of box and key to array in formData that will be edited
+ * @param value the new value
+ * @param defaultvalue the new default value
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload all the passed in params
+ **/
 export function updateActivityFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_ACTIVITY_FORM_DATA,
@@ -93,6 +116,15 @@ export function updateActivityFormData(index, type, value, defaultvalue) {
 	};
 }
 
+/**
+ * update the submissionFormData in the activities ui state
+ * @param index the index in the list within formData to be updated
+ * @param type the type of box and key to array in formData that will be edited
+ * @param value the new value
+ * @param defaultvalue the new default value
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload all the passed in params
+ **/
 export function updateSubmissionFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_SUBMISSION_FORM_DATA,
@@ -105,6 +137,12 @@ export function updateSubmissionFormData(index, type, value, defaultvalue) {
 	};
 }
 
+/**
+ * update the formData in the activities ui state by adding an entry to the list
+ * @param listIndex the index of the list where an entry is to be added 
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload all the params passed in
+ **/
 export function addActivityFormDataListEntry(listIndex) {
 	return {
 		type: ADD_ACTIVITY_FORM_DATA_LIST_ENTRY,
@@ -114,6 +152,14 @@ export function addActivityFormDataListEntry(listIndex) {
 	};
 }
 
+/**
+ * update the lists in formData in the activities ui state
+ * @param listIndex the index of the list where an entry is to be added
+ * @param index the index in the list to be updated
+ * @param value the new value 
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload all the params passed in
+ **/
 export function updateActivityFormDataList(listIndex, index, value) {
 	return {
 		type: UPDATE_ACTIVITY_FORM_DATA_LIST,

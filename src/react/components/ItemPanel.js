@@ -1,6 +1,18 @@
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ * @import PropTypes an object with validators to typecheck the based props
+ * @import rbs the react-bootstrap module with predefined react components 
+ *             with bootstrap styling
+ **/
 import React, { Component, PropTypes } from 'react';
 import * as rbs from 'react-bootstrap/lib';
 
+/** 
+ * The Modal Component
+ * Renders the edit and delete buttons and a confirmation modal when the delete button is pressed
+ **/
 const Modal = React.createClass({
   getInitialState() {
     return { showModal: false };
@@ -39,8 +51,16 @@ const Modal = React.createClass({
   }
 });
 
+/** 
+ * The Item Controls Component
+ * Renders the item controls in the item panel
+ * The controls include a back button, and the edit and delete buttons
+ **/
 class ItemControls extends Component {
-
+  /**
+   * a function declaration that is called by React to render this component 
+   * @return the panel header with the relevant item controls
+   **/
   render() {
     if (this.props.isItemControlsVisible) {
       return (
@@ -61,6 +81,9 @@ class ItemControls extends Component {
   }
 }
 
+/**
+ * an object validating that all the necessary props have been passed in 
+ **/
 ItemControls.propTypes = {
   onUserClick: PropTypes.func.isRequired,
   isItemControlsVisible: PropTypes.bool.isRequired,
@@ -68,7 +91,15 @@ ItemControls.propTypes = {
   onEditBtnClick: PropTypes.func.isRequired
 }
 
+/** 
+ * The Item Panel Component
+ * Renders a given item (announcement, course, scholar, activity, submission) or its editing/adding form
+ **/
 class ItemPanel extends Component {
+  /**
+   * a function declaration that is called by React to render this component 
+   * @return a panel with the content of an item (announcement, course, etc...)
+   **/
   render() {
     return (
       <rbs.Panel header={<ItemControls 
@@ -82,6 +113,9 @@ class ItemPanel extends Component {
   }
 }
 
+/**
+ * an object validating that all the necessary props have been passed in 
+ **/
 ItemPanel.propTypes = {
   onUserClick: PropTypes.func.isRequired,
   renderItemPanel: PropTypes.func.isRequired,

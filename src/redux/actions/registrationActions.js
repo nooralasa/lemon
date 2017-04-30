@@ -1,6 +1,6 @@
-// -------------------------------------------------------------------------- //
-// These are the action declarations that update the announcement data state. //
-// -------------------------------------------------------------------------- //
+// --------------------------------------------------------------------- //
+// These are the action declarations that update the registration state. //
+// --------------------------------------------------------------------- //
 
 //import axios for making http calls 
 import axios from 'axios';
@@ -16,7 +16,7 @@ export const FORK_PORTFOLIO_FAILURE = 'FORK_PORTFOLIO_FAILURE';
 export const FORK_PORTFOLIO_SUCCESS = 'FORK_PORTFOLIO_SUCCESS';
 
 /**
- * display the announcements list
+ * increments the current tutorial step
  * @return object.type the action type to be passed to the reducer
  **/
 export function incrementCurrentTutotial() {
@@ -27,7 +27,7 @@ export function incrementCurrentTutotial() {
 }
 
 /**
- * display the announcements list
+ * decrements the current tutorial step
  * @return object.type the action type to be passed to the reducer
  **/
 export function decrementCurrentTutotial() {
@@ -38,8 +38,10 @@ export function decrementCurrentTutotial() {
 }
 
 /**
- * display the announcements list
+ * sets the current tutorial to the passed id
+ * @param id the id of the current tutorial
  * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the current tutorial
  **/
 export function setCurrentTutorial(id) {
 
@@ -50,8 +52,13 @@ export function setCurrentTutorial(id) {
 }
 
 /**
- * display the announcements list
+ * edits the data of a tutorial 
+ * @param id the id of the tutorial to be edited
+ * @param body the message body for the tutorial
+ * @param button the message on the button
+ * @param a the url that the button links to 
  * @return object.type the action type to be passed to the reducer
+ * @return object.payload the tutorial as expected by the state
  **/
 export function editTutorial(id, body, button, a) {
 
@@ -69,8 +76,9 @@ export function editTutorial(id, body, button, a) {
 }
 
 /**
- * an impure action creator that makes an API call to get the announcements from 
- * the database 
+ * an impure action creator that makes an API call to fork the portfolio from gitlab
+ * @param id the id of the user 
+ * @param cb a functional callback to be called after the API call returns 
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function forkPortfolio(id, cb = null) {
@@ -90,8 +98,7 @@ export function forkPortfolio(id, cb = null) {
 }
 
 /**
- * indicates that an API call to get the announcements from 
- * the database has been initiated
+ * indicates that an API call to fork the portfolio has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function forkPortfolioRequest() {
@@ -102,8 +109,7 @@ function forkPortfolioRequest() {
 }
 
 /**
- * indicates that an API call to get the announcements from 
- * the database failed
+ * indicates that an API call to fork the portfolio failed
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -117,11 +123,10 @@ function forkPortfolioFailure(error) {
 }
 
 /**
- * indicates that the API call for getting the announcements succeeded
- * @param data a list of announcements as returned by the API call
+ * indicates that the API call to fork the portfolio succeeded
+ * @param data and object containing the gitlab username of the user 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.announcementsList list of announcement ids
- * @return object.payload.announcementsById object mapping ids to announcements
+ * @return object.payload the gitlab username of the user
  **/
 export function forkPortfolioSuccess(data) {
 

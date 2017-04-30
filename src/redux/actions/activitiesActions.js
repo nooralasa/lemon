@@ -1,6 +1,6 @@
-// --------------------------------------------------------------------- //
+// ------------------------------------------------------------------------ //
 // These are the action declarations that update the activities data state. //
-// --------------------------------------------------------------------- //
+// ------------------------------------------------------------------------ //
 
 //import axios for making http calls 
 import axios from 'axios';
@@ -84,7 +84,7 @@ export const DELETE_SUBMISSION_REQUEST = 'DELETE_ACTIVITY_REQUEST';
 export const DELETE_SUBMISSION_FAILURE = 'DELETE_ACTIVITY_FAILURE';
 export const DELETE_SUBMISSION_SUCCESS = 'DELETE_ACTIVITY_SUCCESS';
 
-// ---impure action creator creators making asynchonous API calls--- //
+// ---impure action creators making asynchonous API calls--- //
 
 /**
  * an impure action creator that makes an API call to get all activities from the database
@@ -107,7 +107,7 @@ export function fetchActivities() {
 }
 
 /**
- * an impure action creator that makes an API call to get all activities from the database
+ * an impure action creator that makes an API call to get all objectives from the database
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchObjectives() {
@@ -127,7 +127,7 @@ export function fetchObjectives() {
 }
 
 /**
- * an impure action creator that makes an API call to get all activities from the database
+ * an impure action creator that makes an API call to get all requirements from the database
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchRequirements() {
@@ -147,7 +147,7 @@ export function fetchRequirements() {
 }
 
 /**
- * an impure action creator that makes an API call to get all activities from the database
+ * an impure action creator that makes an API call to get all submissions from the database
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchSubmissions() {
@@ -167,7 +167,7 @@ export function fetchSubmissions() {
 }
 
 /**
- * an impure action creator that makes an API call to get all the scholars who are 
+ * an impure action creator that makes an API call to get all the objectives that are 
  * associated with the specified activity from the database
  * @param id the id of the activity
  * @return a function that would dispatch Pure action creators and make the API call
@@ -187,7 +187,7 @@ export function fetchActivityObjectives(id) {
 }
 
 /**
- * an impure action creator that makes an API call to get all the scholars who are 
+ * an impure action creator that makes an API call to get all the requirements that are 
  * associated with the specified activity from the database
  * @param id the id of the activity
  * @return a function that would dispatch Pure action creators and make the API call
@@ -207,7 +207,7 @@ export function fetchActivityRequirements(id) {
 }
 
 /**
- * an impure action creator that makes an API call to get all the scholars who are 
+ * an impure action creator that makes an API call to get all the submissions that are 
  * associated with the specified activity from the database
  * @param id the id of the activity
  * @return a function that would dispatch Pure action creators and make the API call
@@ -227,13 +227,15 @@ export function fetchActivitySubmissions(id) {
 }
 
 /**
- * an impure action creator that makes an API call to add a activity to the database  
+ * an impure action creator that makes an API call to add an activity to the database  
  * @param title the title of the activity
- * @param room the name of the gitter room for the activity 
- * @param source the third party offering the activity
- * @param link url to the enrolling page
- * @param img source of the activity image
+ * @param room the name of the gitter room for the activity
+ * @param image source of the activity image 
  * @param description text description of the activity
+ * @param course_id the id of the course that the activity belongs to
+ * @param requirementsList a list of requirement ids associated with this activity
+ * @param objectivesList a list of objective ids associated with this activity
+ * @param expert_id the id of the scholar who posted the activity
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addActivity(title, room, image, description, course_id, requirementsList, objectivesList, expert_id) {
@@ -262,14 +264,16 @@ export function addActivity(title, room, image, description, course_id, requirem
 }
 
 /**
- * an impure action creator that makes an API call to update a activity to the database  
+ * an impure action creator that makes an API call to update an activity in the database  
  * @param id the id of the activity to be updated
- * @param title the new title of the activity
- * @param room the new name of the gitter room for the activity 
- * @param source the new third party offering the activity
- * @param link the new url to the enrolling page
- * @param img the new source of the activity image
- * @param description the new text description of the activity
+ * @param title the title of the activity
+ * @param room the name of the gitter room for the activity
+ * @param image source of the activity image 
+ * @param description text description of the activity
+ * @param course_id the id of the course that the activity belongs to
+ * @param requirementsList a list of requirement ids associated with this activity
+ * @param objectivesList a list of objective ids associated with this activity
+ * @param expert_id the id of the scholar who posted the activity
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateActivity(id, title, room, image, description, course_id, requirementsList, objectivesList, expert_id) {
@@ -298,7 +302,7 @@ export function updateActivity(id, title, room, image, description, course_id, r
 }
 
 /**
- * an impure action creator that makes an API call to delete a activity from the database  
+ * an impure action creator that makes an API call to delete an activity from the database  
  * @param id the id of the activity to be deleted
  * @return a function that would dispatch Pure action creators and make the API call
  **/
@@ -319,13 +323,9 @@ export function deleteActivity(id) {
 }
 
 /**
- * an impure action creator that makes an API call to add a activity to the database  
- * @param title the title of the activity
- * @param room the name of the gitter room for the activity 
- * @param source the third party offering the activity
- * @param link url to the enrolling page
- * @param img source of the activity image
- * @param description text description of the activity
+ * an impure action creator that makes an API call to add a requirement to the database  
+ * @param activity_id the id of the activity that the requirement belongs to
+ * @param description the text of the requirement
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addRequirement(activity_id, description) {
@@ -348,14 +348,9 @@ export function addRequirement(activity_id, description) {
 }
 
 /**
- * an impure action creator that makes an API call to update a activity to the database  
- * @param id the id of the activity to be updated
- * @param title the new title of the activity
- * @param room the new name of the gitter room for the activity 
- * @param source the new third party offering the activity
- * @param link the new url to the enrolling page
- * @param img the new source of the activity image
- * @param description the new text description of the activity
+ * an impure action creator that makes an API call to update a requirement to the database  
+ * @param activity_id the id of the activity that the requirement belongs to
+ * @param description the text of the requirement
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateRequirement(id, activity_id, description) {
@@ -378,8 +373,8 @@ export function updateRequirement(id, activity_id, description) {
 }
 
 /**
- * an impure action creator that makes an API call to delete a activity from the database  
- * @param id the id of the activity to be deleted
+ * an impure action creator that makes an API call to delete a requirement from the database  
+ * @param id the id of the requirement to be deleted
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function deleteRequirement(id) {
@@ -399,13 +394,9 @@ export function deleteRequirement(id) {
 }
 
 /**
- * an impure action creator that makes an API call to add a activity to the database  
- * @param title the title of the activity
- * @param room the name of the gitter room for the activity 
- * @param source the third party offering the activity
- * @param link url to the enrolling page
- * @param img source of the activity image
- * @param description text description of the activity
+ * an impure action creator that makes an API call to add a objective to the database  
+ * @param activity_id the id of the activity that the objective belongs to
+ * @param description the text of the objective
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addObjective(activity_id, description) {
@@ -428,14 +419,9 @@ export function addObjective(activity_id, description) {
 }
 
 /**
- * an impure action creator that makes an API call to update a activity to the database  
- * @param id the id of the activity to be updated
- * @param title the new title of the activity
- * @param room the new name of the gitter room for the activity 
- * @param source the new third party offering the activity
- * @param link the new url to the enrolling page
- * @param img the new source of the activity image
- * @param description the new text description of the activity
+ * an impure action creator that makes an API call to update a objective to the database  
+ * @param activity_id the id of the activity that the objective belongs to
+ * @param description the text of the objective
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateObjective(id, activity_id, description) {
@@ -458,8 +444,8 @@ export function updateObjective(id, activity_id, description) {
 }
 
 /**
- * an impure action creator that makes an API call to delete a activity from the database  
- * @param id the id of the activity to be deleted
+ * an impure action creator that makes an API call to delete a objective from the database  
+ * @param id the id of the objective to be deleted
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function deleteObjective(id) {
@@ -479,13 +465,14 @@ export function deleteObjective(id) {
 }
 
 /**
- * an impure action creator that makes an API call to add a activity to the database  
- * @param title the title of the activity
- * @param room the name of the gitter room for the activity 
- * @param source the third party offering the activity
- * @param link url to the enrolling page
- * @param img source of the activity image
- * @param description text description of the activity
+ * an impure action creator that makes an API call to add a submission to the database
+ * @param activity_id the id of the activity that the submission belongs to
+ * @param title the title of the submission
+ * @param image source of the submission image 
+ * @param gitlab_link a string with a link to the gitlab code
+ * @param gdoc_link a string with a link the google_doc documentation
+ * @param description text description of the submission
+ * @param user_id the id of the scholar who posted the submission
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addSubmission(activity_id, title, image, gitlab_link, gdoc_link, description, user_id) {
@@ -513,14 +500,15 @@ export function addSubmission(activity_id, title, image, gitlab_link, gdoc_link,
 }
 
 /**
- * an impure action creator that makes an API call to update a activity to the database  
- * @param id the id of the activity to be updated
- * @param title the new title of the activity
- * @param room the new name of the gitter room for the activity 
- * @param source the new third party offering the activity
- * @param link the new url to the enrolling page
- * @param img the new source of the activity image
- * @param description the new text description of the activity
+ * an impure action creator that makes an API call to update a submission to the database  
+ * @param id the id of the submission to be updated
+ * @param activity_id the id of the activity that the submission belongs to
+ * @param title the title of the submission
+ * @param image source of the submission image 
+ * @param gitlab_link a string with a link to the gitlab code
+ * @param gdoc_link a string with a link the google_doc documentation
+ * @param description text description of the submission
+ * @param user_id the id of the scholar who posted the submission
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateSubmission(id, activity_id, title, image, gitlab_link, gdoc_link, description, user_id) {
@@ -548,8 +536,8 @@ export function updateSubmission(id, activity_id, title, image, gitlab_link, gdo
 }
 
 /**
- * an impure action creator that makes an API call to delete a activity from the database  
- * @param id the id of the activity to be deleted
+ * an impure action creator that makes an API call to delete a submission from the database  
+ * @param id the id of the submission to be deleted
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function deleteSubmission(id) {
@@ -613,11 +601,11 @@ export function fetchActivitiesSuccess(data) {
 }
 
 /**
- * indicates that the API call for getting all activities from the database succeeded
- * @param data a list of all activity objects as returned by the database 
+ * indicates that the API call for getting all objectives from the database succeeded
+ * @param data a list of all objective objects as returned by the database 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.activitiesList a list of activity ids
- * @return object.payload.activitiesById an object mapping ids to activities
+ * @return object.payload.objectivesList a list of objective ids
+ * @return object.payload.objectivesById an object mapping ids to objectives
  **/
 export function fetchObjectivesSuccess(data) {
 	let objectivesList = Immutable.List();
@@ -646,11 +634,11 @@ export function fetchObjectivesSuccess(data) {
 }
 
 /**
- * indicates that the API call for getting all activities from the database succeeded
- * @param data a list of all activity objects as returned by the database 
+ * indicates that the API call for getting all requirements from the database succeeded
+ * @param data a list of all requirement objects as returned by the database 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.activitiesList a list of activity ids
- * @return object.payload.activitiesById an object mapping ids to activities
+ * @return object.payload.requirementsList a list of requirement ids
+ * @return object.payload.requirementsById an object mapping ids to requirements
  **/
 export function fetchRequirementsSuccess(data) {
 	let requirementsList = Immutable.List();
@@ -679,11 +667,11 @@ export function fetchRequirementsSuccess(data) {
 }
 
 /**
- * indicates that the API call for getting all activities from the database succeeded
- * @param data a list of all activity objects as returned by the database 
+ * indicates that the API call for getting all submissions from the database succeeded
+ * @param data a list of all submission objects as returned by the database 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.activitiesList a list of activity ids
- * @return object.payload.activitiesById an object mapping ids to activities
+ * @return object.payload.submissionsList a list of submission ids
+ * @return object.payload.submissionsById an object mapping ids to submissions
  **/
 export function fetchSubmissionsSuccess(data) {
 	let submissionsList = Immutable.List();
@@ -719,11 +707,12 @@ export function fetchSubmissionsSuccess(data) {
 }
 
 /**
- * indicates that the API call for getting all activities from the database succeeded
- * @param data a list of all activity objects as returned by the database 
+ * indicates that the API call for getting all activity objectives from the database succeeded
+ * @param data a list of all activity objectives as returned by the database 
+ * @param id the id of the relevant activity
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.activitiesList a list of activity ids
- * @return object.payload.activitiesById an object mapping ids to activities
+ * @return object.payload.activityId the activity id that the objectives are associated with
+ * @return object.payload.objectivesList a list of objective ids
  **/
 export function fetchActivityObjectivesSuccess(data, id) {
 	let objectivesList = Immutable.List();
@@ -743,11 +732,12 @@ export function fetchActivityObjectivesSuccess(data, id) {
 }
 
 /**
- * indicates that the API call for getting all activities from the database succeeded
- * @param data a list of all activity objects as returned by the database 
+ * indicates that the API call for getting all activity requirements from the database succeeded
+ * @param data a list of all activity requirements as returned by the database
+ * @param id the id of the relevant activity 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.activitiesList a list of activity ids
- * @return object.payload.activitiesById an object mapping ids to activities
+ * @return object.payload.activityId the activity id that the requirements are associated with
+ * @return object.payload.objectivesList a list of requirement ids
  **/
 export function fetchActivityRequirementsSuccess(data, id) {
 	let requirementsList = Immutable.List();
@@ -767,11 +757,12 @@ export function fetchActivityRequirementsSuccess(data, id) {
 }
 
 /**
- * indicates that the API call for getting all activities from the database succeeded
- * @param data a list of all activity objects as returned by the database 
+ * indicates that the API call for getting all activity submissions from the database succeeded
+ * @param data a list of all activity submissions as returned by the database
+ * @param id the id of the relevant activity 
  * @return object.type the action type to be passed to the reducer
- * @return object.payload.activitiesList a list of activity ids
- * @return object.payload.activitiesById an object mapping ids to activities
+ * @return object.payload.activityId the activity id that the submissions are associated with
+ * @return object.payload.objectivesList a list of submission ids
  **/
 export function fetchActivitySubmissionsSuccess(data, id) {
 	let submissionsList = Immutable.List();
@@ -791,8 +782,8 @@ export function fetchActivitySubmissionsSuccess(data, id) {
 }
 
 /**
- * indicates that the API call for adding a activity to the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for adding an activity to the database succeeded
+ * @param data an activity object as returned by the database
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the activity object as expected by react components
  **/
@@ -820,12 +811,11 @@ export function addActivitySuccess(data) {
 }
 
 /**
- * indicates that the API call for updating a activity in the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for updating an activity in the database succeeded
+ * @param data an activity object as returned by the database
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the activity object as expected by react components
  **/
- //TODO: Think about this a little more. How do you deal with the lists?
 export function updateActivitySuccess(data) {
 	const request = Immutable.Map({
 		id: data.id,
@@ -850,7 +840,7 @@ export function updateActivitySuccess(data) {
 }
 
 /**
- * indicates that the API call for deleting a activity in the database succeeded
+ * indicates that the API call for deleting an activity in the database succeeded
  * @param data an object containing the activity id
  * @return object.type the action type to be passed to the reducer
  * @return object.payload an object containing the activity id
@@ -867,10 +857,10 @@ export function deleteActivitySuccess(data) {
 }
 
 /**
- * indicates that the API call for adding a activity to the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for adding a requirement to the database succeeded
+ * @param data a requirement object as returned by the database
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the activity object as expected by react components
+ * @return object.payload the requirement object as expected by react components
  **/
 export function addRequirementSuccess(data) {
 	const request = Immutable.Map({
@@ -888,12 +878,11 @@ export function addRequirementSuccess(data) {
 }
 
 /**
- * indicates that the API call for updating a activity in the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for updating a requirement in the database succeeded
+ * @param data a requirement object as returned by the database
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the activity object as expected by react components
+ * @return object.payload the requirement object as expected by react components
  **/
- //TODO: Think about this a little more. How do you deal with the lists?
 export function updateRequirementSuccess(data) {
 	const request = Immutable.Map({
 		id: data.id,
@@ -910,10 +899,10 @@ export function updateRequirementSuccess(data) {
 }
 
 /**
- * indicates that the API call for deleting a activity in the database succeeded
- * @param data an object containing the activity id
+ * indicates that the API call for deleting a reuirement in the database succeeded
+ * @param data an object containing the reuirement id
  * @return object.type the action type to be passed to the reducer
- * @return object.payload an object containing the activity id
+ * @return object.payload an object containing the reuirement and activity ids
  **/
 export function deleteRequirementSuccess(data) {
 	const request = {
@@ -928,10 +917,10 @@ export function deleteRequirementSuccess(data) {
 }
 
 /**
- * indicates that the API call for adding a activity to the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for adding a objective to the database succeeded
+ * @param data a objective object as returned by the database
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the activity object as expected by react components
+ * @return object.payload the objective object as expected by react components
  **/
 export function addObjectiveSuccess(data) {
 	const request = Immutable.Map({
@@ -949,12 +938,11 @@ export function addObjectiveSuccess(data) {
 }
 
 /**
- * indicates that the API call for updating a activity in the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for updating a objective in the database succeeded
+ * @param data a objective object as returned by the database
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the activity object as expected by react components
+ * @return object.payload the objective object as expected by react components
  **/
- //TODO: Think about this a little more. How do you deal with the lists?
 export function updateObjectiveSuccess(data) {
 	const request = Immutable.Map({
 		id: data.id,
@@ -971,10 +959,10 @@ export function updateObjectiveSuccess(data) {
 }
 
 /**
- * indicates that the API call for deleting a activity in the database succeeded
- * @param data an object containing the activity id
+ * indicates that the API call for deleting a objective in the database succeeded
+ * @param data an object containing the objective id
  * @return object.type the action type to be passed to the reducer
- * @return object.payload an object containing the activity id
+ * @return object.payload an object containing the objective and activity ids
  **/
 export function deleteObjectiveSuccess(data) {
 	const request = {
@@ -989,10 +977,10 @@ export function deleteObjectiveSuccess(data) {
 }
 
 /**
- * indicates that the API call for adding a activity to the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for adding a submission to the database succeeded
+ * @param data a submission object as returned by the database
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the activity object as expected by react components
+ * @return object.payload the submission object as expected by react components
  **/
 export function addSubmissionSuccess(data) {
 	const request = Immutable.Map({
@@ -1015,12 +1003,11 @@ export function addSubmissionSuccess(data) {
 }
 
 /**
- * indicates that the API call for updating a activity in the database succeeded
- * @param data a activity object as returned by the database
+ * indicates that the API call for updating a submission in the database succeeded
+ * @param data a submission object as returned by the database
  * @return object.type the action type to be passed to the reducer
- * @return object.payload the activity object as expected by react components
+ * @return object.payload the submission object as expected by react components
  **/
- //TODO: Think about this a little more. How do you deal with the lists?
 export function updateSubmissionSuccess(data) {
 	const request = Immutable.Map({
 		id: data.id,
@@ -1042,10 +1029,10 @@ export function updateSubmissionSuccess(data) {
 }
 
 /**
- * indicates that the API call for deleting a activity in the database succeeded
- * @param data an object containing the activity id
+ * indicates that the API call for deleting a submission in the database succeeded
+ * @param data an object containing the submission id
  * @return object.type the action type to be passed to the reducer
- * @return object.payload an object containing the activity id
+ * @return object.payload an object containing the submission and activity ids
  **/
 export function deleteSubmissionSuccess(data) {
 	const request = {
@@ -1087,7 +1074,7 @@ function fetchActivitiesFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all activities has been initiated
+ * indicates that an API call for retrieving all objectives has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchObjectivesRequest() {
@@ -1098,7 +1085,7 @@ function fetchObjectivesRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all activities failed 
+ * indicates that an API call for retrieving all objectives failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1112,7 +1099,7 @@ function fetchObjectivesFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all activities has been initiated
+ * indicates that an API call for retrieving all requirements has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchRequirementsRequest() {
@@ -1123,7 +1110,7 @@ function fetchRequirementsRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all activities failed 
+ * indicates that an API call for retrieving all requirements failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1137,7 +1124,7 @@ function fetchRequirementsFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all activities has been initiated
+ * indicates that an API call for retrieving all submissions has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchSubmissionsRequest() {
@@ -1148,7 +1135,7 @@ function fetchSubmissionsRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all activities failed 
+ * indicates that an API call for retrieving all submissions failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1162,7 +1149,7 @@ function fetchSubmissionsFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all activities has been initiated
+ * indicates that an API call for retrieving all activity objectives has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchActivityObjectivesRequest() {
@@ -1173,7 +1160,7 @@ function fetchActivityObjectivesRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all activities failed 
+ * indicates that an API call for retrieving all activity objectives failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1187,7 +1174,7 @@ function fetchActivityObjectivesFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all activities has been initiated
+ * indicates that an API call for retrieving all activity requirements has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchActivityRequirementsRequest() {
@@ -1198,7 +1185,7 @@ function fetchActivityRequirementsRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all activities failed 
+ * indicates that an API call for retrieving all activity requirements failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1212,7 +1199,7 @@ function fetchActivityRequirementsFailure(error) {
 }
 
 /**
- * indicates that an API call for retrieving all activities has been initiated
+ * indicates that an API call for retrieving all activity submissions has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function fetchActivitySubmissionsRequest() {
@@ -1223,7 +1210,7 @@ function fetchActivitySubmissionsRequest() {
 }
 
 /**
- * indicates that an API call for retrieving all activities failed 
+ * indicates that an API call for retrieving all activity submissions failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1237,7 +1224,7 @@ function fetchActivitySubmissionsFailure(error) {
 }
 
 /**
- * indicates that an API call for adding a activity has been initiated
+ * indicates that an API call for adding an activity has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function addActivityRequest() {
@@ -1248,7 +1235,7 @@ function addActivityRequest() {
 }
 
 /**
- * indicates that an API call for adding a activity failed 
+ * indicates that an API call for adding an activity failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1262,7 +1249,7 @@ function addActivityFailure(error) {
 }
 
 /**
- * indicates that an API call for updating a activity has been initiated
+ * indicates that an API call for updating an activity has been initiated
  * @param id the activity id to be updated
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1275,7 +1262,7 @@ function updateActivityRequest(id) {
 }
 
 /**
- * indicates that an API call for updating a activity failed 
+ * indicates that an API call for updating an activity failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1289,7 +1276,7 @@ function updateActivityFailure(error) {
 }
 
 /**
- * indicates that an API call for deleting a activity has been initiated
+ * indicates that an API call for deleting an activity has been initiated
  * @param id the activity id to be deleted
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1302,7 +1289,7 @@ function deleteActivityRequest(id) {
 }
 
 /**
- * indicates that an API call for deleting a activity a activity failed 
+ * indicates that an API call for deleting an activity a activity failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1316,7 +1303,7 @@ function deleteActivityFailure(error) {
 }
 
 /**
- * indicates that an API call for adding a activity has been initiated
+ * indicates that an API call for adding a requirement has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function addRequirementRequest() {
@@ -1327,7 +1314,7 @@ function addRequirementRequest() {
 }
 
 /**
- * indicates that an API call for adding a activity failed 
+ * indicates that an API call for adding a requirement failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1341,7 +1328,7 @@ function addRequirementFailure(error) {
 }
 
 /**
- * indicates that an API call for updating a activity has been initiated
+ * indicates that an API call for updating a requirement has been initiated
  * @param id the activity id to be updated
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1354,7 +1341,7 @@ function updateRequirementRequest(id) {
 }
 
 /**
- * indicates that an API call for updating a activity failed 
+ * indicates that an API call for updating a requirement failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1368,7 +1355,7 @@ function updateRequirementFailure(error) {
 }
 
 /**
- * indicates that an API call for deleting a activity has been initiated
+ * indicates that an API call for deleting a requirement has been initiated
  * @param id the activity id to be deleted
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1381,7 +1368,7 @@ function deleteRequirementRequest(id) {
 }
 
 /**
- * indicates that an API call for deleting a activity a activity failed 
+ * indicates that an API call for deleting a requirement a activity failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1395,7 +1382,7 @@ function deleteRequirementFailure(error) {
 }
 
 /**
- * indicates that an API call for adding a activity has been initiated
+ * indicates that an API call for adding a objective has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function addObjectiveRequest() {
@@ -1406,7 +1393,7 @@ function addObjectiveRequest() {
 }
 
 /**
- * indicates that an API call for adding a activity failed 
+ * indicates that an API call for adding a objective failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1420,7 +1407,7 @@ function addObjectiveFailure(error) {
 }
 
 /**
- * indicates that an API call for updating a activity has been initiated
+ * indicates that an API call for updating a objective has been initiated
  * @param id the activity id to be updated
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1433,7 +1420,7 @@ function updateObjectiveRequest(id) {
 }
 
 /**
- * indicates that an API call for updating a activity failed 
+ * indicates that an API call for updating a objective failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1447,7 +1434,7 @@ function updateObjectiveFailure(error) {
 }
 
 /**
- * indicates that an API call for deleting a activity has been initiated
+ * indicates that an API call for deleting a objective has been initiated
  * @param id the activity id to be deleted
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1460,7 +1447,7 @@ function deleteObjectiveRequest(id) {
 }
 
 /**
- * indicates that an API call for deleting a activity a activity failed 
+ * indicates that an API call for deleting a objective a activity failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1474,7 +1461,7 @@ function deleteObjectiveFailure(error) {
 }
 
 /**
- * indicates that an API call for adding a activity has been initiated
+ * indicates that an API call for adding a submission has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
 function addSubmissionRequest() {
@@ -1485,7 +1472,7 @@ function addSubmissionRequest() {
 }
 
 /**
- * indicates that an API call for adding a activity failed 
+ * indicates that an API call for adding a submission failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1499,7 +1486,7 @@ function addSubmissionFailure(error) {
 }
 
 /**
- * indicates that an API call for updating a activity has been initiated
+ * indicates that an API call for updating a submission has been initiated
  * @param id the activity id to be updated
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1512,7 +1499,7 @@ function updateSubmissionRequest(id) {
 }
 
 /**
- * indicates that an API call for updating a activity failed 
+ * indicates that an API call for updating a submission failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
@@ -1526,7 +1513,7 @@ function updateSubmissionFailure(error) {
 }
 
 /**
- * indicates that an API call for deleting a activity has been initiated
+ * indicates that an API call for deleting a submission has been initiated
  * @param id the activity id to be deleted
  * @return object.type the action type to be passed to the reducer
  **/
@@ -1539,7 +1526,7 @@ function deleteSubmissionRequest(id) {
 }
 
 /**
- * indicates that an API call for deleting a activity a activity failed 
+ * indicates that an API call for deleting a submission a activity failed 
  * @param error the error returned by the API call
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network

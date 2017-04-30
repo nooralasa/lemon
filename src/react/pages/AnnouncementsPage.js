@@ -1,7 +1,7 @@
-// ------------------------------------------------------------- //
-// The Announcements Page                                        //
-// The React Component to be endered with the /announcements uri //
-// ------------------------------------------------------------- //
+// ------------------------------------------------------------------- //
+// The Announcements Page                                              //
+// The React Component to be endered with the /build/announcements uri //
+// ------------------------------------------------------------------- //
 
 /** 
  * React Imports
@@ -11,25 +11,23 @@
  **/
 import React, { Component, PropTypes } from 'react';
 
-// import Parser from 'html-to-react';
-// const htmlToReact = new Parser();
-
-// var HtmlToReactParser = require('html-to-react').Parser;
-// var htmlToReactParser = new HtmlToReactParser();
-
-
 // ---React Components--- //
 import ItemsPanel from '../components/ItemsPanel';
 import Authenticate from '../components/Authenticate';
+
+// ---React Functional Components--- //
 import {renderAnnouncementPanel} from '../components/renderModulePanel';
 import {renderModuleForm} from '../components/renderForm';
 import {renderListGroupItems, renderAnnouncementsListBody} from '../components/renderModuleList';
 
 /** 
  * The Announcements' Page Componenet
- * This component renders the entire page when the /announcements uri is fetched
+ * This component renders the entire page when the /build/announcements uri is fetched
  **/
 class Announcements extends Component {
+  /** 
+   * The constructor binds the class functions to this, so this.props becomes accessable
+   **/
   constructor(props) {
     super(props);
     this.renderListItems = this.renderListItems.bind(this);
@@ -38,11 +36,9 @@ class Announcements extends Component {
   }
 
   /**
-   * specifies how the body of a list item should be rendered
-   * this function is to be used by the PanelList component to customize 
-   * each item in the announcements' list 
-   * @param body_params the data of one of the announcements
-   * @return the announcement's message cropped to fit in the list item 
+   * specifies how the list of announcements should be rendered
+   * this function is to be used by the PanelList component 
+   * @return a panel list of announcements 
    **/
   renderListItems() {
     return renderListGroupItems(this.props.announcementsList, this.props.announcementsById, renderAnnouncementsListBody, this.props.handleListClick);
@@ -51,9 +47,6 @@ class Announcements extends Component {
   /**
    * specifies how an announcement should be rendered in its panel if clicked
    * this function is to be used by the ItemPanel Component  
-   * @param announcement the announcement that is currently being viewed
-   * @param communityById all scholars this will be used to find the author 
-   *                      of the announcement and render their name
    * @return a div containing all the contents of the announcement
    **/
   renderItemPanel() {
@@ -62,36 +55,18 @@ class Announcements extends Component {
     return renderAnnouncementPanel(announcement, this.props.communityById[announcement['body_params']['user']]['body_params']);
   }
 
+  /**
+   * specifies how an announcement form should be rendered when editing or adding an announcement
+   * this function is to be used by the ItemPanel Component  
+   * @return a div containing a form for adding or editing an announcement
+   **/
   renderItemForm() {
     return renderModuleForm(this.props.formData, this.props.handleFormUpdates, this.props.currentVisibleAnnouncement, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.handleListClick);
   }
 
-
-
   /**
-   * a function declaration that is called  by React to render this component   
-   * @component Navbar the navbar to be customized for logged in users
-   *  @prop items a list of lists. Each list contains the name of each item on
-   *              the navbar and the uri that it links to
-   * @component Title renders the title of the Announcements Page
-   *  @prop children the title of the page (Announcements)
-   * @component ItemsPanel to be customize to render all announcements
-   *  @prop items the data to be rendered in this page (announcementsById)
-   *  @prop itemIds a list of ids of each of the items above (announcementsList)
-   *  @prop otherItems other data that may be relevant to rendering this item
-   *                   here communityById is needed to render the announcer's name
-   *  @prop isListViewable a ui state used for conditional rendering. If true
-   *                       PanelList will be rendered, else: ItemPanel
-   *  @prop currentVisible indicates which item (announcement) should be rendered
-   *                       if the ItemPanel is in view
-   *  @prop handleListClick a function to handle clicking on an item in the PanelList
-   *  @prop handlePanelClick a function to handle clicking the back button in ItemPanel
-   *  @prop renderListBody a function specifying how an item within the PanelList
-   *                       should be rendered
-   *  @prop renderItemPanel a function specifying how the view of the ItemPanel 
-   *                       should be rendered for a given item (announcement)
-   * @component Footer the footer of the application
-   * @return the announcement's page
+   * a function declaration that is called  by React to render this component 
+   * @return the announcements page
    **/
   render() {
     return (
@@ -126,19 +101,8 @@ class Announcements extends Component {
 }
 
 /**
- * an object validating that the following props have been passed in from 
+ * an object validating that all the necessary props have been passed in from 
  * the AnnouncementsContainer which passes this data from the Redux store 
- * @prop isAnnouncementListViewable boolean indicating whether the list is in view
- * @prop currentVisibleAnnouncement the id of the announcement to be rendered if 
- *                                  isAnnouncementListViewable is false
- * @prop handlePanelClick a function to handle changing the ui state when clicking 
- *                        the back button in ItemPanel
- * @prop handleListClick a function to handle changing the ui state when clicking 
- *                       on an item in the PanelList
- * @prop announcementsById an object mapping each announcement id to its data
- * @prop communityById an object mapping each scholar id to its scholar data
- * @prop announcementsList a list of announcement ids
- * @prop mount a function for fetching scholar and announcement data before rendering
  **/
 Announcements.propTypes = {
   isAnnouncementsListViewable: PropTypes.bool.isRequired,
@@ -159,7 +123,8 @@ Announcements.propTypes = {
   handleEditFormSubmission:  PropTypes.func.isRequired,
   handleDeleteButtonClick: PropTypes.func.isRequired,
   handleEditButtonClick: PropTypes.func.isRequired,
-  handleProfileClick: PropTypes.func.isRequired
+  handleProfileClick: PropTypes.func.isRequired,
+  authenticate: PropTypes.func.isRequired
 }
 
 export default Announcements;

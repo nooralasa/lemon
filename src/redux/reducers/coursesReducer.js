@@ -44,8 +44,8 @@ const initialCoursesState = Immutable.fromJS({
 
 /**
  * Reducer for course data
- * This reducer handles adding, updating, deleting and fetching courses as well as
- * enrolling scholars into courses and getting the course's list of enrolled scholars
+ * This reducer handles adding, updating, deleting and fetching courses as well as enrolling
+ * scholars into courses and getting the course's list of enrolled scholars and activities
  * @param state the current state of the app
  *							set to initialCoursesState when the app is first started
  * @param action the dispatched action

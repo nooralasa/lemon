@@ -15,7 +15,6 @@
  *							 component 
  * @import browserHistory manipulates the browser urls to sync with React
  *												components
- * @import IndexRedirect redirects to the specified Route element
  **/
 import React from 'react';
 import ReactDOM from 'react-dom'; 
@@ -55,6 +54,10 @@ import appReducer from './redux/reducers/index';
  *													to its state
  * @import CommunityContainer the container component connecting the community  
  *													  page to its state
+ * @import RegistrationContainer the container component connecting the registration  
+ *													  	 page to its state
+ * @import ActivitiesContainer the container component connecting the activities  
+ *													   page to its state
  * @import NotFoundPage a page to be rendered for misentered urls (404)
  **/
 import LandingPage from './react/pages/LandingPage';
@@ -84,6 +87,8 @@ const store = createStore(
 //ReactDom would fitch the html element with id root from index.html
 //It would then convert the JSX virtual DOM below into an HTML DOM
 //and append it to the root div
+//Provider connects the redux store to the react components
+//Routing is visible with all relevant urls
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>

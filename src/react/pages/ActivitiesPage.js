@@ -1,30 +1,33 @@
-// ------------------------------------------------------- //
-// The Activities Page                                        //
-// The React Component to be endered with the /activities uri //
-// ------------------------------------------------------- //
+// ---------------------------------------------------------------- //
+// The Activities Page                                              //
+// The React Component to be endered with the /build/activities uri //
+// ---------------------------------------------------------------- //
 
 /** 
  * React Imports
  * @import React the main react object necessary for writing JSX
  * @import Component this class must be extended to create a react component 
  * @import PropTypes an object with validators to typecheck the based props
- * @import rbs the react-bootstrap module with predefined react components 
- *             with bootstrap styling
  **/
 import React, { Component, PropTypes } from 'react';
 
 // ---React Components--- //
 import ItemsPanel from '../components/ItemsPanel';
 import Authenticate from '../components/Authenticate';
+
+// ---React Functional Components--- //
 import {renderActivityPanel, renderSubmissionPanel} from '../components/renderModulePanel';
 import {renderListGroupItems, renderActivitiesListBody} from '../components/renderModuleList';
 import {renderActivityForm, renderSubmissionForm} from '../components/renderForm';
 
 /** 
  * The Activities Page Componenet
- * This component renders the entire page when the /activities uri is fetched
+ * This component renders the entire page when the /build/activities uri is fetched
  **/
 class Activities extends Component {
+  /** 
+   * The constructor binds the class functions to this, so this.props becomes accessable
+   **/
   constructor(props) {
     super(props);
     this.renderListItems = this.renderListItems.bind(this);
@@ -33,16 +36,19 @@ class Activities extends Component {
   }
 
   /**
-   * specifies how the body of a list item should be rendered
-   * this function is to be used by the PanelList component to customize 
-   * each item in the activities' list 
-   * @param body_params the data of one of the activities
-   * @return a activity's picture, name and source fit in one of the list's items
+   * specifies how the list of activities should be rendered
+   * this function is to be used by the PanelList component 
+   * @return a panel list of activities 
    **/
   renderListItems() {
     return renderListGroupItems(this.props.activitiesList, this.props.activitiesById, renderActivitiesListBody, this.props.handleListClick, (id) => { return this.props.coursesById[this.props.activitiesById[id].body_params.course_id].body_params.title});
   }
 
+  /**
+   * specifies how an activity or submission form should be rendered when editing 
+   * or adding an activity or submission. this function is to be used by the ItemPanel Component  
+   * @return a div containing a form for adding or editing an activity or submission
+   **/
   renderItemForm() {
     if (this.props.isSubmissionFormViewable) {
       return renderSubmissionForm(this.props.submissionFormData, this.props.handleFormUpdates, this.props.currentVisibleSubmission, this.props.handleEditFormSubmission, this.props.handleAddFormSubmission, this.props.handlePanelClick, this.props.handleListClick, this.props.currentVisibleActivity);
@@ -52,17 +58,9 @@ class Activities extends Component {
   }
 
   /**
-   * specifies how a activity should be rendered in its panel if clicked
+   * specifies how an activity or a submission should be rendered in its panel if clicked
    * this function is to be used by the ItemPanel Component  
-   * @param activity the activity that is currently being viewed
-   * @param communityById all scholars this will be used to render the scholars that 
-   *                      are enrolled in this activity
-   * @param handleThumbnailClick a function to handle clicking on one of the scholar
-   *                             thumbnails that are enrolled in this activity
-   * @param url the page that React Router must render when a class thumbnail is 
-   *            clicked (/community in this case)
-   * @componenet handleButtonClick a fucntion handling enrolling into a activity
-   * @return a div containing all the contents of the activity
+   * @return a div containing all the contents of the activity or the submission
    **/
   renderItemPanel() {
     const activity = this.props.activitiesById[this.props.currentVisibleActivity];
@@ -74,32 +72,8 @@ class Activities extends Component {
   }
 
   /**
-   * a function declaration that is called  by React to render this component   
-   * @component Navbar the navbar to be customized for logged in users
-   *  @prop items a list of lists. Each list contains the name of each item on
-   *              the navbar and the uri that it links to
-   * @component Title renders the title of the Activities Page
-   *  @prop children the title of the page (Activities)
-   * @component ItemsPanel to be customize to render all activities
-   *  @prop items the data to be rendered in this page (activitiesById)
-   *  @prop itemIds a list of ids of each of the items above (activitiesList)
-   *  @prop otherItems other data that may be relevant to rendering this item
-   *                   here communityById is needed to render enrolled activities
-   *  @prop isListViewable a ui state used for conditional rendering. If true
-   *                       PanelList will be rendered, else: ItemPanel
-   *  @prop currentVisible indicates which item (activity) should be rendered
-   *                       if the ItemPanel is in view
-   *  @prop handleListClick a function to handle clicking on an item in the PanelList
-   *  @prop handlePanelClick a function to handle clicking the back button in ItemPanel
-   *  @prop handleThumbnailClick a function to handle clicking an enrolled activity
-   *  @prop handleButtonClick a function to handle clicking the enroll button
-   *  @prop url the url that the thumbnail click should link to
-   *  @prop renderListBody a function specifying how an item within the PanelList
-   *                       should be rendered
-   *  @prop renderItemPanel a function specifying how the view of the ItemPanel 
-   *                       should be rendered for a given item (scholar)
-   * @component Footer the footer of the application
-   * @return the activities' page
+   * a function declaration that is called  by React to render this component 
+   * @return the activities page
    **/
   render() {
     return (
@@ -134,40 +108,40 @@ class Activities extends Component {
 }
 
 /**
- * an object validating that the following props have been passed in from 
+ * an object validating that all the necessary props have been passed in from 
  * the ActivitiesContainer which passes this data from the Redux store 
- * @prop isActivitiesListViewable boolean indicating whether the list is in view
- * @prop currentVisibleActivity the id of the activity to be rendered if 
- *                             isActivitiesListViewable is false
- * @prop handlePanelClick a function to handle changing the ui state when clicking 
- *                        the back button in ItemPanel
- * @prop handleListClick a function to handle changing the ui state when clicking 
- *                       on an item in the PanelList
- * @prop handleThumbnailClick a function to handle changing the ui state when an 
- *                            enrolled class is clicked in the ThumbnailsList
- * @prop handleButtonClick a function to handle associating a scholar to a class 
- *                         in the backend if a scholar enrolls into a class
- * @prop activitiesById an object mapping each activity id to its activity data
- * @prop communityById an object mapping each scholar id to its scholar data
- * @prop activitiesList a list of activity ids
- * @prop mount a function for fetching scholar and activity data before rendering
  **/
 Activities.propTypes = {
   isActivitiesListViewable: PropTypes.bool.isRequired,
+  isFormViewable: PropTypes.bool.isRequired,
+  isSubmissionFormViewable: PropTypes.bool.isRequired,
   currentUser: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
   currentVisibleActivity: PropTypes.number.isRequired,
+  currentVisibleSubmission: PropTypes.number.isRequired,
   handlePanelClick: PropTypes.func.isRequired,
   handleListClick: PropTypes.func.isRequired,
   mount: PropTypes.func.isRequired,
-  handleButtonClick: PropTypes.func.isRequired,
-  handleAddButtonClick: PropTypes.func,
-  handleFormUpdates: PropTypes.func,
+  handleSubmissionButton1Click: PropTypes.func.isRequired,
+  handleAddButtonClick: PropTypes.func.isRequired,
+  handleEditButtonClick: PropTypes.func.isRequired,
+  handleDeleteButtonClick: PropTypes.func.isRequired,
+  handleFormUpdates: PropTypes.func.isRequired,
   handleThumbnailClick: PropTypes.func.isRequired,
-  handleAddFormSubmission: PropTypes.func,
+  handleAddFormSubmission: PropTypes.func.isRequired,
+  handleEditFormSubmission: PropTypes.func.isRequired,
+  handleProfileClick: PropTypes.func.isRequired,
+  handleAddFormListEntry: PropTypes.func.isRequired,
+  authenticate: PropTypes.func.isRequired,
   activitiesById: PropTypes.object.isRequired,
   activitiesList: PropTypes.array.isRequired,
-  formData: PropTypes.object,
+  coursesById: PropTypes.object.isRequired,
+  coursesList: PropTypes.array.isRequired,
+  requirementsById: PropTypes.object.isRequired,
+  objectivesById: PropTypes.object.isRequired,
+  submissionsById: PropTypes.object.isRequired,
+  formData: PropTypes.object.isRequired,
+  submissionsFormData: PropTypes.object.isRequired,
   communityById: PropTypes.object.isRequired
 }
 

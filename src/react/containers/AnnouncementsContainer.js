@@ -4,9 +4,10 @@
 // ------------------------------------------------------------------------ //
 
 /** 
- * React-Redux Imports
+ * React-Redux and React-Router Imports
  * @import connect a function that passes the state down to the specified 
  *                 component as props
+ * @import browserHistory the urls that will be rendered in the browser
  **/
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -22,14 +23,18 @@ import {fetchAnnouncement, displayFetchedAnnouncements, fetchAnnouncementForm, u
 
 /**
  * a function declaration to be called  by React-Redux 
- * here we specify what parts of the application state to share with the 
- * Announcements Page
+ * here we specify what parts of the application state to share with the Announcements Page
  * @param state the application state as passed in by Redux
+ * @return object.currentUser the id of the user as saved in the browser sessions
+ * @return object.userRole the role of the currently logged in user (admin or scholar)
  * @return object.announcementsList the list of announcement ids
  * @return object.announcementsById an object mapping announcement ids to their data
  * @return object.communityById an object mapping scholar ids to scholar data
  * @return object.isAnnouncementsListViewable boolean indicating that the list view is on
  * @return object.currentVisibleAnnouncement the id of the announcement to be rendered 
+ * @return object.isFormViewable boolean indicating that the form is in view for editing or 
+ *                               adding an announcement
+ * @return object.formData an object of data to fill the form and track updates
  **/
 const mapStateToProps = (state) => {
   return {
@@ -53,6 +58,14 @@ const mapStateToProps = (state) => {
  * @return object.mount fetches data from the database before rendering
  * @return object.handleListClick prepares the ui state for rendering the clicked announcement
  * @return object.handlePanelClick prepares the ui state for rendering the announcements list
+ * @return object.handleAddButtonClick prepares the ui state for adding a new announcement
+ * @return object.handleFormUpdates keeps track of any changes to form data
+ * @return object.handleAddFormSubmission adds a new announcement to the database 
+ * @return object.handleEditFormSubmission updates an announcement in the database 
+ * @return object.handleEditButtonClick prepares the ui state for editing an announcement
+ * @return object.handleDeleteButtonClick prepares the ui state for deleting an announcement
+ * @return object.handleProfileClick renders the profile of the logged in user
+ * @return object.authenticate fetches the session data of who's currently logged in from db
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -136,9 +149,9 @@ const mapDispatchToProps = (dispatch) => {
  * a function declaration to be called  by React-Redux 
  * this function can be used to use the state data fetched by mapStateToProps
  * with the defined functions in mapDispatchToProps
- * we use this to pass the currently logged in user to the handleButtonClick function
  * @param stateProps all the props taken directly from the state
  * @param dispatchProps all the functions defined above to dispatch events
+ * @param ownProps all the props passed into the container from parent elements (router)
  * @return the mixture of these two props to be passed into the presentation component
  **/
 const mergeProps = (stateProps, dispatchProps, ownProps) => {

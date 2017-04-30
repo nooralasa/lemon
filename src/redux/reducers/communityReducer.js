@@ -50,7 +50,7 @@ const initialCommunityState = Immutable.fromJS({
  * Reducer for community data
  * This reducer handles adding, updating, deleting and fetching scholars as well as
  * enrolling scholars into courses, getting their list of enrolled courses, and  
- * getting the id currently logged in scholar
+ * getting the id of the currently logged in scholar
  * @param state the current state of the app
  *							set to initialCommunityState when the app is first started
  * @param action the dispatched action

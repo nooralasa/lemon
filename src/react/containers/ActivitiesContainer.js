@@ -1,12 +1,13 @@
-// ------------------------------------------------------------------ //
+// --------------------------------------------------------------------- //
 // The Activities Container                                              //
 // This Container Component links the Redux store to the Activities Page //
-// ------------------------------------------------------------------ //
+// --------------------------------------------------------------------- //
 
 /** 
- * React-Redux Imports
+ * React-Redux and React-Router Imports
  * @import connect a function that passes the state down to the specified 
  *                 component as props
+ * @import browserHistory the urls that will be rendered in the browser
  **/
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -25,14 +26,26 @@ import {fetchScholar} from '../../redux/actions/communityUIActions';
 
 /**
  * a function declaration to be called by React-Redux 
- * here we specify what parts of the application state to share with the 
- * Activities Page
+ * here we specify what parts of the application state to share with the Activities Page
  * @param state the application state as passed in by Redux
  * @return object.activitiesList the list of activity ids
  * @return object.communityById an object mapping scholar ids to scholar data
+ * @return object.coursesById an object mapping course ids to course data
+ * @return object.requirementsById an object mapping requirement ids to requirement data
+ * @return object.objectivesById an object mapping objective ids to objective data
+ * @return object.submissionsById an object mapping submission ids to submission data
  * @return object.activitiesById an object mapping activity ids to activity data
  * @return object.isActivitiesListViewable boolean indicating that the list view is on
  * @return object.currentVisibleActivity the id of the activity to be rendered 
+ * @return object.currentVisibleSubmission the id of the submission to be rendered 
+ * @return object.isFormViewable boolean indicating that the form is in view for editing or 
+ *                               adding an activity
+ * @return object.isSubmissionFormViewable boolean indicating that the form is in view for  
+ *                                         editing or adding a submission
+ * @return object.formData an object of data to fill the form and track updates
+ * @return object.submissionFormData an object of data to fill the submission form and track updates
+ * @return object.currentUser the id of the user as saved in the browser sessions
+ * @return object.userRole the role of the currently logged in user (admin or scholar)
  **/
 const mapStateToProps = (state) => {
   return {
@@ -65,8 +78,17 @@ const mapStateToProps = (state) => {
  * @return object.handleListClick prepares the ui state for rendering the clicked activity
  * @return object.handlePanelClick prepares the ui state for rendering the activities list
  * @return object.handleThumbnailClick prepares the ui state for rendering the clicked 
- *                                     scholar in the enrolled scholars thumbnails list
- * @return object.handleButtonClick enrolls a scholar into the activity in the backend
+ *                                     submission in the submissions thumbnails list
+ * @return object.handleSubmissionButton1Click renders the activity that the submission belongs to
+ * @return object.handleAddButtonClick prepares the ui state for adding a new activity or submission
+ * @return object.handleAddFormListEntry prepares the ui state for adding a new requirement or objective
+ * @return object.handleFormUpdates keeps track of any changes to form data
+ * @return object.handleAddFormSubmission adds a new activity or submission to the database 
+ * @return object.handleEditFormSubmission updates an activity or submission in the database 
+ * @return object.handleEditButtonClick prepares the ui state for editing an activity or submission
+ * @return object.handleDeleteButtonClick prepares the ui state for deleting an activity or submission
+ * @return object.handleProfileClick renders the profile of the logged in user
+ * @return object.authenticate fetches the session data of who's currently logged in from db
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -271,6 +293,7 @@ const mapDispatchToProps = (dispatch) => {
  * we use this to pass the currently logged in user to the handleButtonClick function
  * @param stateProps all the props taken directly from the state
  * @param dispatchProps all the functions defined above to dispatch events
+ * @param ownProps all the props passed into the container from parent elements (router)
  * @return the mixture of these two props to be passed into the presentation component
  **/
 const mergeProps = (stateProps, dispatchProps, ownProps) => {

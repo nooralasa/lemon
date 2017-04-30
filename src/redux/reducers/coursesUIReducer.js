@@ -64,7 +64,7 @@ const initialCoursesUIState = Immutable.fromJS({
 
 /**
  * Reducer for course ui state
- * This reducer handles rendering the courses list or a specific course 
+ * This reducer handles rendering the courses list or a specific course and forms
  * @param state the current state of the app
  *							set to initialCoursesUIState when the app is first started
  * @param action the dispatched action
