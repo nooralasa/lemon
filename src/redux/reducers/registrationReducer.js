@@ -32,7 +32,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["First, create a Gitlab account. In LIME, we'll be working on and sharing projects through Gitlab. Check your inbox for a verification email, then return to this page after verifying your email address."],
 	    button: 'Create an account!',
 	    a: 'https://gitlab.com/users/sign_in',
-	    img: ''
+	    img: 'styles/img/registration/gitlab-create-account.gif'
 	  },
 
 	  3: {
@@ -41,7 +41,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ['Next, update your profile. Upload a profile picture, add your name and a public email, specify your university or company under "organization," and type a short bio so we know who you are!'],
 	    button: 'Customize my profile!',
 	    a:'https://gitlab.com/profile',
-	    img: '/styles/img/img.png'
+	    img: 'styles/img/registration/gitlab-update-profile.gif'
 	  },
 
 	  4: {
@@ -50,7 +50,6 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["Now you're ready to login to LIME with Gitlab!"],
 	    button: 'Link my account!',
 	    a: '/auth/gitlab-register',
-
 	    img: ''
 	  },
 

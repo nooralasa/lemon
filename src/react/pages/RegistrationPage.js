@@ -51,6 +51,7 @@ class Flexbox extends Component {
         allSteps={this.props.tutorial}
         handleButtonClick={this.handleButtonClick}
         onButtonActive={this.handleButtonActive}
+        onForwardClick={this.handleForwardClick}
       />);
     }
 
@@ -125,13 +126,19 @@ class ButtonLink extends Component {
     return (
       <div>
         <rbs.Button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}}
-          style={{backgroundColor:'#bbdb8f', border:'none', padding:'5px 10px', borderRadius:'5px'}}
+          style={{backgroundColor:'rgba(0,0,0,0)', border:'none', padding:'5px 10px', marginBottom:'10px', borderRadius:'5px'}}
           >
-          <a style={{color:'white', textDecoration:'none'}}
+          <a style={{color:'#3377b5', textDecoration:'none', fontSize:'16px'}}
             target="_blank"
             onClick={this.props.onButtonActive}>
             {this.props.allSteps[this.props.currentStep].button}
           </a>
+        </rbs.Button>
+        <br/>
+        <rbs.Button onClick={() => {this.props.onForwardClick(); this.props.onButtonActive();}}
+          style={{backgroundColor:'#bbdb8f', color:'white', border:'none', padding:'5px 10px', borderRadius:'5px'}}
+          >
+          Click when finished!
         </rbs.Button>
       </div>
     )
@@ -243,15 +250,15 @@ class Progress extends Component {
       <div>
         <div>{this.props.button}</div>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems:'center', marginTop:'20px', marginBottom:'30px'}}>
-          <button
+          {/*<button
             style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
             onClick={this.props.onBackClick}>
             &#60;
-          </button>
+          </button>*/}
           <div style={{display:'flex', flexDirection:'row', justifyContent: 'center', alignItems:'center', marginLeft:'15px', marginRight:'15px'}}>  
             {circles}
           </div>
-          {buttonActive}
+          {/*{buttonActive}*/}
         </div>
       </div>
     );
