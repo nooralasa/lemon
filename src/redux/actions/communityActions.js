@@ -20,6 +20,10 @@ export const FETCH_SCHOLAR_COURSES_REQUEST = 'FETCH_SCHOLAR_COURSES_REQUEST';
 export const FETCH_SCHOLAR_COURSES_FAILURE = 'FETCH_SCHOLAR_COURSES_FAILURE';
 export const FETCH_SCHOLAR_COURSES_SUCCESS = 'FETCH_SCHOLAR_COURSES_SUCCESS';
 
+export const FETCH_SCHOLAR_SUBMISSIONS_REQUEST = 'FETCH_SCHOLAR_SUBMISSIONS_REQUEST';
+export const FETCH_SCHOLAR_SUBMISSIONS_FAILURE = 'FETCH_SCHOLAR_SUBMISSIONS_FAILURE';
+export const FETCH_SCHOLAR_SUBMISSIONS_SUCCESS = 'FETCH_SCHOLAR_SUBMISSIONS_SUCCESS';
+
 export const ADD_SCHOLAR_REQUEST = 'ADD_SCHOLAR_REQUEST';
 export const ADD_SCHOLAR_FAILURE = 'ADD_SCHOLAR_FAILURE';
 export const ADD_SCHOLAR_SUCCESS = 'ADD_SCHOLAR_SUCCESS';
@@ -36,14 +40,15 @@ export const DELETE_SCHOLAR_REQUEST = 'DELTE_SCHOLAR_REQUEST';
 export const DELETE_SCHOLAR_FAILURE = 'DELTE_SCHOLAR_FAILURE';
 export const DELETE_SCHOLAR_SUCCESS = 'DELTE_SCHOLAR_SUCCESS';
 
-// ---impure action creator creators making asynchonous API calls--- //
+// ---impure action creators making asynchonous API calls--- //
 
 /**
  * an impure action creator that makes an API call to get the currently logged in  
  * user from the database 
+ * @param cb a functional callback to be called after the API call returns
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function currentScholar() {
+export function currentScholar(cb) {
 	return dispatch => {
 		console.log('The async action ran')
 		dispatch(currentScholarRequest());
@@ -53,9 +58,9 @@ export function currentScholar() {
 			if (res) {
 				console.log('current_user');
 				console.log(res.data);
-				dispatch(currentScholarSuccess(res.data));
+				dispatch(currentScholarSuccess(res.data, cb));
 			} else if (err) {
-				dispatch(currentScholarFailure(err));
+				dispatch(currentScholarFailure(err, cb));
 			} 
 		});
 	}	
@@ -65,7 +70,7 @@ export function currentScholar() {
  * an impure action creator that makes an API call to add a course to the scholar's  
  * enrolled courses in the database 
  * @param user_id the id of the user enrolling in the course
- * Qparam course_id the id of the course that the user is enrolling in
+ * @param course_id the id of the course that the user is enrolling in
  * @return a function that would dispatch pure actions and make the API call
  **/
 export function addScholarCourse(user_id, course_id) {
@@ -87,10 +92,11 @@ export function addScholarCourse(user_id, course_id) {
 }
 
 /**
- * an impure action creator that makes an API call to get all scholars from the database  
+ * an impure action creator that makes an API call to get all scholars from the database 
+ * @param cb a functional callback to be called after the API call returns 
  * @return a function that would dispatch pure actions and make the API call
  **/
-export function fetchScholars() {
+export function fetchScholars(cb) {
 	return dispatch => {
 		dispatch(fetchScholarsRequest());
 
@@ -98,6 +104,7 @@ export function fetchScholars() {
 		.then((res, err) => {
 			if (res) {
 				dispatch(fetchScholarsSuccess(res.data));
+				cb();
 			} else if (err) {
 				dispatch(fetchScholarsFailure(err));	
 			} 
@@ -127,10 +134,31 @@ export function fetchScholarCourses(id) {
 }
 
 /**
+ * an impure action creator that makes an API call to get all of the scholar's submissions  
+ * @param id the id of the scholar whose list of submissions we want to retrieve 
+ * @return a function that would dispatch pure actions and make the API call
+ **/
+export function fetchScholarSubmissions(id) {
+	return dispatch => {
+		dispatch(fetchScholarSubmissionsRequest());
+
+		return axios.get('/api/v1/users/submissions/'+id)
+		.then((res, err) => {
+			if (res) {
+				dispatch(fetchScholarSubmissionsSuccess(res.data, id));	
+			} else if (err) {
+				dispatch(fetchScholarSubmissionsFailure(err));
+			} 
+		});
+	}	
+}
+
+/**
  * an impure action creator that makes an API call to add a scholar to the database  
  * @param title the scholar's name
  * @param source the scholar's affiliation
  * @param link the scholar's personal portfolio
+ * @param chat_link the scholar's gitter url
  * @param img the scholar's image url
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
@@ -164,10 +192,12 @@ export function addScholar(title, source, link, chat_link, img, description) {
 /**
  * an impure action creator that makes an API call to updare a  specified scholar 
  * in the database 
- * @param id the id of the user to be updared 
+ * @param id the id of the user to be updared
+ * @param role the scholar's role 
  * @param title the scholar's name
  * @param source the scholar's affiliation
  * @param link the scholar's personal portfolio
+ * @param chat_link the scholar's gitter url
  * @param img the scholar's image url
  * @param description the scholar's bio
  * @return a function that would dispatch pure actions and make the API call
@@ -229,14 +259,18 @@ export function deleteScholar(id) {
 /**
  * indicates that the API call for getting the currently logged in user succeeded
  * @param data an object containing the id of the currently logged in user
+ * @param cb a functional callback to be called after the API call returns
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the id of the currently logged in user
  **/
-export function currentScholarSuccess(data) {
+export function currentScholarSuccess(data, cb) {
 	const request = {
+		authenticated: data.authenticated,
 		user_id: data.user_id,
 		role: data.role
 	};
+
+	cb(null, request);
 
 	return {
 		type: CURRENT_SCHOLAR_SUCCESS,
@@ -287,7 +321,8 @@ export function fetchScholarsSuccess(data) {
 					link: item.portfolio,
 					chat_link: item.chat_link,
 					img: item.image,
-					list: [],
+					list: Immutable.List(),
+					submissionsList: Immutable.List(),
 					role: 'scholar',
 					description: item.about
 				}
@@ -332,6 +367,32 @@ export function fetchScholarCoursesSuccess(data, id) {
 }
 
 /**
+ * indicates that the API call for getting the scholar's submissions succeeded
+ * @param data a list of submission ids as returned by the API call
+ * @param id the id of the user who's enrolled in these courses
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload.userId the user id
+ * @return object.payload.submissionsList the list of submission ids
+ **/
+export function fetchScholarSubmissionsSuccess(data, id) {
+	let list = Immutable.List();
+	console.log('data ', data);
+	data.forEach(function(item) {
+		list = list.push(item.id);
+	});
+
+	const request = {
+		userId: id,
+		submissionsList: list
+	};
+
+	return {
+		type: FETCH_SCHOLAR_SUBMISSIONS_SUCCESS,
+		payload: request
+	};
+}
+
+/**
  * indicates that the API call for adding a scholar succeeded
  * @param data the added scholar as returned by the API
  * @return object.type the action type to be passed to the reducer
@@ -347,7 +408,8 @@ export function addScholarSuccess(data) {
 			chat_link: data.chat_link,
 			img: data.image,
 			role: 'scholar',
-			list: [],
+			list: Immutable.List(),
+			submissionsList: Immutable.List(),
 			description: data.about
 		}
 	};
@@ -373,7 +435,8 @@ export function updateScholarSuccess(data) {
 			link: data.portfolio,
 			chat_link: data.chat_link,
 			img: data.image,
-			list: [],
+			list: Immutable.List(),
+			submissionsList: Immutable.List(),
 			role: 'scholar',
 			description: data.about
 		}
@@ -420,12 +483,16 @@ function currentScholarRequest() {
  * indicates that an API call to get the currently logged in scholar 
  * from session data failed
  * @param error the error returned by the API call
+ * @param cb a functional callback to be called after the API call returns
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the error returned by the network
  **/
-function currentScholarFailure(error) {
+function currentScholarFailure(error, cb) {
 	console.log('current scholar failure action creator');
 	console.log(error);
+
+	cb(error, null);
+	
 	return {
 		type: CURRENT_SCHOLAR_FAILURE,
 		payload: {error: error}
@@ -515,6 +582,31 @@ function fetchScholarCoursesFailure(error) {
 }
 
 /**
+ * indicates that an API call to  get all submissions that a scholar submitted
+ * @return object.type the action type to be passed to the reducer
+ **/
+function fetchScholarSubmissionsRequest() {
+
+	return {
+		type: FETCH_SCHOLAR_SUBMISSIONS_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call to get the scholar submissions failed
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function fetchScholarSubmissionsFailure(error) {
+
+	return {
+		type: FETCH_SCHOLAR_SUBMISSIONS_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
  * indicates that an API call to add a scholar to the database 
  * has been initiated
  * @return object.type the action type to be passed to the reducer
@@ -595,5 +687,3 @@ function deleteScholarFailure(error) {
 		payload: {error: error}
 	};
 }
-
-

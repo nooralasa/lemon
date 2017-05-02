@@ -34,7 +34,7 @@ const initialAnnouncementsState = Immutable.fromJS({
 
 /**
  * Reducer for announcements data
- * This reducer handles adding, updating, deleting and fetching announcements
+ * This reducer handles adding, updating, deleting and fetching announcements 
  * @param state the current state of the app
  *							set to initialAnnouncementsState when the app is first run
  * @param action the dispatched action

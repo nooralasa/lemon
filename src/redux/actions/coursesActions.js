@@ -16,6 +16,10 @@ export const FETCH_COURSE_USERS_REQUEST = 'FETCH_COURSE_USERS_REQUEST';
 export const FETCH_COURSE_USERS_FAILURE = 'FETCH_COURSE_USERS_FAILURE';
 export const FETCH_COURSE_USERS_SUCCESS = 'FETCH_COURSE_USERS_SUCCESS';
 
+export const FETCH_COURSE_ACTIVITIES_REQUEST = 'FETCH_COURSE_ACTIVITIES_REQUEST';
+export const FETCH_COURSE_ACTIVITIES_FAILURE = 'FETCH_COURSE_ACTIVITIES_FAILURE';
+export const FETCH_COURSE_ACTIVITIES_SUCCESS = 'FETCH_COURSE_ACTIVITIES_SUCCESS';
+
 export const ADD_COURSE_REQUEST = 'ADD_COURSE_REQUEST';
 export const ADD_COURSE_FAILURE = 'ADD_COURSE_FAILURE';
 export const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
@@ -32,7 +36,7 @@ export const DELETE_COURSE_REQUEST = 'DELETE_COURSE_REQUEST';
 export const DELETE_COURSE_FAILURE = 'DELETE_COURSE_FAILURE';
 export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
 
-// ---impure action creator creators making asynchonous API calls--- //
+// ---impure action creators making asynchonous API calls--- //
 
 /**
  * an impure action creator that makes an API call to associate a scholar and a course
@@ -62,16 +66,18 @@ export function enrollInCourse(user_id, course_id) {
 
 /**
  * an impure action creator that makes an API call to get all courses from the database
+ * @param cb a functional callback to be called after the API call returns 
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function fetchCourses() {
+export function fetchCourses(cb) {
 	return dispatch => {
 		dispatch(fetchCoursesRequest());
 
 		return axios.get('/api/v1/courses')
 		.then(res => {
 			console.log('fetching courses success!');
-			dispatch(fetchCoursesSuccess(res.data));		
+			dispatch(fetchCoursesSuccess(res.data));	
+			cb();	
 		})
 		.catch(err => {
 			console.log('fetching courses failure!');
@@ -87,6 +93,7 @@ export function fetchCourses() {
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchCourseUsers(id) {
+	console.log('I ran fetchCourseUsers');
 	return dispatch => {
 		dispatch(fetchCourseUsersRequest());
 
@@ -96,6 +103,26 @@ export function fetchCourseUsers(id) {
 		})
 		.catch(err => {
 			dispatch(fetchCourseUsersFailure(err));	
+		});
+	}	
+}
+
+/**
+ * an impure action creator that makes an API call to get all the activities associated 
+ * with the specified course from the database
+ * @param id the id of the course
+ * @return a function that would dispatch Pure action creators and make the API call
+ **/
+export function fetchCourseActivities(id) {
+	return dispatch => {
+		dispatch(fetchCourseActivitiesRequest());
+
+		return axios.get('/api/v1/courses/activities/'+id)
+		.then(res => {
+			dispatch(fetchCourseActivitiesSuccess(res.data, id));		
+		})
+		.catch(err => {
+			dispatch(fetchCourseActivitiesFailure(err));	
 		});
 	}	
 }
@@ -144,7 +171,7 @@ export function addCourse(title, room, source, link, img, description) {
  * @param description the new text description of the course
  * @return a function that would dispatch Pure action creators and make the API call
  **/
-export function updateCourse(id, title, source, link, img, list, description) {
+export function updateCourse(id, title, room, source, link, img, description) {
 	return dispatch => {
 		dispatch(updateCourseRequest());
 
@@ -154,7 +181,7 @@ export function updateCourse(id, title, source, link, img, list, description) {
 			description: description,
 			image: img,
 			course_link: link,
-			chat_link: link
+			chat_link: 'https://gitter.im/ML-LIME/'+room
 		})
 		.then(res => {
 			console.log('updating course success!');
@@ -226,6 +253,7 @@ export function fetchCoursesSuccess(data) {
 					chat_link: item.chat_link,
 					img: item.image,
 					list: Immutable.List(),
+					activitiesList: Immutable.List(),
 					description: item.description
 				})
 			}));
@@ -269,6 +297,31 @@ export function fetchCourseUsersSuccess(data, id) {
 }
 
 /**
+ * indicates that the API call for getting all activities associated with a course succeeded
+ * @param data a list of ids of all activities associated with a course
+ * @param id the id of the course  
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload.courseId the id of the course in question
+ * @return object.payload.activitiesList a list of activity ids
+ **/
+export function fetchCourseActivitiesSuccess(data, id) {
+	let activitiesList = Immutable.List();
+	data.forEach(function(item) {
+		activitiesList = activitiesList.push(item.id);
+	});
+
+	const request = {
+		courseId: id,
+		activitiesList: activitiesList
+	};
+
+	return {
+		type: FETCH_COURSE_ACTIVITIES_SUCCESS,
+		payload: request
+	};
+}
+
+/**
  * indicates that the API call for adding a course to the database succeeded
  * @param data a course object as returned by the database
  * @return object.type the action type to be passed to the reducer
@@ -281,8 +334,10 @@ export function addCourseSuccess(data) {
 			title: data.title,
 			source: data.source,
 			link: data.course_link,
+			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
+			activitiesList: [],
 			description: data.description
 		}
 	};
@@ -306,8 +361,10 @@ export function updateCourseSuccess(data) {
 			title: data.title,
 			source: data.source,
 			link: data.course_link,
+			chat_link: data.chat_link,
 			img: data.image,
 			list: [],
+			activitiesList: [],
 			description: data.description
 		}
 	};
@@ -413,6 +470,31 @@ function fetchCourseUsersFailure(error) {
 }
 
 /**
+ * indicates that an API call for retrieving course activities has been initiated
+ * @return object.type the action type to be passed to the reducer
+ **/
+function fetchCourseActivitiesRequest() {
+
+	return {
+		type: FETCH_COURSE_ACTIVITIES_REQUEST
+	};
+}
+
+/**
+ * indicates that an API call for retrieving course activities failed 
+ * @param error the error returned by the API call
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the error returned by the network
+ **/
+function fetchCourseActivitiesFailure(error) {
+
+	return {
+		type: FETCH_COURSE_ACTIVITIES_FAILURE,
+		payload: {error: error}
+	};
+}
+
+/**
  * indicates that an API call for adding a course has been initiated
  * @return object.type the action type to be passed to the reducer
  **/
@@ -441,6 +523,7 @@ function addCourseFailure(error) {
  * indicates that an API call for updating a course has been initiated
  * @param id the course id to be updated
  * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the updated course
  **/
 function updateCourseRequest(id) {
 
@@ -468,6 +551,7 @@ function updateCourseFailure(error) {
  * indicates that an API call for deleting a course has been initiated
  * @param id the course id to be deleted
  * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the deleted course
  **/
 function deleteCourseRequest(id) {
 

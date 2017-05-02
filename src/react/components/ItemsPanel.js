@@ -1,114 +1,66 @@
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ * @import PropTypes an object with validators to typecheck the based props
+ **/
 import React, { Component, PropTypes } from 'react';
 
+// ---React Components--- //
 import PanelList from '../components/PanelList';
 import ItemPanel from '../components/ItemPanel';
-import renderForm from '../components/renderForm';
 
+/** 
+ * The Items Panel Component
+ * The main component for rendering the different pages
+ * Renders the PanelList if the list is viewable, the form if the form is viewable
+ * and an item with all its contents if an item is in view
+ **/
 class ItemsPanel extends Component {
-  constructor(props) {
-    super(props);
-    this.formSubmissionHandler = this.formSubmissionHandler.bind(this);
-    this.formSubmissionMessage = this.formSubmissionMessage.bind(this);
-    this.deleteButtonHandler = this.deleteButtonHandler.bind(this);
-  }
-
-  formSubmissionHandler() {
-    if (this.props.currentVisible) {
-      return (values) => {
-        this.props.handleEditFormSubmission(values);
-        this.props.handlePanelClick();
-      }
-    } else {
-      return (values) => {
-        this.props.handleAddFormSubmission(values);
-        this.props.handlePanelClick();
-      }
-    }
-  }
-
-  deleteButtonHandler() {
-    if (this.props.currentPage==='community' && this.props.currentUser===this.props.currentVisible) {
-      this.props.handleDeleteButtonClick();
-      window.location.replace('/logout');
-    } else {
-      this.props.handleDeleteButtonClick();
-    }
-  }
-
-  formSubmissionMessage(isProfile) {
-    if (this.props.currentVisible) { 
-      if (isProfile) {
-        return this.props.editProfileSubmitMessage;
-      } else {
-        return this.props.editSubmitMessage;
-      }
-    } else {
-      return this.props.addSubmitMessage;
-    }
-  }
-
+  /**
+   * a function declaration that is called by React to render this component 
+   * @return the items panel, the main component for each of the pages
+   **/
   render() {
-    const isProfile = (this.props.currentPage==='community' && this.props.currentUser===this.props.currentVisible);
-    const isOtherProfile = (this.props.currentPage==='community' && this.props.currentUser!==this.props.currentVisible);
-    if (this.props.isListViewable) {
+    if (this.props.logic.isListViewable) {
       return (
-        <div style={{ margin: '3%'}}>
+        <div style={{ margin: '3%', maxWidth: 800}}>
           <PanelList 
-            items={this.props.items}
-            itemIds={this.props.itemIds}
-            isAdmin={this.props.isAdmin}
-            currentPage={this.props.currentPage} 
-            onUserClick={this.props.handleListClick}
-            renderBody={this.props.renderListBody}
-            handleAddButtonClick={this.props.handleAddButtonClick} />
+            isAddControlsVisible={this.props.logic.isAddControlsVisible}
+            renderListItems={this.props.render.renderListItems}
+            handleAddButtonClick={this.props.handler.handleAddButtonClick} />
         </div>
       );
-    } else if ((this.props.isAdmin || isProfile) && this.props.isFormViewable) {
-      const submissionHandler = this.formSubmissionHandler();
-      const message = this.formSubmissionMessage(isProfile);
+    } else if (this.props.logic.isFormViewable) {
       return (
-        <div style={{ margin: '3%'}}>
+        <div style={{ margin: '3%', maxWidth: 800}}>
           <ItemPanel 
-            onUserClick={this.props.handlePanelClick}
-            renderItemPanel={renderForm(this.props.formData, this.props.handleFormUpdates, submissionHandler, message, isOtherProfile)} />
+            onUserClick={this.props.handler.handlePanelClick}
+            renderItemPanel={this.props.render.renderItemForm()} />
         </div>
       );
     } else {
       return (
-        <div style={{ margin: '3%'}}>
+        <div style={{ margin: '3%', maxWidth: 800}}>
           <ItemPanel 
-            onUserClick={this.props.handlePanelClick}
-            renderItemPanel={this.props.renderItemPanel(this.props.items[this.props.currentVisible], this.props.otherItems, this.props.handleThumbnailClick, this.props.url, this.props.handleButtonClick)}
-            isAdmin={this.props.isAdmin}
-            isProfile={isProfile}
-            handleDeleteButtonClick={this.deleteButtonHandler}
-            handleEditButtonClick={this.props.handleEditButtonClick}
-            url={this.props.url} />
+            onUserClick={this.props.handler.handlePanelClick}
+            renderItemPanel={this.props.render.renderItemPanel()}
+            isItemControlsVisible={this.props.logic.isItemControlsVisible}
+            handleDeleteButtonClick={this.props.handler.handleDeleteButtonClick}
+            handleEditButtonClick={this.props.handler.handleEditButtonClick} />
         </div>
       );
     }
   }
 }
 
+/**
+ * an object validating that all the necessary props have been passed in 
+ **/
 ItemsPanel.propTypes = {
-  isListViewable: PropTypes.bool.isRequired,
-  isFormViewable: PropTypes.bool.isRequired,
-  currentVisible: PropTypes.number.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
-  url: PropTypes.string,
-  handlePanelClick: PropTypes.func.isRequired,
-  handleButtonClick: PropTypes.func.isRequired,
-  handleAddButtonClick: PropTypes.func,
-  handleFormUpdates: PropTypes.func,
-  handleAddFormSubmission: PropTypes.func,
-  handleListClick: PropTypes.func.isRequired,
-  handleThumbnailClick: PropTypes.func,
-  renderListBody: PropTypes.func.isRequired,
-  renderItemPanel: PropTypes.func.isRequired,
-  items: PropTypes.object.isRequired,
-  otherItems: PropTypes.object,
-  formData: PropTypes.object,
-  itemIds: PropTypes.array.isRequired
+  logic: PropTypes.objectOf(PropTypes.bool).isRequired,
+  render: PropTypes.objectOf(PropTypes.func).isRequired,
+  handler: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 export default ItemsPanel;

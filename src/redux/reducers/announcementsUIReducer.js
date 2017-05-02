@@ -7,7 +7,6 @@ import {
 	DISPLAY_FETCHED_ANNOUNCEMENTS, 
 	FETCH_ANNOUNCEMENT,
 	FETCH_ANNOUNCEMENT_FORM, 
-	FETCH_ANNOUNCEMENT_FORM_DATA,
 	UPDATE_ANNOUNCEMENT_FORM_DATA,} from '../actions/announcementsUIActions.js';
 
 //importing Immutable to create an immutable state 
@@ -40,7 +39,7 @@ const initialAnnouncementsUIState = Immutable.fromJS({
 
 /**
  * Reducer for announcements ui state
- * This reducer handles rendering the announcements list or a specific announcement 
+ * This reducer handles rendering the announcements, the announcements list and forms
  * @param state the current state of the app
  *							set to initialAnnouncementsUIState when the app is first run
  * @param action the dispatched action

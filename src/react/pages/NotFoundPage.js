@@ -1,33 +1,33 @@
-import React, { Component, PropTypes } from 'react';
-import * as rbs from 'react-bootstrap/lib';
+// ------------------------------------------------- //
+// The Not Found Page                                //
+// The React Component to be endered with 404 routes //
+// ------------------------------------------------- //
 
+/** 
+ * React and React-Router Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ **/
+import React, { Component } from 'react';
+
+// ---React Components--- //
 import Navbar from '../components/Navbar';
 import Title from '../components/Title';
 import Footer from '../components/Footer';
-import ItemsPanel from '../components/ItemsPanel';
-import renderModulePanel from '../components/renderModulePanel';
 
-const hiddenOverFlow = {overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'};
-
+/** 
+ * The Not Found Page Componenet
+ * This component is rendered on 404 errors
+ **/
 class NotFound extends Component {
-  renderListBody(body_params) {
-    return (
-      <rbs.Media>
-       <rbs.Media.Left>
-          <rbs.Image width={64} height={64} src={body_params['img']} circle />
-        </rbs.Media.Left>
-        <rbs.Media.Body>
-          <rbs.Media.Heading style={hiddenOverFlow}>{body_params['title']}</rbs.Media.Heading>
-          <p style={{color:'grey'}}>{body_params['source']}</p>
-        </rbs.Media.Body>
-      </rbs.Media>
-    );
-  }
-
+  /**
+   * a function declaration that is called  by React to render this component 
+   * @return the not found page
+   **/
   render() {
     return (
       <div className="notfound">
-        <Navbar items={[]}/>
+        <Navbar main='/build/' items={[]}/>
         
         <div style={{padding: '50px 0'}}>
           <Title>Page Not Found</Title>

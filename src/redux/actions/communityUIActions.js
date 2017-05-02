@@ -35,7 +35,13 @@ export function fetchScholar(id) {
 	};
 }
 
-export function fetchScholarForm(id = null) {
+/**
+ * display the specified scholar's editing form 
+ * @param id the id of the scholar to be edited
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload the id of the scholar to be displayed
+ **/
+export function fetchScholarForm(id) {
 	const request = {
 		id: id
 	};
@@ -46,6 +52,15 @@ export function fetchScholarForm(id = null) {
 	};
 }
 
+/**
+ * update the formData in the community ui state
+ * @param index the index in the list within formData to be updated
+ * @param type the type of box and key to array in formData that will be edited
+ * @param value the new value
+ * @param defaultvalue the new default value
+ * @return object.type the action type to be passed to the reducer
+ * @return object.payload all the passed in params
+ **/
 export function updateScholarFormData(index, type, value, defaultvalue) {
 	return {
 		type: UPDATE_SCHOLAR_FORM_DATA,

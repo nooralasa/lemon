@@ -1,6 +1,6 @@
-// --------------------------------------------------------------- //
+// ---------------------------------------------------------------- //
 // Reducer Composition: Combining all reducers into one app reducer //
-// --------------------------------------------------------------- //
+// ---------------------------------------------------------------- //
 
 /**	
  * Redux Imports
@@ -16,6 +16,8 @@ import courses from './coursesReducer';
 import coursesUI from './coursesUIReducer';
 import community from './communityReducer';
 import communityUI from './communityUIReducer';
+import activities from './activitiesReducer';
+import activitiesUI from './activitiesUIReducer';
 
 //exporting the single appReducer that redux's combineReducers produces
 export default combineReducers({
@@ -25,5 +27,7 @@ export default combineReducers({
   courses,
   coursesUI,
   community,
-  communityUI
+  communityUI,
+  activities,
+  activitiesUI
 });

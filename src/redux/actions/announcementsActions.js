@@ -25,11 +25,12 @@ export const DELETE_ANNOUNCEMENT_FAILURE = 'DELETE_ANNOUNCEMENT_FAILURE';
 export const DELETE_ANNOUNCEMENT_SUCCESS = 'DELETE_ANNOUNCEMENT_SUCCESS';
 
 
-// ---impure action creator creators making asynchonous API calls--- //
+// ---impure action creators making asynchonous API calls--- //
 
 /**
  * an impure action creator that makes an API call to get the announcements from 
  * the database 
+ * @param cb a functional callback to be called after the API call returns
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function fetchAnnouncements(cb = null) {
@@ -55,7 +56,7 @@ export function fetchAnnouncements(cb = null) {
  * the database 
  * @param header the title of the announcement
  * @param message the body of the announcement
- * @param user_id the id of the user who making the announcement 
+ * @param user_id the id of the user who is making the announcement 
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function addAnnouncement(header, message, user_id) {
@@ -83,7 +84,7 @@ export function addAnnouncement(header, message, user_id) {
  * @param id the id of the announcement
  * @param header the title of the announcement
  * @param message the body of the announcement
- * @param user_id the id of the user who making the announcement 
+ * @param user_id the id of the user who is making the announcement 
  * @return a function that would dispatch Pure action creators and make the API call
  **/
 export function updateAnnouncement(id, header, message, user_id) {

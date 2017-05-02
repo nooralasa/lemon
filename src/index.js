@@ -15,12 +15,11 @@
  *							 component 
  * @import browserHistory manipulates the browser urls to sync with React
  *												components
- * @import IndexRedirect redirects to the specified Route element
  **/
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom'; 
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 
 /**	
  * Redux Imports
@@ -44,7 +43,7 @@ import createLogger from 'redux-logger';
  * @import storeSetUp a function that sets up the initial state of the store
  **/
 import appReducer from './redux/reducers/index';
-import storeSetUp from './redux/storeSetUp';
+// import storeSetUp from './redux/storeSetUp';
 
 /**	
  * React Containers
@@ -55,6 +54,10 @@ import storeSetUp from './redux/storeSetUp';
  *													to its state
  * @import CommunityContainer the container component connecting the community  
  *													  page to its state
+ * @import RegistrationContainer the container component connecting the registration  
+ *													  	 page to its state
+ * @import ActivitiesContainer the container component connecting the activities  
+ *													   page to its state
  * @import NotFoundPage a page to be rendered for misentered urls (404)
  **/
 import LandingPage from './react/pages/LandingPage';
@@ -62,10 +65,8 @@ import AnnouncementsContainer from './react/containers/AnnouncementsContainer';
 import CoursesContainer from './react/containers/CoursesContainer';
 import CommunityContainer from './react/containers/CommunityContainer';
 import RegistrationContainer from './react/containers/RegistrationContainer';
+import ActivitiesContainer from './react/containers/ActivitiesContainer';
 import NotFoundPage from './react/pages/NotFoundPage';
-
-import {currentScholar} from './redux/actions/communityActions';
-
 
 //set up the redux store by passing in the state reducer and relevant middleware
 //also add the Redux devToolsExtension to be able to debug the store in browser
@@ -86,13 +87,21 @@ const store = createStore(
 //ReactDom would fitch the html element with id root from index.html
 //It would then convert the JSX virtual DOM below into an HTML DOM
 //and append it to the root div
+//Provider connects the redux store to the react components
+//Routing is visible with all relevant urls
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
 			<Route path="/build" component={LandingPage} />
 		  <Route path="/build/announcements" component={AnnouncementsContainer} />
+		  <Route path="/build/announcements/:id" component={AnnouncementsContainer} />
 		  <Route path="/build/courses" component={CoursesContainer} />
+		  <Route path="/build/courses/:id" component={CoursesContainer} />
 		  <Route path="/build/community" component={CommunityContainer} />
+		  <Route path="/build/community/:id" component={CommunityContainer} />
+		  <Route path="/build/activities" component={ActivitiesContainer} />
+		  <Route path="/build/activities/:id" component={ActivitiesContainer} />
+		  <Route path="/build/activities/:id/submissions/:submission_id" component={ActivitiesContainer} />
 		  <Route path="/build/register/:id" component={RegistrationContainer} />
 		  <Route path="/build/404" component={NotFoundPage} />
 		</Router>

@@ -1,12 +1,13 @@
-// ---------------------------------------------- //
-// This is the reducer for announcement ui state. //
-// ---------------------------------------------- //
+// ------------------------------------------- //
+// This is the reducer for registration state. //
+// ------------------------------------------- //
 
 //importing relevant action types
 import {
 	INCREMENT_CURRENT_TUTORIAL, 
 	DECREMENT_CURRENT_TUTORIAL,
 	SET_CURRENT_TUTORIAL,
+	EDIT_TUTORIAL,
 	FORK_PORTFOLIO_SUCCESS} from '../actions/registrationActions.js';
 
 //importing Immutable to create an immutable state 
@@ -56,7 +57,7 @@ const initialRegistrationState = Immutable.fromJS({
 	  5: {
 	    id: 5,
 	    heading: null,
-	    body: ["Hooray! You're logged in.", "Do you have a personal portfolio? Well, we will create one for you on Gitlab. This may take a minute."],
+	    body: ["Hooray! You're logged in. ", "We want to know more about you and your projects. We will help you get started by creating a personal portfolio.","Create your own personal portfolio on gitlab. The page may take a few minutes to reload, don't worry things are happening in the backend."],
 	    button: 'Create my portfolio!',
 	    a: '',
 	    img: ''
@@ -83,7 +84,7 @@ const initialRegistrationState = Immutable.fromJS({
 	  8: {
 	    id: 8,
 	    heading: null,
-	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging. You'll always be able to access it through the URL below."],
+	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging. ", "You'll always be able to access it through the URL below. Go to Gitter and say Hello World!"],
 	    button: 'Take me to Gitter!',
 	    a: 'https://gitter.im/ML-LIME',
 	    img: ''
@@ -94,7 +95,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    heading: "You're all set!",
 	    body: ["You're now all set up and ready to start learning. Click the button to complete registration!"],
 	    button: 'End this tutorial!',
-	    a: '/build/announcements',
+	    a: '/build/announcements/1',
 	    img: ''
 	  }
 	},
@@ -104,10 +105,10 @@ const initialRegistrationState = Immutable.fromJS({
 });
 
 /**
- * Reducer for announcements ui state
- * This reducer handles rendering the announcements list or a specific announcement 
+ * Reducer for registration state
+ * This reducer handles rendering the tutorials  
  * @param state the current state of the app
- *							set to initialAnnouncementsUIState when the app is first run
+ *							set to initialRegistrationState when the app is first run
  * @param action the dispatched action
  **/
 function registration(state = initialRegistrationState, action) {
@@ -127,6 +128,14 @@ function registration(state = initialRegistrationState, action) {
 
 		case FORK_PORTFOLIO_SUCCESS:
 			state = state.update('username', username => action.payload.username);
+			return state
+
+		case EDIT_TUTORIAL:
+			console.log('state beore ', state.get('tutorialsById').toJSON());
+			console.log('state beore before ', state.getIn(['tutorialsById', 6]));
+			console.log('state beore before ', state.getIn(['tutorialsById', '6']));
+			state = state.updateIn(['tutorialsById', action.payload.id], tutorial => action.payload);
+			console.log('state after ', state.get('tutorialsById').toJSON());
 			return state
 
 		default: 

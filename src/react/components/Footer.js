@@ -1,6 +1,19 @@
+/** 
+ * React Imports
+ * @import React the main react object necessary for writing JSX
+ * @import Component this class must be extended to create a react component 
+ **/
 import React, { Component } from 'react';
 
+/** 
+ * The Footer Component
+ * This component renders the footer of the website
+ **/
 class Footer extends Component {
+  /**
+   * a function declaration that is called by React to render this component 
+   * @return the footer of the page
+   **/
   render() {
     return (   
       <footer>
@@ -9,11 +22,11 @@ class Footer extends Component {
             <div className="col-lg-12">
               <ul className="list-inline">
                 <li>
-                  <a href="https://www.media.mit.edu/"><i className="fa fa-building-o fa-fw" /> <span className="network-name">ML</span></a>
+                  <a href="http://learn.media.mit.edu/"><i className="fa fa-building-o fa-fw" /> <span className="network-name">ML</span></a>
                 </li>
                 <li className="footer-menu-divider">⋅</li>
                 <li>
-                  <a href="mailto:nooralasa@gmail.com"><i className="fa fa-envelope fa-fw" /> <span className="network-name">Email</span></a>
+                  <a href="mailto:learn@media.mit.edu"><i className="fa fa-envelope fa-fw" /> <span className="network-name">Email</span></a>
                 </li>
                 <li className="footer-menu-divider">⋅</li>
                 <li>

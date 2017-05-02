@@ -4,19 +4,23 @@
 // ------------------------------------------------------------------ //
 
 /** 
- * React-Redux Imports
+ * React-Redux and React-Router Imports
  * @import connect a function that passes the state down to the specified 
  *                 component as props
+ * @import browserHistory the urls that will be rendered in the browser
  **/
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 //Courses Page Presentational Component
 import CoursesPage from '../pages/CoursesPage';
 
 //Redux actions for fetching data from the database and changing ui state
 import {fetchCourse, displayFetchedCourses, fetchCourseForm, updateCourseFormData} from '../../redux/actions/coursesUIActions';
-import {fetchCourses, fetchCourseUsers, enrollInCourse, addCourse, deleteCourse, updateCourse} from '../../redux/actions/coursesActions';
-import {fetchScholars, fetchScholarCourses, currentScholar} from '../../redux/actions/communityActions';
+import {fetchActivities, fetchSubmissions, fetchObjectives, fetchRequirements, fetchActivityObjectives, fetchActivityRequirements, fetchActivitySubmissions} from '../../redux/actions/activitiesActions';
+import {fetchActivity} from '../../redux/actions/activitiesUIActions';
+import {fetchCourses, fetchCourseUsers, fetchCourseActivities, enrollInCourse, addCourse, deleteCourse, updateCourse} from '../../redux/actions/coursesActions';
+import {fetchScholars, fetchScholarCourses, fetchScholarSubmissions, currentScholar} from '../../redux/actions/communityActions';
 import {fetchScholar} from '../../redux/actions/communityUIActions';
 
 /**
@@ -27,14 +31,21 @@ import {fetchScholar} from '../../redux/actions/communityUIActions';
  * @return object.coursesList the list of course ids
  * @return object.communityById an object mapping scholar ids to scholar data
  * @return object.coursesById an object mapping course ids to course data
+ * @return object.activitiesById an object mapping activity ids to activity data
  * @return object.isCoursesListViewable boolean indicating that the list view is on
  * @return object.currentVisibleCourse the id of the course to be rendered 
+ * @return object.isFormViewable boolean indicating that the form is in view for editing or 
+ *                               adding a course
+ * @return object.formData an object of data to fill the form and track updates
+ * @return object.currentUser the id of the user as saved in the browser sessions
+ * @return object.userRole the role of the currently logged in user (admin or scholar)
  **/
 const mapStateToProps = (state) => {
   return {
   	coursesList: state.courses.get('coursesList').toArray(),
     coursesById: state.courses.get('coursesById').toJSON(),
   	communityById: state.community.get('communityById').toJSON(),
+    activitiesById: state.activities.get('activitiesById').toJSON(),
     formData: state.coursesUI.get('formData').toJSON(),
     currentUser: state.community.get('currentlyLoggedIn'),
     userRole: state.community.get('role'),
@@ -54,18 +65,49 @@ const mapStateToProps = (state) => {
  * @return object.handlePanelClick prepares the ui state for rendering the courses list
  * @return object.handleThumbnailClick prepares the ui state for rendering the clicked 
  *                                     scholar in the enrolled scholars thumbnails list
+ * @return object.handleActivitiesThumbnailClick prepares the ui state for rendering the clicked 
+ *                                               activity in the activities thumbnails list
  * @return object.handleButtonClick enrolls a scholar into the course in the backend
+ * @return object.handleAddButtonClick prepares the ui state for adding a new course
+ * @return object.handleFormUpdates keeps track of any changes to form data
+ * @return object.handleAddFormSubmission adds a new course to the database 
+ * @return object.handleEditFormSubmission updates a course in the database 
+ * @return object.handleEditButtonClick prepares the ui state for editing a course
+ * @return object.handleDeleteButtonClick prepares the ui state for deleting a course
+ * @return object.handleProfileClick renders the profile of the logged in user
+ * @return object.authenticate fetches the session data of who's currently logged in from db
  **/
 const mapDispatchToProps = (dispatch) => {
   return {
-    mount: (isCoursesListViewable, currentVisibleCourse) => {
-      dispatch(fetchCourses());
-      dispatch(fetchScholars());
-      if (!isCoursesListViewable && currentVisibleCourse) {
-        dispatch(fetchCourse(currentVisibleCourse));
-        dispatch(fetchCourseUsers(currentVisibleCourse));
+    mount: (router) => {
+      if (router.params.id) { 
+        return () => {
+          dispatch(fetchScholars());
+          dispatch(fetchActivities());
+          dispatch(fetchCourses(() => {
+            if (router.params.id) {
+              dispatch(fetchCourseUsers(parseInt(router.params.id, 10)));
+              dispatch(fetchCourseActivities(parseInt(router.params.id, 10)));
+              dispatch(fetchCourse(parseInt(router.params.id, 10)));
+            } else {
+              dispatch(displayFetchedCourses());
+            }
+          }));
+          
+        }
+      } else {
+        return (isCoursesListViewable, currentVisibleCourse) => {
+          dispatch(fetchCourses());
+          dispatch(fetchScholars());
+          dispatch(fetchActivities());
+          if (!isCoursesListViewable && currentVisibleCourse) {
+            dispatch(fetchCourse(currentVisibleCourse));
+            dispatch(fetchCourseUsers(currentVisibleCourse));
+            dispatch(fetchCourseActivities(currentVisibleCourse));
+          }
+          dispatch(currentScholar((res) => {return res}));
+        }
       }
-      dispatch(currentScholar());
     },
     handleButtonClick: (user_id) => {
       return (course_id) => {
@@ -75,10 +117,13 @@ const mapDispatchToProps = (dispatch) => {
     handleListClick: (id) => {
       dispatch(fetchCourse(id));
       dispatch(fetchCourseUsers(id));
+      dispatch(fetchCourseActivities(id));
+      browserHistory.push('/build/courses/'+id);
     },
     handlePanelClick: () => {
     	dispatch(fetchCourses());
       dispatch(displayFetchedCourses());
+      browserHistory.push('/build/courses/');
     },
     handleAddButtonClick: () => {
       dispatch(updateCourseFormData(0, 'textBoxes', '',''));
@@ -105,6 +150,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(deleteCourse(id));
         dispatch(fetchCourses());
         dispatch(displayFetchedCourses());
+        browserHistory.push('/build/courses/');
       }
     },
     handleEditButtonClick: (coursesById, currentVisibleCourse) => {
@@ -121,13 +167,34 @@ const mapDispatchToProps = (dispatch) => {
       }
     },
     handleThumbnailClick: (id) => {
-      dispatch(fetchScholar(id));
-      dispatch(fetchScholarCourses(id));
+      dispatch(fetchScholar(''+id));
+      dispatch(fetchScholarCourses(''+id));
+      dispatch(fetchScholarSubmissions(''+id));
+      browserHistory.push('/build/community/'+id);
+    },
+    handleActivitiesThumbnailClick: (id) => {
+      dispatch(fetchActivities());
+      dispatch(fetchRequirements());
+      dispatch(fetchObjectives());
+      dispatch(fetchSubmissions());
+      dispatch(fetchScholars());
+      dispatch(fetchCourses());
+      if (id) {
+        dispatch(fetchActivity(id));
+        dispatch(fetchActivityObjectives(id));
+        dispatch(fetchActivityRequirements(id));
+        dispatch(fetchActivitySubmissions(id)); 
+      }
+      browserHistory.push('/build/activities/'+id);
     },
     handleProfileClick: (id) => {
       return () => {
         dispatch(fetchScholar(id));
+        browserHistory.push('/build/community/'+id);
       }
+    },
+    authenticate: (cb) => {
+      dispatch(currentScholar(cb));
     }
   }
 }
@@ -139,20 +206,22 @@ const mapDispatchToProps = (dispatch) => {
  * we use this to pass the currently logged in user to the handleButtonClick function
  * @param stateProps all the props taken directly from the state
  * @param dispatchProps all the functions defined above to dispatch events
+ * @param ownProps all the props passed into the container from parent elements (router)
  * @return the mixture of these two props to be passed into the presentation component
  **/
-const mergeProps = (stateProps, dispatchProps) => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     currentUser: stateProps.currentUser,
     userRole: stateProps.userRole,
     coursesList: stateProps.coursesList,
     coursesById: stateProps.coursesById,
+    activitiesById: stateProps.activitiesById,
     communityById: stateProps.communityById,
     formData: stateProps.formData,
     isCoursesListViewable: stateProps.isCoursesListViewable,
     isFormViewable: stateProps.isFormViewable,
     currentVisibleCourse: stateProps.currentVisibleCourse,
-    mount: dispatchProps.mount,
+    mount: dispatchProps.mount(ownProps.router),
     handleButtonClick: dispatchProps.handleButtonClick(stateProps.currentUser),
     handleAddButtonClick: dispatchProps.handleAddButtonClick,
     handleFormUpdates: dispatchProps.handleFormUpdates,
@@ -161,9 +230,11 @@ const mergeProps = (stateProps, dispatchProps) => {
     handleListClick: dispatchProps.handleListClick,
     handlePanelClick: dispatchProps.handlePanelClick,
     handleThumbnailClick: dispatchProps.handleThumbnailClick,
+    handleActivitiesThumbnailClick: dispatchProps.handleActivitiesThumbnailClick,
     handleDeleteButtonClick: dispatchProps.handleDeleteButtonClick(stateProps.currentVisibleCourse),
     handleEditButtonClick: dispatchProps.handleEditButtonClick(stateProps.coursesById, stateProps.currentVisibleCourse),
-    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser)
+    handleProfileClick: dispatchProps.handleProfileClick(stateProps.currentUser),
+    authenticate: dispatchProps.authenticate
   }
 }
 

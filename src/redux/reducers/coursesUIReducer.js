@@ -7,7 +7,6 @@ import {
 	DISPLAY_FETCHED_COURSES, 
 	FETCH_COURSE,
 	FETCH_COURSE_FORM,
-	FETCH_COURSE_FORM_DATA,
 	UPDATE_COURSE_FORM_DATA
 } from '../actions/coursesUIActions.js'
 
@@ -65,7 +64,7 @@ const initialCoursesUIState = Immutable.fromJS({
 
 /**
  * Reducer for course ui state
- * This reducer handles rendering the courses list or a specific course 
+ * This reducer handles rendering the courses list or a specific course and forms
  * @param state the current state of the app
  *							set to initialCoursesUIState when the app is first started
  * @param action the dispatched action
