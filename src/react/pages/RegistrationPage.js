@@ -32,14 +32,13 @@ class Flexbox extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isButtonActive:false
-    }
-
     this.handleForwardClick = this.handleForwardClick.bind(this);
     this.handleBackClick = this.handleBackClick.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.handleButtonActive = this.handleButtonActive.bind(this);
+    this.setActiveState = this.setActiveState.bind(this);
+    this.setWaitingState = this.setWaitingState.bind(this);
+    this.setInactiveState = this.setInactiveState.bind(this);
   }
 
   /** 
@@ -58,12 +57,28 @@ class Flexbox extends Component {
     browserHistory.push('/build/register/'+(this.props.currentStep-1));
   }
 
+  setActiveState() {
+    this.props.setActiveState();
+    console.log('inside setActiveState()');
+  }
+
+  setWaitingState() {
+    this.props.setWaitingState();
+    console.log('inside setWaitingState()');
+  }
+
+  setInactiveState() {
+    this.props.setInactiveState();
+    console.log('inside setInactiveState()');
+  }
+
   /** 
    * Handler for button clicks
    * @param id the id of the current tutorial
    * @param a the link that the current tutorial links to
    **/
   handleButtonClick(id, a) {
+    console.log('in handleButtonClick');
     this.props.onButtonClick(id, a);
   }
 
@@ -71,9 +86,7 @@ class Flexbox extends Component {
    * Determines whether the next step arrow should be active or not
    **/
   handleButtonActive() {
-    this.setState(prevState => ({
-      isButtonActive: !prevState.isButtonActive
-    }));
+    return
   }
 
   /**
@@ -85,12 +98,21 @@ class Flexbox extends Component {
     if (this.props.tutorial[this.props.currentStep].button) {
       button.push(<ButtonLink 
         currentStep={this.props.currentStep}
+        currentState={this.props.currentState}
         allSteps={this.props.tutorial}
         username={this.props.username}
         handleButtonClick={this.handleButtonClick}
         onButtonActive={this.handleButtonActive}
         onForwardClick={this.handleForwardClick}
+        setActiveState={this.setActiveState}
+        setInactiveState={this.setInactiveState}
+        setWaitingState={this.setWaitingState}
       />);
+    }
+
+    var spinner = null
+    if (this.props.currentState == 'waiting') {
+      spinner = <img src="styles/img/registration/spinner.gif" width="30px"/>;
     }
 
     return (
@@ -104,10 +126,10 @@ class Flexbox extends Component {
             currentStep={this.props.currentStep}
             allSteps={this.props.tutorial} />
 
+          {spinner}
           <Progress currentStep={this.props.currentStep}
             allSteps={this.props.tutorial}
             button={button}
-            buttonActive={this.state.isButtonActive}
             onForwardClick={this.handleForwardClick}
             onBackClick={this.handleBackClick}
             onButtonActive={this.handleButtonActive}/>
@@ -171,24 +193,35 @@ class ButtonLink extends Component {
    * a function declaration that is called  by React to render this component 
    * @return the main button for the current tutroial
    **/
-  render() {
+
+   render() {
+    var buttons = [];
+    /*if (this.props.currentState == 'inactive' || this.props.currentState == 'waiting') {
+      buttons.push(<rbs.Button
+          style={{backgroundColor:'#8e8e8e', color:'white', border:'none', padding:'5px 10px', borderRadius:'5px'}}
+          >
+          Click when finished!
+        </rbs.Button>)
+    } else if (this.props.currentState == 'active') {*/
+    if (this.props.currentState == 'active') {
+      buttons.push(<rbs.Button onClick={() => {this.props.onForwardClick(); this.props.onButtonActive();}}
+          style={{marginBottom:'20px', backgroundColor:'#62a325', color:'white', border:'none', padding:'5px 10px', borderRadius:'5px'}}
+          >
+          Next step!
+        </rbs.Button>)
+    }
+
     return (
       <div>
         <rbs.Button onClick={() => {this.props.handleButtonClick(this.props.currentStep, this.props.allSteps[this.props.currentStep].a)}}
           style={{backgroundColor:'rgba(0,0,0,0)', border:'none', padding:'5px 10px', marginBottom:'10px', borderRadius:'5px'}}
           >
-          <a style={{color:'#3377b5', textDecoration:'none', fontSize:'16px'}}
-            target="_blank"
-            onClick={this.props.onButtonActive}>
+          <a style={{color:'#62a325', textDecoration:'none', fontSize:'16px'}}>
             {this.props.allSteps[this.props.currentStep].button}
           </a>
         </rbs.Button>
         <br/>
-        <rbs.Button onClick={() => {this.props.onForwardClick(); this.props.onButtonActive();}}
-          style={{backgroundColor:'#bbdb8f', color:'white', border:'none', padding:'5px 10px', borderRadius:'5px'}}
-          >
-          Click when finished!
-        </rbs.Button>
+        {buttons}
       </div>
     )
   }
@@ -228,10 +261,10 @@ class PastCircle extends Component {
     return (
       <div style={{backgroundColor:'#dddddd',
           borderRadius:'50%',
-          border:'1.5px solid #a8a8a8',
-          width:'15px',
-          height:'15px',
-          margin:'0 3px'
+          border:'.75px solid #a8a8a8',
+          width:'14px',
+          height:'14px',
+          margin:'0 2px'
           }}
           /*onClick={() => window.location.replace('/build/register/'+this.props.id)}*/>
         &nbsp;
@@ -254,12 +287,12 @@ class CurrentCircle extends Component {
     return (
       <div style={{backgroundColor:'#bbdb8f',
           borderRadius:'50%',
-          border:'1.5px solid #a8a8a8',
-          width:'15px',
-          height:'15px',
-          margin:'0 3px'
+          border:'.75px solid #a8a8a8',
+          width:'14px',
+          height:'14px',
+          margin:'0 2px'
           }}
-          /*onClick={() => window.location.replace('/build/register/'+this.props.id)}*/>
+        >
         &nbsp;
       </div>
     );
@@ -279,12 +312,12 @@ class FutureCircle extends Component {
     return (
       <div style={{backgroundColor:'white',
           borderRadius:'50%',
-          border:'1.5px solid #a8a8a8',
-          width:'15px',
-          height:'15px',
-          margin:'0 3px'
+          border:'.75px solid #a8a8a8',
+          width:'14px',
+          height:'14px',
+          margin:'0 2px'
           }}
-          /*onClick={() => window.location.replace('/build/register/'+this.props.id)}*/>
+        >
         &nbsp;
       </div>
     );
@@ -316,35 +349,14 @@ class Progress extends Component {
       i++;
     };
 
-    var buttonActive = [];
-
-    if (this.props.buttonActive) {
-        buttonActive.push(<button
-          style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
-          onClick={() => {this.props.onForwardClick(); this.props.onButtonActive();}}>
-          &#62;
-        </button>)
-    } else {
-      buttonActive.push(<button
-          style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#dddddd'}}>
-          &#62;
-        </button>)
-    };
-
     return (
       <div>
         <div>{this.props.button}</div>
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems:'center', marginTop:'20px', marginBottom:'30px'}}>
-          {/*<button
-            style={{backgroundColor:'transparent', border:'none', fontSize:'30px', fontWeight:'300', color:'#bbdb8f'}}
-            onClick={this.props.onBackClick}>
-            &#60;
-          </button>*/}
-          <div style={{display:'flex', flexDirection:'row', justifyContent: 'center', alignItems:'center', marginLeft:'15px', marginRight:'15px'}}>  
+        {/*<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems:'center', marginBottom:'30px'}}>*/}
+          <div style={{marginBottom:'30px', display:'flex', flexDirection:'row', justifyContent: 'center', alignItems:'center', marginLeft:'15px', marginRight:'15px'}}>  
             {circles}
           </div>
-          {/*{buttonActive}*/}
-        </div>
+        {/*</div>*/}
       </div>
     );
   }
@@ -373,17 +385,16 @@ class Registration extends Component {
     return (
       <div>
         <Navbar items={[]}/>
-        <div>
+        <div style={{marginBottom:'35px'}}>
           <div className="container-fluid" style={{paddingTop: '100px'}}>
             <div className="row" style={{textAlign:'center', margin:'0 auto'}}>
-              {/*add backgroundColor:'blue'*/}
               <Flexbox 
                 tutorial={this.props.tutorialsById} 
                 currentStep={this.props.currentTutorial}
                 username={this.props.username}
-                isButtonActive={this.props.isButtonActive}
                 incrementStep={this.props.incrementStep}
                 decrementStep={this.props.decrementStep}
+                currentState={this.props.currentState}
                 onButtonClick={this.props.onButtonClick}/>
             </div>
           </div>
@@ -403,9 +414,12 @@ Registration.propTypes = {
   tutorialsList: PropTypes.array.isRequired,
   tutorialsById: PropTypes.object.isRequired,
   currentTutorial: PropTypes.number.isRequired,
-  isButtonActive: PropTypes.bool.isRequired,
   incrementStep: PropTypes.func.isRequired,
   decrementStep: PropTypes.func.isRequired,
+  currentState: PropTypes.string.isRequired,
+  setActiveState: PropTypes.func.isRequired,
+  setInactiveState: PropTypes.func.isRequired,
+  setWaitingState: PropTypes.func.isRequired,
   mount: PropTypes.func.isRequired,
   onButtonClick: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired

@@ -20,6 +20,9 @@ import {
   incrementCurrentTutotial, 
   decrementCurrentTutotial,
   setCurrentTutorial,
+  setActiveState,
+  setInactiveState,
+  setWaitingState,
   forkPortfolio,
   editTutorial} from '../../redux/actions/registrationActions';
 import {
@@ -40,11 +43,12 @@ import {
 const mapStateToProps = (state) => {
   return {
     currentUser: state.community.get('currentlyLoggedIn'),
-  	tutorialsList: state.registration.get('tutorialsList').toArray(),
+    tutorialsList: state.registration.get('tutorialsList').toArray(),
     tutorialsById: state.registration.get('tutorialsById').toJSON(),
     currentTutorial: state.registration.get('currentTutorial'),
     isButtonActive: state.registration.get('isButtonActive'),
-    username: state.registration.get('username')
+    username: state.registration.get('username'),
+    currentState: state.registration.get('currentState')
   }
 }
 
@@ -69,36 +73,43 @@ const mapDispatchToProps = (dispatch) => {
     },
     incrementStep: () => {
       dispatch(incrementCurrentTutotial());
+      dispatch(setInactiveState());
     },
     decrementStep: () => {
       dispatch(decrementCurrentTutotial());
     },
     onButtonClick: (user_id) => {
+      console.log('in onButtonClick');
       return (id, a) => {
         console.log('Im in onButtonClick');
         console.log('id ', id);
         switch (id) {
           case 2:
           case 3:
+          case 4:
           case 6:
           case 8:
+            console.log('about to run this');
             window.open(a);
+            dispatch(setActiveState());
             //window.location.replace('/build/register/'+(id+1));
             return
 
           case 1:
-          case 4:
           case 7:
           case 9:
             window.location.replace(a);
+            dispatch(setActiveState());
             return
 
           case 5:
+            dispatch(setWaitingState());
             dispatch(forkPortfolio(user_id, function(username) {
               console.log('username ', username);
               dispatch(editTutorial('6', ['Success! You now have a repository for your personal LIME portfolio called lime-portfolio. Your personal portfolio will be viewable in roughly 15 minutes at '+username+'.gitlab.io/lime-portfolio. You can customize it and make it your own by editing the repo.'], 'Customize my portfolio!', 'https://gitlab.com/'+username+'/lime-portfolio'));
               dispatch(incrementCurrentTutotial());
               browserHistory.push('/build/register/6');
+              dispatch(setActiveState());
             }));
             return
 
@@ -130,7 +141,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     incrementStep: dispatchProps.incrementStep,
     decrementStep: dispatchProps.decrementStep,
     mount: dispatchProps.mount(ownProps.routeParams.id, stateProps.username),
-    onButtonClick: dispatchProps.onButtonClick(stateProps.currentUser)
+    onButtonClick: dispatchProps.onButtonClick(stateProps.currentUser),
+    currentState: stateProps.currentState
   }
 }
 

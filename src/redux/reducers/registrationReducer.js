@@ -7,6 +7,9 @@ import {
 	INCREMENT_CURRENT_TUTORIAL, 
 	DECREMENT_CURRENT_TUTORIAL,
 	SET_CURRENT_TUTORIAL,
+	SET_INACTIVE_STATE,
+	SET_ACTIVE_STATE,
+	SET_WAITING_STATE,
 	EDIT_TUTORIAL,
 	FORK_PORTFOLIO_SUCCESS} from '../actions/registrationActions.js';
 
@@ -24,7 +27,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    "This tutorial will take you through registration. Click the next arrow to get started!"],
 	    button: 'Start this tutorial',
 	    a: '/build/register/2',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  },
 
 	  2: {
@@ -51,7 +54,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["Now you're ready to login to LIME with Gitlab!"],
 	    button: 'Link my account!',
 	    a: '/auth/gitlab-register',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  },
 
 	  5: {
@@ -60,7 +63,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["Hooray! You're logged in. ", "We want to know more about you and your projects. We will help you get started by creating a personal portfolio.","Create your own personal portfolio on gitlab. The page may take a few minutes to reload, don't worry things are happening in the backend."],
 	    button: 'Create my portfolio!',
 	    a: '',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  },
 
 	  6: {
@@ -69,7 +72,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ['Success! You now have a repository for your personal LIME portfolio called lime-portfolio. Your personal portfolio will be viewable in roughly 15 minutes at yourusername.gitlab.io/lime-portfolio. You can customize it and make it your own by editing the repo.'],
 	    button: 'Customize my portfolio!',
 	    a: 'https://gitlab.com/',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  },
 
 	  7: {
@@ -78,7 +81,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["Gitter is a chat platform. Let's sign up for Gitter and add you to the LIME community so you can ask for help if you ever get stuck or have a question for us."],
 	    button: 'Sign up for Gitter!',
 	    a: '/auth/gitter',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  },
 
 	  8: {
@@ -87,7 +90,7 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["Within our Gitter community, you can send messages to your peers, ask instructors questions, and even copy/paste your code if you need help debugging. ", "You'll always be able to access it through the URL below. Go to Gitter and say Hello World!"],
 	    button: 'Take me to Gitter!',
 	    a: 'https://gitter.im/ML-LIME',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  },
 
 	  9: {
@@ -96,11 +99,12 @@ const initialRegistrationState = Immutable.fromJS({
 	    body: ["You're now all set up and ready to start learning. Click the button to complete registration!"],
 	    button: 'End this tutorial!',
 	    a: '/build/announcements/1',
-	    img: ''
+	    img: 'styles/img/registration/temporary.png'
 	  }
 	},
 	currentTutorial: 1,
 	isButtonActive: false,
+	currentState: 'inactive',
 	username: ''
 });
 
@@ -128,6 +132,18 @@ function registration(state = initialRegistrationState, action) {
 
 		case FORK_PORTFOLIO_SUCCESS:
 			state = state.update('username', username => action.payload.username);
+			return state
+
+		case SET_INACTIVE_STATE:
+			state = state.update('currentState', currentState => 'inactive');
+			return state
+
+		case SET_WAITING_STATE:
+			state = state.update('currentState', currentState => 'waiting');
+			return state
+
+		case SET_ACTIVE_STATE:
+			state = state.update('currentState', currentState => 'active');
 			return state
 
 		case EDIT_TUTORIAL:

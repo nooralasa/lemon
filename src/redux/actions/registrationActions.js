@@ -10,6 +10,9 @@ export const INCREMENT_CURRENT_TUTORIAL = 'INCREMENT_CURRENT_TUTORIAL';
 export const DECREMENT_CURRENT_TUTORIAL = 'DECREMENT_CURRENT_TUTORIAL';
 export const SET_CURRENT_TUTORIAL = 'SET_CURRENT_TUTORIAL';
 export const EDIT_TUTORIAL = 'EDIT_TUTORIAL';
+export const SET_ACTIVE_STATE = 'STATE_ACTIVE_STATE';
+export const SET_INACTIVE_STATE = 'SET_INACTIVE_STATE';
+export const SET_WAITING_STATE = 'SET_WAITING_STATE';
 
 export const FORK_PORTFOLIO_REQUEST = 'FORK_PORTFOLIO_REQUEST';
 export const FORK_PORTFOLIO_FAILURE = 'FORK_PORTFOLIO_FAILURE';
@@ -19,6 +22,25 @@ export const FORK_PORTFOLIO_SUCCESS = 'FORK_PORTFOLIO_SUCCESS';
  * increments the current tutorial step
  * @return object.type the action type to be passed to the reducer
  **/
+
+export function setActiveState() {
+	return {
+		type: SET_ACTIVE_STATE
+	};
+}
+
+export function setInactiveState() {
+	return {
+		type: SET_INACTIVE_STATE
+	};
+}
+
+export function setWaitingState() {
+	return {
+		type: SET_WAITING_STATE
+	};
+}
+
 export function incrementCurrentTutotial() {
 
 	return {
@@ -135,5 +157,3 @@ export function forkPortfolioSuccess(data) {
 		payload: data
 	};
 }
-
-
