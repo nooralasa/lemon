@@ -96,8 +96,11 @@ const mapDispatchToProps = (dispatch) => {
             return
 
           case 1:
-          case 7:
           case 9:
+            window.location.replace(a);
+            return
+
+          case 7:
             window.location.replace(a);
             dispatch(setActiveState());
             return
