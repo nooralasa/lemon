@@ -82,7 +82,7 @@ export function setCurrentTutorial(id) {
  * @return object.type the action type to be passed to the reducer
  * @return object.payload the tutorial as expected by the state
  **/
-export function editTutorial(id, body, button, a) {
+export function editTutorial(id, body, button, a, image) {
 
 	return {
 		type: EDIT_TUTORIAL,
@@ -92,7 +92,7 @@ export function editTutorial(id, body, button, a) {
 			body: body,
 			button: button,
 			a: a,
-			img: ''
+			img: image
 		}
 	};
 }

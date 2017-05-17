@@ -79,37 +79,28 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(decrementCurrentTutotial());
     },
     onButtonClick: (user_id) => {
-      console.log('in onButtonClick');
       return (id, a) => {
-        console.log('Im in onButtonClick');
-        console.log('id ', id);
         switch (id) {
           case 2:
           case 3:
-          case 4:
           case 6:
           case 8:
-            console.log('about to run this');
             window.open(a);
             dispatch(setActiveState());
-            //window.location.replace('/build/register/'+(id+1));
             return
 
           case 1:
+          case 4:
+          case 7:
           case 9:
             window.location.replace(a);
-            return
-
-          case 7:
-            window.location.replace(a);
-            dispatch(setActiveState());
             return
 
           case 5:
             dispatch(setWaitingState());
             dispatch(forkPortfolio(user_id, function(username) {
               console.log('username ', username);
-              dispatch(editTutorial('6', ['Success! You now have a repository for your personal LIME portfolio called lime-portfolio. Your personal portfolio will be viewable in roughly 15 minutes at '+username+'.gitlab.io/lime-portfolio. You can customize it and make it your own by editing the repo.'], 'Customize my portfolio!', 'https://gitlab.com/'+username+'/lime-portfolio'));
+              dispatch(editTutorial('6', ['Success! You now have a repository for your personal LIME portfolio called lime-portfolio. Your personal portfolio will be viewable in roughly 15 minutes at '+username+'.gitlab.io/lime-portfolio. You can customize it and make it your own by editing the repo.'], 'Customize my portfolio!', 'https://gitlab.com/'+username+'/lime-portfolio', 'styles/img/registration/customize-portfolio.gif'));
               dispatch(incrementCurrentTutotial());
               browserHistory.push('/build/register/6');
               dispatch(setActiveState());
