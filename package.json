@@ -13,7 +13,7 @@
     "redux": "^3.6.0"
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": ">=0.18.1",
     "bootstrap": "^3.3.7",
     "github-api": "^3.0.0",
     "html-to-react": "^1.2.4",
